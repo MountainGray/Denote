@@ -2,11 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMessageBox>
+#include <QMenuBar>
+#include <QApplication>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
-
+class Document;
+class DocumentView;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -15,7 +16,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    bool save();
+    void open();
+    void about();
+
 private:
-    Ui::MainWindow *ui;
+    void createMenus();
+
+    QWidget *main_widget = nullptr;
+
 };
 #endif // MAINWINDOW_H
