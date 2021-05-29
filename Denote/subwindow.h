@@ -1,17 +1,21 @@
 #ifndef SUBWINDOW_H
 #define SUBWINDOW_H
 
-#include <QWidget>
+#include <QDockWidget>
+#include <QMainWindow>
 
-class SubWindow : public QWidget {
+class SubWindow : public QDockWidget {
+    Q_OBJECT
 public:
-    SubWindow();
+    explicit SubWindow(QMainWindow *parent = nullptr, QWidget *child = nullptr);
+    virtual ~SubWindow();
 
-public:
-    void changeWindow();
-    void splitWindow();
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
 private:
     bool active;
+    QMainWindow *mainWindow;
 };
 
 #endif // SUBWINDOW_H

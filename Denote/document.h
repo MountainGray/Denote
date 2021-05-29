@@ -1,11 +1,10 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-
-class Document : public SubWindow
-{
+class Document {
 public:
     Document();
+    ~Document();
 };
 
 #endif // DOCUMENT_H

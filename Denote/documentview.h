@@ -1,9 +1,10 @@
 #ifndef DOCUMENTVIEW_H
 #define DOCUMENTVIEW_H
 
+#include "subwindow.h"
+
 #include <QObject>
 
-#include "subwindow.h"
 
 class Document;
 
@@ -15,11 +16,9 @@ public:
     DocumentView(Document* doc);
 
 protected:
-    /*
-    void tabletEvent(QTabletEvent *event) override;
+    //void tabletEvent(QTabletEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
-    */
+    //void resizeEvent(QResizeEvent *event) override;
     Document* doc;
 
     

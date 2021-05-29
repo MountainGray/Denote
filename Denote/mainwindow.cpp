@@ -1,21 +1,28 @@
 #include "mainwindow.h"
 #include "document.h"
 #include "documentview.h"
+#include "subwindow.h"
+
+
+#include <QTextEdit>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     createMenus();
     setWindowTitle(tr("Denote"));
 
-    if(main_widget == nullptr){
-        Document *doc = new Document();
-        main_widget = new DocumentView(doc);
-    }
-    setCentralWidget(main_widget);
+    Document *doc = new Document();
+    DocumentView *doc_view = new DocumentView(doc);
+    SubWindow *sub = new SubWindow(this, doc_view);
+    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, sub);
+
+    subWindows.append(sub);
+
 }
 
 
 MainWindow::~MainWindow(){
 }
+
 
 bool MainWindow::save(){
     return false;
