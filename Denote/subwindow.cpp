@@ -1,13 +1,14 @@
 #include "subwindow.h"
 
-SubWindow::SubWindow(){
+
+SubWindow::SubWindow(QMainWindow *parent, QWidget *child) : QDockWidget(parent), mainWindow(parent){
+    setWidget(child);
+}
+
+SubWindow::~SubWindow(){
 
 }
 
-void SubWindow::changeWindow(){
+void SubWindow::paintEvent(QPaintEvent *event){
 
-}
-
-void SubWindow::splitWindow(){
-    
 }

@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QMenuBar>
 #include <QApplication>
+#include <QDockWidget>
 
 class Document;
 class DocumentView;
@@ -23,8 +24,7 @@ private slots:
 
 private:
     void createMenus();
-
-    QWidget *main_widget = nullptr;
+    QList<QDockWidget *> subWindows;
 
 };
 #endif // MAINWINDOW_H
