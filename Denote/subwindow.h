@@ -3,19 +3,24 @@
 
 #include <QDockWidget>
 #include <QMainWindow>
+#include <QEvent>
 
 class SubWindow : public QDockWidget {
     Q_OBJECT
 public:
-    explicit SubWindow(QMainWindow *parent = nullptr, QWidget *child = nullptr);
-    virtual ~SubWindow();
+    SubWindow(QMainWindow *parent = nullptr);
+    ~SubWindow();
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
+    void changeEvent(QEvent *e) override;
+
+private slots:
+    void makeTopLevel(bool);
 
 private:
     bool active;
     QMainWindow *mainWindow;
+    QWidget *titlebar;
 };
 
 #endif // SUBWINDOW_H

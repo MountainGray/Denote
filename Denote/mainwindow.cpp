@@ -4,19 +4,29 @@
 #include "subwindow.h"
 
 
-#include <QTextEdit>
-
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     createMenus();
     setWindowTitle(tr("Denote"));
-
     Document *doc = new Document();
-    DocumentView *doc_view = new DocumentView(doc);
-    SubWindow *sub = new SubWindow(this, doc_view);
-    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, sub);
 
-    subWindows.append(sub);
+    DocumentView *docView = new DocumentView(this, doc);
+    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, docView);
+    subWindows.append(docView);
 
+    DocumentView *docView2 = new DocumentView(this, doc);
+    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, docView2);
+    subWindows.append(docView2);
+
+    DocumentView *docView3 = new DocumentView(this, doc);
+    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, docView3);
+    subWindows.append(docView3);
+
+    DocumentView *docView4 = new DocumentView(this, doc);
+    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, docView4);
+    subWindows.append(docView4);
+
+
+    QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
 }
 
 
@@ -48,3 +58,5 @@ void MainWindow::createMenus(){
     helpMenu->addAction(tr("A&bout"), this, &MainWindow::about);
     helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
 }
+
+

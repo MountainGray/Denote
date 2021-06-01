@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     document.cpp \
+    documentgraphics.cpp \
     documentview.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
 
 HEADERS += \
     document.h \
+    documentgraphics.h \
     documentview.h \
     mainwindow.h \
     subwindow.h
