@@ -2,8 +2,6 @@
 #include "pen.h"
 
 
-#include <qdebug.h>
-
 Stroke::Stroke(Pen* pen)
 {
    this->pen = pen;
@@ -17,7 +15,9 @@ void Stroke::init(QGraphicsSceneMouseEvent *event)
 void Stroke::addpoint(QGraphicsSceneMouseEvent *event)
 {
     points.push_back(event->scenePos());
-    qDebug() << event->scenePos();
+    QRectF dirty = QRectF(points.at(points.length()-2),points.last()).normalized();
+    update(dirty);
+
 }
 
 void Stroke::finish(QGraphicsSceneMouseEvent *event)
@@ -27,7 +27,7 @@ void Stroke::finish(QGraphicsSceneMouseEvent *event)
 
 void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    color = QColor(Qt::blue);
+    color = QColor(Qt::white);
     QPen pen = QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     pen.setCosmetic(true);
     painter->setPen(pen);
