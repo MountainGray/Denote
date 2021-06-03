@@ -6,7 +6,7 @@
 DocumentGraphics::DocumentGraphics(DocumentView *view, Document *doc) : QGraphicsView(view){
     this->doc = doc;
     setScene(doc);
-    setSceneRect(0,0,1920, 5*1080);
+    setSceneRect(0,0,850, 3*1150);
 
     setDragMode(QGraphicsView::NoDrag);
     setTransformationAnchor(AnchorUnderMouse);

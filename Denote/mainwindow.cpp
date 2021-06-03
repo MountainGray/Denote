@@ -2,6 +2,7 @@
 #include "document.h"
 #include "documentview.h"
 #include "subwindow.h"
+#include "page.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -9,8 +10,23 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setWindowTitle(tr("Denote"));
     Document *doc = new Document();
 
+    Page *page1 = new Page();
+    page1->setBackgroundType(Engineering);
+    doc->addPage(page1);
+
+    Page *page2 = new Page();
+    page2->setBackgroundType(LinesMargin);
+    doc->addPage(page2);
+
+    Page *page3 = new Page();
+    page3->setBackgroundType(Lines);
+    doc->addPage(page3);
+
     DocumentView *docView = new DocumentView(this, doc);
-    setCentralWidget(docView);
+    addDockWidget(Qt::LeftDockWidgetArea,docView);
+
+    DocumentView *docView2 = new DocumentView(this, doc);
+    addDockWidget(Qt::LeftDockWidgetArea,docView2);
 
     QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
 }
