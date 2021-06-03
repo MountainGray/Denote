@@ -2,12 +2,15 @@
 #include "document.h"
 #include "documentview.h"
 #include "subwindow.h"
+#include "ui.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     createMenus();
     setWindowTitle(tr("Denote"));
-    Document *doc = new Document();
+    ui = new UI();
+    Document *doc = new Document(ui);
+    ui->addDocument(doc);
 
     DocumentView *docView = new DocumentView(this, doc);
     setCentralWidget(docView);

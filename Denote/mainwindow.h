@@ -9,6 +9,7 @@
 
 class Document;
 class DocumentView;
+class UI;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -25,6 +26,8 @@ private slots:
 private:
     void createMenus();
     QList<QDockWidget *> subWindows;
+    UI* ui;
+
 
 };
 #endif // MAINWINDOW_H
