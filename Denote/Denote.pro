@@ -14,14 +14,20 @@ SOURCES += \
     documentview.cpp \
     main.cpp \
     mainwindow.cpp \
-    subwindow.cpp
+    pen.cpp \
+    subwindow.cpp \
+    tool.cpp \
+    ui.cpp
 
 HEADERS += \
     document.h \
     documentgraphics.h \
     documentview.h \
     mainwindow.h \
-    subwindow.h
+    pen.h \
+    subwindow.h \
+    tool.h \
+    ui.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

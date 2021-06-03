@@ -10,27 +10,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     Document *doc = new Document();
 
     DocumentView *docView = new DocumentView(this, doc);
-    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, docView);
-    subWindows.append(docView);
-
-    DocumentView *docView2 = new DocumentView(this, doc);
-    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, docView2);
-    subWindows.append(docView2);
-
-    DocumentView *docView3 = new DocumentView(this, doc);
-    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, docView3);
-    subWindows.append(docView3);
-
-    DocumentView *docView4 = new DocumentView(this, doc);
-    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, docView4);
-    subWindows.append(docView4);
-
+    setCentralWidget(docView);
 
     QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
 }
 
 
 MainWindow::~MainWindow(){
+
 }
 
 
