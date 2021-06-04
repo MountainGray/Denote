@@ -15,6 +15,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     pen.cpp \
+    stroke.cpp \
     subwindow.cpp \
     tool.cpp \
     ui.cpp
@@ -25,6 +26,7 @@ HEADERS += \
     documentview.h \
     mainwindow.h \
     pen.h \
+    stroke.h \
     subwindow.h \
     tool.h \
     ui.h
