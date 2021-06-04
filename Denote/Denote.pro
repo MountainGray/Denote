@@ -17,6 +17,7 @@ SOURCES += \
     page.cpp \
     pagebackground.cpp \
     pen.cpp \
+    stroke.cpp \
     subwindow.cpp \
     tool.cpp \
     ui.cpp
@@ -29,6 +30,7 @@ HEADERS += \
     page.h \
     pagebackground.h \
     pen.h \
+    stroke.h \
     subwindow.h \
     tool.h \
     ui.h

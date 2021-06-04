@@ -2,13 +2,16 @@
 #include "document.h"
 #include "documentview.h"
 #include "subwindow.h"
+#include "ui.h"
 #include "page.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     createMenus();
     setWindowTitle(tr("Denote"));
-    Document *doc = new Document();
+    ui = new UI();
+    Document *doc = new Document(ui);
+    ui->addDocument(doc);
 
     Page *page1 = new Page();
     page1->setBackgroundType(Engineering);

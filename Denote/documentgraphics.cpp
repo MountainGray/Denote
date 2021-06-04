@@ -38,3 +38,4 @@ void DocumentGraphics::wheelEvent(QWheelEvent *e){
         QGraphicsView::wheelEvent(e);
     }
 }
+

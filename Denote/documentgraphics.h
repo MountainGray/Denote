@@ -10,12 +10,12 @@ class DocumentView;
 class DocumentGraphics : public QGraphicsView{
     Q_OBJECT
 public:
-    DocumentGraphics(DocumentView *view, Document *doc);
+    explicit DocumentGraphics(DocumentView *view, Document *doc);
 
 protected:
     void wheelEvent(QWheelEvent *e) override;
-
 private:
+    DocumentView *view;
     Document *doc;
     float scale = 1;
     float rotation = 0;
