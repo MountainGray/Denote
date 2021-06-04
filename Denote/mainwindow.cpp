@@ -1,9 +1,9 @@
 #include "mainwindow.h"
-#include "document.h"
-#include "documentview.h"
-#include "subwindow.h"
-#include "ui.h"
-#include "page.h"
+#include "Framework/document.h"
+#include "Framework/documentview.h"
+#include "Framework/subwindow.h"
+#include "Ui/ui.h"
+#include "Graphics/page.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {

@@ -1,6 +1,6 @@
-#include "documentgraphics.h"
-#include "document.h"
-#include "documentview.h"
+#include "Framework/documentgraphics.h"
+#include "Framework/document.h"
+#include "Framework/documentview.h"
 
 
 DocumentGraphics::DocumentGraphics(DocumentView *view, Document *doc) : QGraphicsView(view){

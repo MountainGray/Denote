@@ -1,5 +1,5 @@
-#include "stroke.h"
-#include "pen.h"
+#include "Tools/stroke.h"
+#include "Tools/pen.h"
 #include <QDebug>
 
 Stroke::Stroke(Pen* pen)

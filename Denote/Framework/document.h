@@ -3,7 +3,7 @@
 
 #include <QGraphicsScene>
 
-#include "documentview.h"
+#include "Framework/documentview.h"
 
 
 class Page;

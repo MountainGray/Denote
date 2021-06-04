@@ -1,4 +1,5 @@
-#include "page.h"
+#include "Graphics/page.h"
+
 
 Page::Page() : QGraphicsItem(){
     width = 850;

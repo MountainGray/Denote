@@ -2,7 +2,7 @@
 #define PEN_H
 #include <QColor>
 
-#include "tool.h"
+#include "Tools/tool.h"
 
 class Stroke;
 class UI;

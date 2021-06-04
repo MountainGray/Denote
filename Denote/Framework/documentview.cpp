@@ -1,5 +1,5 @@
-#include "documentview.h"
-#include "documentgraphics.h"
+#include "Framework/documentview.h"
+#include "Framework/documentgraphics.h"
 
 
 DocumentView::DocumentView(QMainWindow *parent, Document *doc) : SubWindow(parent){

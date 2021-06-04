@@ -1,6 +1,6 @@
 #include "document.h"
-#include "page.h"
-#include "ui.h"
+#include "Graphics/page.h"
+#include "Ui/ui.h"
 
 Document::Document(UI* ui, QObject* parent):QGraphicsScene(parent){
     this->ui = ui;

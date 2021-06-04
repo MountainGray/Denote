@@ -1,6 +1,6 @@
 #include "ui.h"
-#include "tool.h"
-#include "pen.h"
+#include "Tools/tool.h"
+#include "Tools/pen.h"
 
 
 UI::UI()

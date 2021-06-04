@@ -1,4 +1,4 @@
-#include "pagebackground.h"
+#include "Graphics/pagebackground.h"
 
 PageBackground::PageBackground()
 {

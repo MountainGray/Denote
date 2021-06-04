@@ -1,7 +1,7 @@
 #ifndef PAGE_H
 #define PAGE_H
 
-#include "pagebackground.h"
+#include "Graphics/pagebackground.h"
 
 #include <QGraphicsItem>
 #include <QPainter>

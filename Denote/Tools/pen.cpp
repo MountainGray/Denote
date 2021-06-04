@@ -1,8 +1,8 @@
-#include "pen.h"
+#include "Tools/pen.h"
 
-#include "stroke.h"
-#include "ui.h"
-#include "document.h"
+#include "Tools/stroke.h"
+#include "Ui/ui.h"
+#include "Framework/document.h"
 
 
 Pen::Pen(UI* ui)
