@@ -11,15 +11,24 @@ void Stroke::init(QGraphicsSceneMouseEvent *event)
 {
     qDebug("start");
     points.append(event->scenePos());
+    path = QPainterPath(event->scenePos());
 }
 
 void Stroke::addpoint(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << event->scenePos();
-    points.append(event->scenePos());
-    qDebug("Add point");
-    QRectF dirty = QRectF(points.first(),points.last()).normalized();
+    QRectF dirty = QRectF(event->scenePos(),points.last()).normalized();
     update(dirty);
+    //qDebug() << event->scenePos();
+    points.append(event->scenePos());
+    //qDebug("Add point");
+    if((points.size()>=7) and (points.size()%3 ==1)){
+        int shiftpoint = points.size() - 4;
+        qDebug() << shiftpoint;
+        points.insert(shiftpoint,
+                              (points.at(shiftpoint-1)+ points.at(shiftpoint+1))/2
+                      );
+        path.cubicTo(points.at(shiftpoint-2),points.at(shiftpoint-1),points.at(shiftpoint));
+    }
 
 
 }
@@ -35,14 +44,21 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     QPen pen = QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     pen.setCosmetic(true);
     painter->setPen(pen);
-
-    if(points.size()>1){
-        for(int i = 1; i < points.size()-1; i++){
-        painter->drawLine(points.at(i-1),points.at(i));
+    painter->drawPath(path);
+    /*
+    if(points.size()>=1){
+        if(points.size()>4){
+            for(int i = 3; i <points.size()-3;i+=3){
+                points.insert(i,
+                              (points.at(i+1)+ points.at(i-1))/2
+                              );
+            }
+           for(int i = 0; i+3<points.size()-1;i+=3){
+                path.cubicTo(points.at(i+1),points.at(i+2),points.at(i+3));
+           }
         }
-    }
+    */
     this->show();
-
 }
 
 QRectF Stroke::boundingRect() const{

@@ -25,6 +25,7 @@ protected:
     QRectF bounds;
     Pen* pen;
     QColor color;
+    QPainterPath path;
 };
 
 #endif // STROKE_H
