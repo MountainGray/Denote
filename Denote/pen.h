@@ -27,7 +27,7 @@ private:
     UI* ui;
     QColor color = Qt::blue;
     QPointF lastPoint;
-    Stroke *stroke;
+    Stroke *stroke = nullptr;
 };
 
 #endif // PEN_H
