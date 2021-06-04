@@ -6,6 +6,7 @@
 #include "documentview.h"
 
 
+class Page;
 class UI;
 
 class Document : public QGraphicsScene{
@@ -13,8 +14,11 @@ public:
     Document(UI* ui, QObject* parent = 0);
     ~Document();
 
+    void addPage(Page* page);
+    bool removePage(int i);
 public:
     void deleteItems(QList<QGraphicsItem*> items);
+
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
@@ -30,6 +34,7 @@ private:
     DocumentView* activeView;
     UI* ui;
 
+    QList<Page*> pages;
 };
 
 #endif // DOCUMENT_H

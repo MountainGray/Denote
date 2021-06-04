@@ -8,13 +8,11 @@ UI::UI()
     tool = new Pen(this);
 }
 
-void UI::changeTool(Tool *tool)
-{
+void UI::changeTool(Tool *tool){
     this->tool = tool;
 }
 
-Tool* UI::getTool()
-{
+Tool* UI::getTool(){
     return this->tool;
 }
 

@@ -14,6 +14,8 @@ SOURCES += \
     documentview.cpp \
     main.cpp \
     mainwindow.cpp \
+    page.cpp \
+    pagebackground.cpp \
     pen.cpp \
     stroke.cpp \
     subwindow.cpp \
@@ -25,6 +27,8 @@ HEADERS += \
     documentgraphics.h \
     documentview.h \
     mainwindow.h \
+    page.h \
+    pagebackground.h \
     pen.h \
     stroke.h \
     subwindow.h \
