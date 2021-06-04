@@ -22,10 +22,10 @@ void Page::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     if(type == Lines) paintLines(painter);
     else if(type == LinesMargin) paintLinesMargin(painter);
     else if(type == Engineering) paintEngineering(painter);
-    else if(type == Graph) paintEngineering(painter);
-    else if(type == Staves) paintEngineering(painter);
-    else if(type == Custom) paintLinesMargin(painter);
-    else paintLinesMargin(painter);
+    else if(type == Graph) paintGraph(painter);
+    else if(type == Staves) paintStaves(painter);
+    else if(type == Custom) paintEngineering(painter);
+    else paintEngineering(painter);
 
     painter->setPen(QPen(QColor("black"),2));
     painter->setBrush(QBrush(QColor("black")));
@@ -94,12 +94,30 @@ void Page::paintEngineering(QPainter *painter){
 
 
 void Page::paintGraph(QPainter *painter){
-    return;
+    int grid_size = 20;
+
+    painter->setPen(QPen(QColor(0,0,0,125),1));
+
+    for(int i = 0; i < width; i += grid_size){//vertical lines
+        painter->drawLine(QLineF(i,0,i,height));
+    }
+    for(int i = 0; i < height; i += grid_size){//horizontal lines
+        painter->drawLine(QLineF(0,i,width,i));
+    }
 }
 
 
 void Page::paintStaves(QPainter *painter){
-    return;
+    int line_spacing = 12;
+    int stave_spacing = 40;
+
+    painter->setPen(QPen(QColor(0,0,0,125),1));
+
+    for(int i = 2*stave_spacing; i < height-5*line_spacing-stave_spacing; i+= 5*line_spacing+stave_spacing){
+        for(int j = 0; j < 5; j++){
+            painter->drawLine(QLineF(0.08*width, i+j*line_spacing,0.92*width, i+j*line_spacing));
+        }
+    }
 }
 
 

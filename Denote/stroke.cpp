@@ -31,7 +31,7 @@ void Stroke::finish(QGraphicsSceneMouseEvent *event)
 
 void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    color = QColor(Qt::white);
+    color = QColor(Qt::black);
     QPen pen = QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     pen.setCosmetic(true);
     painter->setPen(pen);
