@@ -34,5 +34,4 @@ void Pen::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
         stroke->finish(event);
         stroke = nullptr;
     }
-
 }

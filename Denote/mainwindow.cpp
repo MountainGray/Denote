@@ -18,11 +18,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     doc->addPage(page1);
 
     Page *page2 = new Page();
-    page2->setBackgroundType(LinesMargin);
+    page2->setBackgroundType(Staves);
     doc->addPage(page2);
 
     Page *page3 = new Page();
-    page3->setBackgroundType(Lines);
+    page3->setBackgroundType(Graph);
     doc->addPage(page3);
 
     DocumentView *docView = new DocumentView(this, doc);
