@@ -24,7 +24,7 @@ void Stroke::addpoint(QGraphicsSceneMouseEvent *event)
     if((points.size()>=7) and (points.size()%3 ==1)){
         int shiftpoint = points.size() - 4;
         qDebug() << shiftpoint;
-        points.insert(shiftpoint,
+        points.replace(shiftpoint,
                               (points.at(shiftpoint-1)+ points.at(shiftpoint+1))/2
                       );
         path.cubicTo(points.at(shiftpoint-2),points.at(shiftpoint-1),points.at(shiftpoint));
