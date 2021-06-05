@@ -28,8 +28,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     DocumentView *docView = new DocumentView(this, doc);
     addDockWidget(Qt::LeftDockWidgetArea,docView);
 
-    DocumentView *docView2 = new DocumentView(this, doc);
-    addDockWidget(Qt::LeftDockWidgetArea,docView2);
+    //DocumentView *docView2 = new DocumentView(this, doc);
+    //addDockWidget(Qt::LeftDockWidgetArea,docView2);
 
     QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
 }
