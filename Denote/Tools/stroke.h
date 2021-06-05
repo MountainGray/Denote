@@ -25,6 +25,7 @@ protected:
     QRectF bounds;
     Pen* pen;
     QColor color;
+    int count = 0;
 };
 
 #endif // STROKE_H
