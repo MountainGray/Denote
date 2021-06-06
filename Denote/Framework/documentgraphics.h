@@ -14,6 +14,11 @@ public:
 
 protected:
     void wheelEvent(QWheelEvent *e) override;
+    //void tabletEvent(QTabletEvent *event) override;//used for tablet events only
+    //void mousePressEvent(QMouseEvent *event) override;
+    //void mouseMoveEvent(QMouseEvent *event) override;
+    //void mouseReleaseEvent(QMouseEvent *event) override;
+
 private:
     DocumentView *view;
     Document *doc;

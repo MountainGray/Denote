@@ -10,15 +10,15 @@ Stroke::Stroke(Pen* pen)
 }
 
 
-void Stroke::init(QGraphicsSceneMouseEvent *event)
+void Stroke::init(QPointF pos, float pressure)
 {
-    points.append(event->scenePos());
+    points.append(pos);
 }
 
 
-void Stroke::addpoint(QGraphicsSceneMouseEvent *event)
+void Stroke::addpoint(QPointF pos, float pressure)
 {
-    if(count < 7){
+    if(count < 2){
         count ++;
     }
     else {
@@ -26,33 +26,35 @@ void Stroke::addpoint(QGraphicsSceneMouseEvent *event)
         if(points.size() > 2){
             if(points.size()%2 == 1){
                 points.pop_back();
-                float avg_x = (points.last().x() + event->scenePos().x())/2;
-                float avg_y = (points.last().y() + event->scenePos().y())/2;
+                float avg_x = (points.last().x() + pos.x())/2;
+                float avg_y = (points.last().y() + pos.y())/2;
                 points.append(QPointF(avg_x,avg_y));                
             }
-            QRectF new_area = QRectF(event->scenePos(),points.last());
+            QRectF new_area = QRectF(pos,points.last());
             QRectF old_area = QRectF(points.last(),points.at(points.size()-2));
-            points.append(event->scenePos());
+            points.append(pos);
             update(new_area.united(old_area).adjusted(-10,-10,10,10));
         } else {
-            points.append(event->scenePos());
+            points.append(pos);
         }
     }
 }
 
 
-void Stroke::finish(QGraphicsSceneMouseEvent *event)
+void Stroke::finish(QPointF pos, float pressure)
 {
-    QRectF new_area = QRectF(event->scenePos(),points.last());
-    QRectF old_area = QRectF(points.last(),points.at(points.size()-2));
-    points.append(event->scenePos());
-    update(new_area.united(old_area).adjusted(-10,-10,10,10));
+    if(points.size() > 2){
+        QRectF new_area = QRectF(pos,points.last());
+        QRectF old_area = QRectF(points.last(),points.at(points.size()-2));
+        points.append(pos);
+        update(new_area.united(old_area).adjusted(-10,-10,10,10));
+    }
 }
 
 
 void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    float res = 10;
+    float res = 15;
 
     QPen pen = QPen(color, 3);
     pen.setCosmetic(true);

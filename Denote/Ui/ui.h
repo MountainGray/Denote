@@ -18,6 +18,10 @@ public:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+    void tabletPress(QTabletEvent *event);
+    void tabletMove(QTabletEvent *event);
+    void tabletRelease(QTabletEvent *event);
     //void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
     //void keyPressEvent(QKeyEvent *event);
     //void wheelEvent(QGraphicsSceneWheelEvent *);

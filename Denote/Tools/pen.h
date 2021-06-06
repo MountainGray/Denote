@@ -19,6 +19,11 @@ public:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+
+    void tabletPress(QTabletEvent *event) override;
+    void tabletMove(QTabletEvent *event) override;
+    void tabletRelease(QTabletEvent *event) override;
+
     //void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     //void keyPressEvent(QKeyEvent *event) override;
     //void wheelEvent(QGraphicsSceneWheelEvent *) override;

@@ -15,6 +15,11 @@ public:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) = 0;
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) = 0;
+
+    virtual void tabletPress(QTabletEvent *event) = 0;
+    virtual void tabletMove(QTabletEvent *event) = 0;
+    virtual void tabletRelease(QTabletEvent *event) = 0;
+
     //virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) = 0;
     //virtual void keyPressEvent(QKeyEvent *event) = 0;
     //virtual void wheelEvent(QGraphicsSceneWheelEvent *event) = 0;

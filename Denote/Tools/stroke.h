@@ -3,8 +3,6 @@
 
 #include <QPainter>
 #include <QGraphicsItem>
-#include <QGraphicsSceneMouseEvent>
-
 
 class Pen;
 
@@ -14,9 +12,9 @@ public:
     Stroke(Pen *pen);
 
 public:
-    void init(QGraphicsSceneMouseEvent* event);
-    void addpoint(QGraphicsSceneMouseEvent* event);
-    void finish(QGraphicsSceneMouseEvent* event);
+    void init(QPointF pos, float pressure);
+    void addpoint(QPointF pos, float pressure);
+    void finish(QPointF pos, float pressure);
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 

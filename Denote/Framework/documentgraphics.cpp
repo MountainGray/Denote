@@ -39,3 +39,47 @@ void DocumentGraphics::wheelEvent(QWheelEvent *e){
     }
 }
 
+/*
+void DocumentGraphics::tabletEvent(QTabletEvent *event){
+    event->setAccepted(true);
+    if (event->type() == QEvent::TabletEnterProximity ||
+        event->type() == QEvent::TabletLeaveProximity) {
+        //ui->setTabletDevice(static_cast<QTabletEvent *>(event));
+    } else if(event->type() == QEvent::TabletPress){
+        //ui->tabletPress(static_cast<QTabletEvent *>(event));
+        qDebug() << "Tablet Press";
+        event->accept();
+    } else if(event->type() == QEvent::TabletMove){
+        //ui->tabletMove(static_cast<QTabletEvent *>(event));
+        qDebug() << "Tablet Move";
+        event->accept();
+    } else if(event->type() == QEvent::TabletRelease){
+        //ui->tabletRelease(static_cast<QTabletEvent *>(event));
+        qDebug() << "Tablet Release";
+        event->accept();
+    }
+    //QWidget::tabletEvent(event);
+    event->accept();
+}
+
+void DocumentGraphics::mousePressEvent(QMouseEvent *event)
+{
+    qDebug() << "Mouse Press";
+    event->accept();
+}
+
+void DocumentGraphics::mouseMoveEvent(QMouseEvent *event)
+{
+    if(event->type() == QEvent::MouseMove){
+        qDebug() << "Mouse Move";
+        event->accept();
+    }
+}
+
+void DocumentGraphics::mouseReleaseEvent(QMouseEvent *event)
+{
+    qDebug() << "Mouse Release";
+    event->accept();
+}
+*/
+

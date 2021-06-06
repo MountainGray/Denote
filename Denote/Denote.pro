@@ -20,7 +20,8 @@ SOURCES += \
     Tools/stroke.cpp \
     Framework/subwindow.cpp \
     Tools/tool.cpp \
-    Ui/ui.cpp
+    Ui/ui.cpp \
+    test.cpp
 
 HEADERS += \
     Framework/document.h \
@@ -33,7 +34,8 @@ HEADERS += \
     Tools/stroke.h \
     Framework//subwindow.h \
     Tools/tool.h \
-    Ui/ui.h
+    Ui/ui.h \
+    test.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

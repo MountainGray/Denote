@@ -4,6 +4,7 @@
 #include "Framework/subwindow.h"
 #include "Ui/ui.h"
 #include "Graphics/page.h"
+#include "test.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -28,10 +29,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     DocumentView *docView = new DocumentView(this, doc);
     addDockWidget(Qt::LeftDockWidgetArea,docView);
 
+
+    test *t = new test();
+    setCentralWidget(t);
+
     //DocumentView *docView2 = new DocumentView(this, doc);
     //addDockWidget(Qt::LeftDockWidgetArea,docView2);
 
     QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
+
+    //QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents);
 }
 
 

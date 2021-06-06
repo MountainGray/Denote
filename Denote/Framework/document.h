@@ -1,9 +1,9 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-#include <QGraphicsScene>
-
 #include "Framework/documentview.h"
+
+#include <QGraphicsScene>
 
 
 class Page;
@@ -23,9 +23,12 @@ public:
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
 
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    //void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    //void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+
+    //bool event(QEvent *event) override;//used for tablet events only
+
     //void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     //void keyPressEvent(QKeyEvent *event) override;
 
