@@ -16,6 +16,54 @@ DocumentGraphics::DocumentGraphics(DocumentView *view, Document *doc) : QGraphic
 }
 
 
+void DocumentGraphics::tabletEvent(QTabletEvent *event){
+    event->accept();
+
+    if (event->type() == QEvent::TabletEnterProximity ||
+        event->type() == QEvent::TabletLeaveProximity) {
+        //update cursor to specific writing cursor (if for tablet only)
+    } else if(event->type() == QEvent::TabletPress){
+        doc->getUI()->tabletPressEvent(mapToDoc(event));
+    } else if(event->type() == QEvent::TabletMove){
+        doc->getUI()->tabletMoveEvent(mapToDoc(event));
+    } else if(event->type() == QEvent::TabletRelease){
+        doc->getUI()->tabletReleaseEvent(mapToDoc(event));
+    }
+}
+
+
+void DocumentGraphics::mousePressEvent(QMouseEvent *event)
+{
+    if(event->deviceType() == QInputDevice::DeviceType::Mouse){
+        QGraphicsView::mousePressEvent(event);//prevents artificial mouse events from stylus
+    }
+}
+
+
+void DocumentGraphics::mouseMoveEvent(QMouseEvent *event)
+{
+    if(event->deviceType() == QInputDevice::DeviceType::Mouse){
+        QGraphicsView::mouseMoveEvent(event);//prevents artificial mouse events from stylus
+    }
+}
+
+
+void DocumentGraphics::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(event->deviceType() == QInputDevice::DeviceType::Mouse){
+        QGraphicsView::mouseReleaseEvent(event);//prevents artificial mouse events from stylus
+    }
+}
+
+
+void DocumentGraphics::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if(event->deviceType() == QInputDevice::DeviceType::Mouse){
+        QGraphicsView::mouseDoubleClickEvent(event);//prevents artificial mouse events from stylus
+    }
+}
+
+
 void DocumentGraphics::wheelEvent(QWheelEvent *e){
     if (e->modifiers() & Qt::ControlModifier){
         if(e->modifiers() & Qt::ShiftModifier){//rotate
@@ -33,53 +81,28 @@ void DocumentGraphics::wheelEvent(QWheelEvent *e){
         matrix.scale(scale, scale);
         matrix.rotate(rotation);
         setTransform(matrix);
+        //might just use scale() and rotate() instead -------
         e->accept();
     } else {
         QGraphicsView::wheelEvent(e);
     }
 }
 
-/*
-void DocumentGraphics::tabletEvent(QTabletEvent *event){
-    event->setAccepted(true);
-    if (event->type() == QEvent::TabletEnterProximity ||
-        event->type() == QEvent::TabletLeaveProximity) {
-        //ui->setTabletDevice(static_cast<QTabletEvent *>(event));
-    } else if(event->type() == QEvent::TabletPress){
-        //ui->tabletPress(static_cast<QTabletEvent *>(event));
-        qDebug() << "Tablet Press";
-        event->accept();
-    } else if(event->type() == QEvent::TabletMove){
-        //ui->tabletMove(static_cast<QTabletEvent *>(event));
-        qDebug() << "Tablet Move";
-        event->accept();
-    } else if(event->type() == QEvent::TabletRelease){
-        //ui->tabletRelease(static_cast<QTabletEvent *>(event));
-        qDebug() << "Tablet Release";
-        event->accept();
-    }
-    //QWidget::tabletEvent(event);
-    event->accept();
-}
 
-void DocumentGraphics::mousePressEvent(QMouseEvent *event)
+QTabletEvent *DocumentGraphics::mapToDoc(QTabletEvent *event)
 {
-    qDebug() << "Mouse Press";
-    event->accept();
+    //not sure if this should be deleted manually, possible memory leak
+    return new QTabletEvent(event->type(),
+                        event->pointingDevice(),
+                        viewportTransform().inverted().map(event->position()), //only difference
+                        event->globalPosition(),
+                        event->pressure(),
+                        event->xTilt(),
+                        event->yTilt(),
+                        event->tangentialPressure(),
+                        event->rotation(),
+                        event->z(),
+                        event->modifiers(),
+                        event->button(),
+                        event->buttons());
 }
-
-void DocumentGraphics::mouseMoveEvent(QMouseEvent *event)
-{
-    if(event->type() == QEvent::MouseMove){
-        qDebug() << "Mouse Move";
-        event->accept();
-    }
-}
-
-void DocumentGraphics::mouseReleaseEvent(QMouseEvent *event)
-{
-    qDebug() << "Mouse Release";
-    event->accept();
-}
-*/
-

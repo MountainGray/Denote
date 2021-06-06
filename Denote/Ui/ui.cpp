@@ -9,13 +9,41 @@ UI::UI()
 }
 
 
-void UI::changeTool(Tool *tool){
+void UI::setTool(Tool *tool){
     this->tool = tool;
 }
 
 
 Tool* UI::getTool(){
     return this->tool;
+}
+
+
+Document *UI::getDocument()
+{
+    return this->document;
+}
+
+void UI::addDocument(Document *doc){
+    this->document = doc;
+}
+
+
+void UI::tabletPressEvent(QTabletEvent *event)
+{
+    tool->tabletPressEvent(event);
+}
+
+
+void UI::tabletMoveEvent(QTabletEvent *event)
+{
+    tool->tabletMoveEvent(event);
+}
+
+
+void UI::tabletReleaseEvent(QTabletEvent *event)
+{
+    tool->tabletReleaseEvent(event);
 }
 
 
@@ -36,29 +64,13 @@ void UI::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 }
 
 
-void UI::tabletPress(QTabletEvent *event)
+void UI::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    tool->tabletPress(event);
+    tool->mouseDoubleClickEvent(event);
 }
 
 
-void UI::tabletMove(QTabletEvent *event)
-{
-    tool->tabletMove(event);
-}
 
 
-void UI::tabletRelease(QTabletEvent *event)
-{
-    tool->tabletRelease(event);
-}
 
 
-Document *UI::getDocument()
-{
-    return this->document;
-}
-
-void UI::addDocument(Document *doc){
-    this->document = doc;
-}

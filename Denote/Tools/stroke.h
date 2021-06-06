@@ -1,6 +1,8 @@
 #ifndef STROKE_H
 #define STROKE_H
 
+#include "pressurepoint.h"
+
 #include <QPainter>
 #include <QGraphicsItem>
 
@@ -19,7 +21,10 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 protected:
-    QVector<QPointF> points;
+    float pressureToWidth(float pressure);
+
+protected:
+    QVector<PressurePoint> points;
     QRectF bounds;
     Pen* pen;
     QColor color;

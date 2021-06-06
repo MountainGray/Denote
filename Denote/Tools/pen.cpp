@@ -11,6 +11,36 @@ Pen::Pen(UI* ui)
 }
 
 
+//tablet and mouse functions are basically the same besides adding pressure, should fix in future;
+
+
+void Pen::tabletPressEvent(QTabletEvent *event)
+{
+    if(event->button() == Qt::LeftButton){
+        stroke = new Stroke(this);
+        stroke->init(event->position(), event->pressure());
+        ui->getDocument()->addItem(stroke);
+    }
+}
+
+
+void Pen::tabletMoveEvent(QTabletEvent *event)
+{
+    if (stroke != nullptr){
+        stroke->addpoint(event->position(),event->pressure());
+    }
+}
+
+
+void Pen::tabletReleaseEvent(QTabletEvent *event)
+{
+    if((event->button() == Qt::LeftButton) and (stroke != nullptr)){
+        stroke->finish(event->position(),event->pressure());
+        stroke = nullptr;
+    }
+}
+
+
 void Pen::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton){
@@ -20,7 +50,6 @@ void Pen::mousePressEvent(QGraphicsSceneMouseEvent *event)
             ui->getDocument()->addItem(stroke);
         }
     }
-    event->accept();
 }
 
 
@@ -28,7 +57,6 @@ void Pen::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     if (stroke != nullptr){
         stroke->addpoint(event->scenePos(),0);
     }
-    event->accept();
 }
 
 
@@ -37,35 +65,9 @@ void Pen::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
         stroke->finish(event->scenePos(),0);
         stroke = nullptr;
     }
-    event->accept();
 }
 
 
-void Pen::tabletPress(QTabletEvent *event)
-{
-    if(stroke == nullptr){
-        stroke = new Stroke(this);
-        stroke->init(event->position(),event->pressure());
-        ui->getDocument()->addItem(stroke);
-    }
-    event->accept();
-}
-
-
-void Pen::tabletMove(QTabletEvent *event)
-{
-    if (stroke != nullptr){
-        stroke->addpoint(event->position(),event->pressure());
-    }
-    event->accept();
-}
-
-
-void Pen::tabletRelease(QTabletEvent *event)
-{
-    if(stroke != nullptr){
-        stroke->finish(event->position(),event->pressure());
-        stroke = nullptr;
-    }
-    event->accept();
+void Pen::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event){
+    Q_UNUSED(event);
 }

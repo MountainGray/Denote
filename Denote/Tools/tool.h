@@ -12,18 +12,17 @@ public:
     Tool();
 
 public:
+    virtual void tabletPressEvent(QTabletEvent *event) = 0;
+    virtual void tabletMoveEvent(QTabletEvent *event) = 0;
+    virtual void tabletReleaseEvent(QTabletEvent *event) = 0;
+
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) = 0;
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) = 0;
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) = 0;
 
-    virtual void tabletPress(QTabletEvent *event) = 0;
-    virtual void tabletMove(QTabletEvent *event) = 0;
-    virtual void tabletRelease(QTabletEvent *event) = 0;
-
-    //virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) = 0;
     //virtual void keyPressEvent(QKeyEvent *event) = 0;
     //virtual void wheelEvent(QGraphicsSceneWheelEvent *event) = 0;
-
 };
 
 #endif // TOOL_H

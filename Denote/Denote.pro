@@ -12,6 +12,7 @@ SOURCES += \
     Framework/document.cpp \
     Framework/documentgraphics.cpp \
     Framework/documentview.cpp \
+    Tools/pressurepoint.cpp \
     main.cpp \
     mainwindow.cpp \
     Graphics/page.cpp \
@@ -20,13 +21,13 @@ SOURCES += \
     Tools/stroke.cpp \
     Framework/subwindow.cpp \
     Tools/tool.cpp \
-    Ui/ui.cpp \
-    test.cpp
+    Ui/ui.cpp
 
 HEADERS += \
     Framework/document.h \
     Framework/documentgraphics.h \
     Framework/documentview.h \
+    Tools/pressurepoint.h \
     mainwindow.h \
     Graphics/page.h \
     Graphics/pagebackground.h \
@@ -34,8 +35,7 @@ HEADERS += \
     Tools/stroke.h \
     Framework//subwindow.h \
     Tools/tool.h \
-    Ui/ui.h \
-    test.h
+    Ui/ui.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
