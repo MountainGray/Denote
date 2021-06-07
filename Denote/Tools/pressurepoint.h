@@ -11,8 +11,8 @@ public:
     PressurePoint(qreal x_pos, qreal y_pos, float pressure = 0);
 
 public:
-    float getPressure(){ return pressure; }
-    void setPressure(float pressure){ this->pressure = pressure; }
+    float p(){ return pressure; }
+    void setP(float pressure){ this->pressure = pressure; }
 
 private:
     float pressure;

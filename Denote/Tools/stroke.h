@@ -22,6 +22,7 @@ public:
 
 protected:
     float pressureToWidth(float pressure);
+    void updateBounds(PressurePoint point);
 
 protected:
     QVector<PressurePoint> points;
