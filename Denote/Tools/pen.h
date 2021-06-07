@@ -14,12 +14,15 @@ public:
     Pen(QColor color, int Width = 1);
 
 public:
-
+    void tabletPressEvent(QTabletEvent *event) override;
+    void tabletMoveEvent(QTabletEvent *event) override;
+    void tabletReleaseEvent(QTabletEvent *event) override;
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    //void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+
     //void keyPressEvent(QKeyEvent *event) override;
     //void wheelEvent(QGraphicsSceneWheelEvent *) override;
 

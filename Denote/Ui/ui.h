@@ -12,18 +12,20 @@ class UI
 public:
     UI();
 public:
-    void changeTool(Tool *tool);
+    void setTool(Tool *tool);
     Tool* getTool();
+    Document* getDocument();
+    void addDocument(Document*);
+
+public:
+    void tabletPressEvent(QTabletEvent *event);
+    void tabletMoveEvent(QTabletEvent *event);
+    void tabletReleaseEvent(QTabletEvent *event);
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    //void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
-    //void keyPressEvent(QKeyEvent *event);
-    //void wheelEvent(QGraphicsSceneWheelEvent *);
-
-    Document* getDocument();
-    void addDocument(Document*);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     Tool *tool;

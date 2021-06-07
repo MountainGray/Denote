@@ -13,7 +13,16 @@ public:
     explicit DocumentGraphics(DocumentView *view, Document *doc);
 
 protected:
+    void tabletEvent(QTabletEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *e) override;
+
+private:
+    QTabletEvent* mapToDoc(QTabletEvent *event);
+
 private:
     DocumentView *view;
     Document *doc;

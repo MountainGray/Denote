@@ -12,6 +12,7 @@ SOURCES += \
     Framework/document.cpp \
     Framework/documentgraphics.cpp \
     Framework/documentview.cpp \
+    Tools/pressurepoint.cpp \
     main.cpp \
     mainwindow.cpp \
     Graphics/page.cpp \
@@ -26,6 +27,7 @@ HEADERS += \
     Framework/document.h \
     Framework/documentgraphics.h \
     Framework/documentview.h \
+    Tools/pressurepoint.h \
     mainwindow.h \
     Graphics/page.h \
     Graphics/pagebackground.h \

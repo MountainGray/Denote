@@ -8,27 +8,16 @@ UI::UI()
     tool = new Pen(this);
 }
 
-void UI::changeTool(Tool *tool){
+
+void UI::setTool(Tool *tool){
     this->tool = tool;
 }
+
 
 Tool* UI::getTool(){
     return this->tool;
 }
 
-void UI::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    tool->mouseMoveEvent(event);
-}
-
-void UI::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    tool->mousePressEvent(event);
-}
-
-void UI::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    tool->mouseReleaseEvent(event);
-}
 
 Document *UI::getDocument()
 {
@@ -38,3 +27,50 @@ Document *UI::getDocument()
 void UI::addDocument(Document *doc){
     this->document = doc;
 }
+
+
+void UI::tabletPressEvent(QTabletEvent *event)
+{
+    tool->tabletPressEvent(event);
+}
+
+
+void UI::tabletMoveEvent(QTabletEvent *event)
+{
+    tool->tabletMoveEvent(event);
+}
+
+
+void UI::tabletReleaseEvent(QTabletEvent *event)
+{
+    tool->tabletReleaseEvent(event);
+}
+
+
+void UI::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    tool->mouseMoveEvent(event);
+}
+
+
+void UI::mousePressEvent(QGraphicsSceneMouseEvent *event){
+    tool->mousePressEvent(event);
+}
+
+
+void UI::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    tool->mouseReleaseEvent(event);
+}
+
+
+void UI::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    tool->mouseDoubleClickEvent(event);
+}
+
+
+
+
+
+

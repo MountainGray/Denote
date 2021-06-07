@@ -1,9 +1,10 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-#include <QGraphicsScene>
-
 #include "Framework/documentview.h"
+#include "Ui/ui.h"
+
+#include <QGraphicsScene>
 
 
 class Page;
@@ -16,6 +17,8 @@ public:
 
     void addPage(Page* page);
     bool removePage(int i);
+    UI* getUI(){return ui;}
+
 public:
     void deleteItems(QList<QGraphicsItem*> items);
 
@@ -26,15 +29,13 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    //void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
-    //void keyPressEvent(QKeyEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     QPixmap background;
     DocumentView* activeView;
-    UI* ui;
-
     QList<Page*> pages;
+    UI* ui;
 };
 
 #endif // DOCUMENT_H
