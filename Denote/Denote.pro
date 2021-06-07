@@ -9,32 +9,38 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Framework/ToolMenus/penmenu.cpp \
+    Framework/ToolMenus/toolmenu.cpp \
+    Framework/ToolMenus/toolmenuviewer.cpp \
     Framework/document.cpp \
     Framework/documentgraphics.cpp \
     Framework/documentview.cpp \
+    Framework/subwindow.cpp \
     Tools/pressurepoint.cpp \
+    Tools/pen.cpp \
+    Tools/stroke.cpp \
+    Tools/tool.cpp \
     main.cpp \
     mainwindow.cpp \
     Graphics/page.cpp \
     Graphics/pagebackground.cpp \
-    Tools/pen.cpp \
-    Tools/stroke.cpp \
-    Framework/subwindow.cpp \
-    Tools/tool.cpp \
     Ui/ui.cpp
 
 HEADERS += \
+    Framework/ToolMenus/penmenu.h \
+    Framework/ToolMenus/toolmenu.h \
+    Framework/ToolMenus/toolmenuviewer.h \
     Framework/document.h \
     Framework/documentgraphics.h \
     Framework/documentview.h \
+    Framework//subwindow.h \
     Tools/pressurepoint.h \
+    Tools/pen.h \
+    Tools/stroke.h \
+    Tools/tool.h \
     mainwindow.h \
     Graphics/page.h \
     Graphics/pagebackground.h \
-    Tools/pen.h \
-    Tools/stroke.h \
-    Framework//subwindow.h \
-    Tools/tool.h \
     Ui/ui.h
 
 # Default rules for deployment.

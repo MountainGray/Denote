@@ -5,12 +5,14 @@
 #include <QKeyEvent>
 
 class Tool;
+class ToolMenuViewer;
 class Document;
 
 class UI
 {
 public:
-    UI();
+    UI(ToolMenuViewer *tool_menu_viewer);
+
 public:
     void setTool(Tool *tool);
     Tool* getTool();
@@ -29,6 +31,7 @@ public:
 
 private:
     Tool *tool;
+    ToolMenuViewer *tool_menu_viewer;
     Document* document;
 };
 

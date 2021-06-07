@@ -4,14 +4,19 @@
 #include "Framework/subwindow.h"
 #include "Ui/ui.h"
 #include "Graphics/page.h"
+#include "Framework/ToolMenus/toolmenuviewer.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     createMenus();
     setWindowTitle(tr("Denote"));
-    ui = new UI();
+
+    ToolMenuViewer *tool_menu_viewer = new ToolMenuViewer(this);
+
+    ui = new UI(tool_menu_viewer);
+
     Document *doc = new Document(ui);
-    ui->addDocument(doc);
+    ui->addDocument(doc);    
 
     Page *page1 = new Page();
     page1->setBackgroundType(Engineering);
@@ -25,14 +30,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     page3->setBackgroundType(Graph);
     doc->addPage(page3);
 
-    DocumentView *docView = new DocumentView(this, doc);
-    addDockWidget(Qt::LeftDockWidgetArea,docView);
+    DocumentView *doc_view = new DocumentView(this, doc);
+    addDockWidget(Qt::LeftDockWidgetArea, doc_view);
 
-    DocumentView *docView2 = new DocumentView(this, doc);
-    addDockWidget(Qt::LeftDockWidgetArea,docView2);
+    DocumentView *doc_view2 = new DocumentView(this, doc);
+    addDockWidget(Qt::LeftDockWidgetArea, doc_view2);
+
+    addDockWidget(Qt::LeftDockWidgetArea, tool_menu_viewer);
+
 
     QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
-
     QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents);
 }
 
@@ -55,6 +62,7 @@ void MainWindow::about() {
     QMessageBox::about(this, tr("Denote"),
                        tr("Best app ever!"));
 }
+
 
 void MainWindow::createMenus(){
     QMenu *fileMenu = menuBar()->addMenu(tr("&File"));

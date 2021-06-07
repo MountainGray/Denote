@@ -21,8 +21,6 @@ public:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) = 0;
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) = 0;
 
-    //virtual void keyPressEvent(QKeyEvent *event) = 0;
-    //virtual void wheelEvent(QGraphicsSceneWheelEvent *event) = 0;
 };
 
 #endif // TOOL_H
