@@ -5,10 +5,10 @@
 #include <QStyleOptionGraphicsItem>
 
 
-Stroke::Stroke(Pen* pen)
+Stroke::Stroke(Pen* pen, QColor color)
 {
    this->pen = pen;
-   color = QColor(Qt::black);
+   this->color = color;
 }
 
 

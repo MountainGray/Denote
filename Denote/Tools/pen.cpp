@@ -17,8 +17,8 @@ Pen::Pen(UI* ui)
 void Pen::tabletPressEvent(QTabletEvent *event)
 {
     if(event->button() == Qt::LeftButton and stroke == nullptr){
-        stroke = new Stroke(this);
-        stroke->init(event->position(),event->pressure());
+        stroke = new Stroke(this, color);
+        stroke->init(event->position(),event->pressure()+width);
         ui->getDocument()->addItem(stroke);
     }
 }
@@ -27,7 +27,7 @@ void Pen::tabletPressEvent(QTabletEvent *event)
 void Pen::tabletMoveEvent(QTabletEvent *event)
 {
     if (stroke != nullptr){
-        stroke->addpoint(event->position(),event->pressure());
+        stroke->addpoint(event->position(),event->pressure()+width);
     }
 }
 
@@ -35,7 +35,7 @@ void Pen::tabletMoveEvent(QTabletEvent *event)
 void Pen::tabletReleaseEvent(QTabletEvent *event)
 {
     if((event->button() == Qt::LeftButton) and (stroke != nullptr)){
-        stroke->finish(event->position(),event->pressure());
+        stroke->finish(event->position(),event->pressure()+width);
         stroke = nullptr;
     }
 }
@@ -44,8 +44,8 @@ void Pen::tabletReleaseEvent(QTabletEvent *event)
 void Pen::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton and stroke == nullptr){
-        stroke = new Stroke(this);
-        stroke->init(event->scenePos(),0);
+        stroke = new Stroke(this, color);
+        stroke->init(event->scenePos(),width);
         ui->getDocument()->addItem(stroke);
     }
 }
@@ -53,14 +53,14 @@ void Pen::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void Pen::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     if (stroke != nullptr){
-        stroke->addpoint(event->scenePos(),0);
+        stroke->addpoint(event->scenePos(),width);
     }
 }
 
 
 void Pen::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     if((event->button() == Qt::LeftButton) and (stroke != nullptr)){
-        stroke->finish(event->scenePos(),0);
+        stroke->finish(event->scenePos(),width);
         stroke = nullptr;
     }
 }

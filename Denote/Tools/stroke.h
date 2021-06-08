@@ -11,7 +11,7 @@ class Pen;
 class Stroke : public QGraphicsItem
 {
 public:
-    Stroke(Pen *pen);
+    Stroke(Pen *pen, QColor color);
 
 public:
     void init(QPointF pos, float pressure);

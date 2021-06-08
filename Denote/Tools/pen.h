@@ -26,11 +26,16 @@ public:
     //void keyPressEvent(QKeyEvent *event) override;
     //void wheelEvent(QGraphicsSceneWheelEvent *) override;
 
+public:
+    void setWidth(float width){this->width = width;}
+    void setColor(QColor color){this->color = color;}
+
 private:
     UI* ui;
-    QColor color = Qt::blue;
+    QColor color = Qt::black;
     QPointF lastPoint;
     Stroke *stroke = nullptr;
+    float width = 0;
 };
 
 #endif // PEN_H

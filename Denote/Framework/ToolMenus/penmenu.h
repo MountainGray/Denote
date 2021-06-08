@@ -12,6 +12,7 @@ public:
 
 public slots:
     void setPenWidth(int width);
+    void setPenColor();
 };
 
 #endif // PENMENU_H
