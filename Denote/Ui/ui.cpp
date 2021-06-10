@@ -35,47 +35,6 @@ void UI::addDocument(Document *doc){
 }
 
 
-void UI::tabletPressEvent(QTabletEvent *event)
-{
-    tool->tabletPressEvent(event);
-}
-
-
-void UI::tabletMoveEvent(QTabletEvent *event)
-{
-    tool->tabletMoveEvent(event);
-}
-
-
-void UI::tabletReleaseEvent(QTabletEvent *event)
-{
-    tool->tabletReleaseEvent(event);
-}
-
-
-void UI::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    tool->mouseMoveEvent(event);
-}
-
-
-void UI::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    tool->mousePressEvent(event);
-}
-
-
-void UI::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    tool->mouseReleaseEvent(event);
-}
-
-
-void UI::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
-{
-    tool->mouseDoubleClickEvent(event);
-}
-
-
 
 
 

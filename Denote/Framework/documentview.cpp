@@ -7,5 +7,5 @@ DocumentView::DocumentView(QMainWindow *parent, Document *doc) : SubWindow(paren
     setWidget(graphics);
     docs.append(doc);
 
-    setMinimumSize(200,200);
+    setMinimumSize(150,150);
 }

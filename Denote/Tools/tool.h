@@ -1,6 +1,8 @@
 #ifndef TOOL_H
 #define TOOL_H
 
+#include "Framework/drawevent.h"
+
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
 #include <QKeyEvent>
@@ -12,15 +14,10 @@ public:
     Tool();
 
 public:
-    virtual void tabletPressEvent(QTabletEvent *event) = 0;
-    virtual void tabletMoveEvent(QTabletEvent *event) = 0;
-    virtual void tabletReleaseEvent(QTabletEvent *event) = 0;
-
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) = 0;
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) = 0;
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) = 0;
-
+    virtual void drawPressEvent(DrawEvent event) = 0;
+    virtual void drawMoveEvent(DrawEvent event) = 0;
+    virtual void drawReleaseEvent(DrawEvent event) = 0;
+    virtual void drawDoubleClickEvent(DrawEvent event) = 0;
 };
 
 #endif // TOOL_H

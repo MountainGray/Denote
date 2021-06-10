@@ -21,9 +21,6 @@ protected:
     void wheelEvent(QWheelEvent *e) override;
 
 private:
-    QTabletEvent* mapToDoc(QTabletEvent *event);
-
-private:
     DocumentView *view;
     Document *doc;
     float scale = 1;

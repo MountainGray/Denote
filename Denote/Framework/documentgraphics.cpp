@@ -1,6 +1,8 @@
 #include "Framework/documentgraphics.h"
 #include "Framework/document.h"
 #include "Framework/documentview.h"
+#include "Tools/tool.h"
+#include "drawevent.h"
 
 
 DocumentGraphics::DocumentGraphics(DocumentView *view, Document *doc) : QGraphicsView(view){
@@ -23,44 +25,48 @@ void DocumentGraphics::tabletEvent(QTabletEvent *event){
         event->type() == QEvent::TabletLeaveProximity) {
         //update cursor to specific writing cursor (if for tablet only)
     } else if(event->type() == QEvent::TabletPress){
-        doc->getUI()->tabletPressEvent(mapToDoc(event));
+        doc->getUI()->getTool()->drawPressEvent(DrawEvent(event, this));
     } else if(event->type() == QEvent::TabletMove){
-        doc->getUI()->tabletMoveEvent(mapToDoc(event));
+        doc->getUI()->getTool()->drawMoveEvent(DrawEvent(event, this));
     } else if(event->type() == QEvent::TabletRelease){
-        doc->getUI()->tabletReleaseEvent(mapToDoc(event));
+        doc->getUI()->getTool()->drawReleaseEvent(DrawEvent(event, this));
     }
 }
 
 
 void DocumentGraphics::mousePressEvent(QMouseEvent *event)
 {
-    if(event->deviceType() == QInputDevice::DeviceType::Mouse){
-        QGraphicsView::mousePressEvent(event);//prevents artificial mouse events from stylus
+    if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
+        doc->getUI()->getTool()->drawPressEvent(DrawEvent(event, this));
     }
+    QGraphicsView::mousePressEvent(event);
 }
 
 
 void DocumentGraphics::mouseMoveEvent(QMouseEvent *event)
 {
-    if(event->deviceType() == QInputDevice::DeviceType::Mouse){
-        QGraphicsView::mouseMoveEvent(event);//prevents artificial mouse events from stylus
+    if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
+        doc->getUI()->getTool()->drawMoveEvent(DrawEvent(event, this));
     }
+    QGraphicsView::mouseMoveEvent(event);
 }
 
 
 void DocumentGraphics::mouseReleaseEvent(QMouseEvent *event)
 {
-    if(event->deviceType() == QInputDevice::DeviceType::Mouse){
-        QGraphicsView::mouseReleaseEvent(event);//prevents artificial mouse events from stylus
+    if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
+        doc->getUI()->getTool()->drawReleaseEvent(DrawEvent(event, this));
     }
+    QGraphicsView::mouseReleaseEvent(event);//for zooming
 }
 
 
 void DocumentGraphics::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if(event->deviceType() == QInputDevice::DeviceType::Mouse){
-        QGraphicsView::mouseDoubleClickEvent(event);//prevents artificial mouse events from stylus
+    if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
+        doc->getUI()->getTool()->drawDoubleClickEvent(DrawEvent(event, this));
     }
+    QGraphicsView::mouseDoubleClickEvent(event);//for zooming
 }
 
 
@@ -86,23 +92,4 @@ void DocumentGraphics::wheelEvent(QWheelEvent *e){
     } else {
         QGraphicsView::wheelEvent(e);
     }
-}
-
-
-QTabletEvent *DocumentGraphics::mapToDoc(QTabletEvent *event)
-{
-    //not sure if this should be deleted manually, possible memory leak
-    return new QTabletEvent(event->type(),
-                        event->pointingDevice(),
-                        viewportTransform().inverted().map(event->position()), //only difference
-                        event->globalPosition(),
-                        event->pressure(),
-                        event->xTilt(),
-                        event->yTilt(),
-                        event->tangentialPressure(),
-                        event->rotation(),
-                        event->z(),
-                        event->modifiers(),
-                        event->button(),
-                        event->buttons());
 }

@@ -15,6 +15,7 @@ SOURCES += \
     Framework/document.cpp \
     Framework/documentgraphics.cpp \
     Framework/documentview.cpp \
+    Framework/drawevent.cpp \
     Framework/subwindow.cpp \
     Tools/pressurepoint.cpp \
     Tools/pen.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     Framework/documentgraphics.h \
     Framework/documentview.h \
     Framework//subwindow.h \
+    Framework/drawevent.h \
     Tools/pressurepoint.h \
     Tools/pen.h \
     Tools/stroke.h \

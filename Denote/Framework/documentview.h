@@ -17,11 +17,6 @@ class DocumentView : public SubWindow{
 public:
     DocumentView(QMainWindow *parent, Document* doc);
 
-protected:
-    //void tabletEvent(QTabletEvent *event) override;
-    //void paintEvent(QPaintEvent *event) override;
-    //void resizeEvent(QResizeEvent *event) override;
-
 private:
     QList<Document*> docs;
     DocumentGraphics* graphics;

@@ -19,16 +19,6 @@ public:
     Document* getDocument();
     void addDocument(Document*);
 
-public:
-    void tabletPressEvent(QTabletEvent *event);
-    void tabletMoveEvent(QTabletEvent *event);
-    void tabletReleaseEvent(QTabletEvent *event);
-
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
-
 private:
     Tool *tool;
     ToolMenuViewer *tool_menu_viewer;

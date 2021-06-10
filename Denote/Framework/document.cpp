@@ -34,26 +34,3 @@ void Document::drawBackground(QPainter *painter, const QRectF &rect){
     painter->drawPixmap(QPoint(0,background.height()+50), background); //page 2
 }
 
-
-void Document::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    ui->mousePressEvent(event);
-}
-
-
-void Document::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-   ui->mouseMoveEvent(event);
-}
-
-
-void Document::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    ui->mouseReleaseEvent(event);
-}
-
-
-void Document::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event){
-    ui->mouseDoubleClickEvent(event);
-}
-

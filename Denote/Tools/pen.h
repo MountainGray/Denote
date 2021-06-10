@@ -14,21 +14,17 @@ public:
     Pen(QColor color, int Width = 1);
 
 public:
-    void tabletPressEvent(QTabletEvent *event) override;
-    void tabletMoveEvent(QTabletEvent *event) override;
-    void tabletReleaseEvent(QTabletEvent *event) override;
-
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
-
-    //void keyPressEvent(QKeyEvent *event) override;
-    //void wheelEvent(QGraphicsSceneWheelEvent *) override;
+    void drawPressEvent(DrawEvent event) override;
+    void drawMoveEvent(DrawEvent event) override;
+    void drawReleaseEvent(DrawEvent event) override;
+    void drawDoubleClickEvent(DrawEvent event) override;
 
 public:
     void setWidth(float width){this->width = width;}
     void setColor(QColor color){this->color = color;}
+    QColor getColor(){ return color;}
+
+    float pressureToWidth(float pressure);
 
 private:
     UI* ui;

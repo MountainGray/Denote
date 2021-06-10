@@ -21,26 +21,20 @@ void Stroke::init(QPointF pos, float pressure)
 
 void Stroke::addpoint(QPointF pos, float pressure)
 {
-    if(count < 2){
-        count ++;
-    }
-    else {
-        updateBounds(pos);
-        if(points.size() > 2){
-            if(points.size()%2 == 1){
-                points.pop_back();
-                float avg_x = (points.last().x() + pos.x())/2;
-                float avg_y = (points.last().y() + pos.y())/2;
-                points.append(PressurePoint(avg_x,avg_y,pressure));
-            }
-            QRectF new_area = QRectF(pos,points.last());
-            QRectF old_area = QRectF(points.last(),points.at(points.size()-2));
-            points.append(PressurePoint(pos,pressure));
-            update(new_area.united(old_area).adjusted(-10,-10,10,10));
-        } else {
-            points.append(PressurePoint(pos,pressure));
+    updateBounds(pos);
+    if(points.size() > 2){
+        if(points.size()%2 == 1){
+            points.pop_back();
+            float avg_x = (points.last().x() + pos.x())/2;
+            float avg_y = (points.last().y() + pos.y())/2;
+            points.append(PressurePoint(avg_x,avg_y,pressure));
         }
-        count = 0;
+        QRectF new_area = QRectF(pos,points.last());
+        QRectF old_area = QRectF(points.last(),points.at(points.size()-2));
+        points.append(PressurePoint(pos,pressure));
+        update(new_area.united(old_area).adjusted(-10,-10,10,10));
+    } else {
+        points.append(PressurePoint(pos,pressure));
     }
 }
 
@@ -98,7 +92,8 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             //pen.setColor(QColor(rand()%255,rand()%255,rand()%255,255)); //display each bezier as random color
 
             line = QLineF(last_x, last_y, new_x, new_y);
-            pen.setWidthF(pressureToWidth(new_p));
+            //pen.setWidthF(this->pen->pressureToWidth(new_p));
+            pen.setWidthF(new_p);
             painter->setPen(pen);
             painter->drawLine(line);
 
@@ -109,12 +104,6 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     if(points.size() > 2 and points.size()%2 == 0){
         painter->drawLine(points.at(points.size()-2), points.last());
     }
-}
-
-
-float Stroke::pressureToWidth(float pressure)
-{
-    return pressure * 2 + 0.2;
 }
 
 

@@ -11,61 +11,50 @@ Pen::Pen(UI* ui)
 }
 
 
-//tablet and mouse functions are basically the same besides adding pressure, should fix in future;
-
-
-void Pen::tabletPressEvent(QTabletEvent *event)
+void Pen::drawPressEvent(DrawEvent event)
 {
-    if(event->button() == Qt::LeftButton and stroke == nullptr){
+    if(event.button() == Qt::LeftButton and stroke == nullptr){
+        lastPoint = event.position();
         stroke = new Stroke(this, color);
-        stroke->init(event->position(),event->pressure()+width);
+        stroke->init(event.docPos(),pressureToWidth(event.pressure()));
         ui->getDocument()->addItem(stroke);
+    } else {
+        drawReleaseEvent(event);
     }
 }
 
 
-void Pen::tabletMoveEvent(QTabletEvent *event)
+void Pen::drawMoveEvent(DrawEvent event)
 {
-    if (stroke != nullptr){
-        stroke->addpoint(event->position(),event->pressure()+width);
+    if(stroke != nullptr){
+        float dist = abs(event.position().x()-lastPoint.x()) + abs(event.position().y()-lastPoint.y());
+        if (event.deviceType() == QInputDevice::DeviceType::Mouse and dist > 4){//min distance to add new point for mouse
+            stroke->addpoint(event.docPos(),pressureToWidth(event.pressure()));
+            lastPoint = event.position();
+        } else if (event.deviceType() == QInputDevice::DeviceType::Stylus and dist > 2){//min distance to add new point for pen
+            stroke->addpoint(event.docPos(),pressureToWidth(event.pressure()));
+            lastPoint = event.position();
+        }
     }
 }
 
 
-void Pen::tabletReleaseEvent(QTabletEvent *event)
+void Pen::drawReleaseEvent(DrawEvent event)
 {
-    if((event->button() == Qt::LeftButton) and (stroke != nullptr)){
-        stroke->finish(event->position(),event->pressure()+width);
+    if(stroke != nullptr){
+        stroke->finish(event.docPos(),pressureToWidth(event.pressure()));
         stroke = nullptr;
     }
 }
 
 
-void Pen::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    if(event->button() == Qt::LeftButton and stroke == nullptr){
-        stroke = new Stroke(this, color);
-        stroke->init(event->scenePos(),width);
-        ui->getDocument()->addItem(stroke);
-    }
-}
-
-
-void Pen::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
-    if (stroke != nullptr){
-        stroke->addpoint(event->scenePos(),width);
-    }
-}
-
-
-void Pen::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
-    if((event->button() == Qt::LeftButton) and (stroke != nullptr)){
-        stroke->finish(event->scenePos(),width);
-        stroke = nullptr;
-    }
-}
-
-
-void Pen::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event){
+void Pen::drawDoubleClickEvent(DrawEvent event){
     Q_UNUSED(event);
+}
+
+
+
+float Pen::pressureToWidth(float pressure)
+{
+    return width + 1.5*pressure*width + 0.2;
 }

@@ -26,11 +26,6 @@ public:
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
 
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
-
 private:
     QPixmap background;
     DocumentView* activeView;

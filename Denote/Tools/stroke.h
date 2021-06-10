@@ -21,7 +21,6 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 protected:
-    float pressureToWidth(float pressure);
     void updateBounds(PressurePoint point);
 
 protected:
@@ -29,7 +28,6 @@ protected:
     QRectF bounds;
     Pen* pen;
     QColor color;
-    int count = 0;
 };
 
 #endif // STROKE_H
