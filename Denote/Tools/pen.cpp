@@ -15,7 +15,7 @@ void Pen::drawPressEvent(DrawEvent event)
 {
     if(event.button() == Qt::LeftButton and stroke == nullptr){
         lastPoint = event.position();
-        stroke = new Stroke(this, color);
+        stroke = new Stroke(this);
         stroke->init(event.docPos(),pressureToWidth(event.pressure()));
         ui->getDocument()->addItem(stroke);
     } else {

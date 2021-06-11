@@ -5,17 +5,18 @@
 #include <QStyleOptionGraphicsItem>
 
 
-Stroke::Stroke(Pen* pen, QColor color)
+Stroke::Stroke(Pen* pen)
 {
-   this->pen = pen;
-   this->color = color;
+    color = pen->getColor();
+    width = pen->getWidth();
+    painter_pen = QPen(color, width, Qt::SolidLine, Qt::RoundCap);
 }
 
 
 void Stroke::init(QPointF pos, float pressure)
 {
     points.append(PressurePoint(pos,pressure));
-    bounds = QRectF(pos.x()-1, pos.y()-1, 2, 2);
+    bounds = QRectF(pos.x()-width/2, pos.y()-width/2, width, width);
 }
 
 
@@ -32,7 +33,7 @@ void Stroke::addpoint(QPointF pos, float pressure)
         QRectF new_area = QRectF(pos,points.last());
         QRectF old_area = QRectF(points.last(),points.at(points.size()-2));
         points.append(PressurePoint(pos,pressure));
-        update(new_area.united(old_area).adjusted(-10,-10,10,10));
+        update(new_area.united(old_area).adjusted(-width,-width,width,width));
     } else {
         points.append(PressurePoint(pos,pressure));
     }
@@ -46,7 +47,7 @@ void Stroke::finish(QPointF pos, float pressure)
         QRectF new_area = QRectF(pos,points.last());
         QRectF old_area = QRectF(points.last(),points.at(points.size()-2));
         points.append(PressurePoint(pos,pressure));
-        update(new_area.united(old_area).adjusted(-10,-10,10,10));
+        update(new_area.united(old_area).adjusted(-width,-width,width,width));
     }
 }
 
@@ -63,11 +64,6 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     float world_scale = option->levelOfDetailFromTransform(painter->worldTransform());
     int line_res = qBound(5, qRound(4*world_scale), 200); //lines per bezier curve
 
-
-    QPen pen = QPen(color, 3, Qt::SolidLine, Qt::RoundCap);
-    //pen.setCosmetic(true);
-    painter->setPen(pen);
-
     PressurePoint p0,p1,p2;
     float t, last_x, last_y, new_x, new_y, new_p;
     QLineF line;
@@ -80,8 +76,6 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         last_x = p0.x();
         last_y = p0.y();
 
-        //pen.setColor(QColor(rand()%255,rand()%255,rand()%255,255)); //display each bezier as random color
-
         for(int j = 1; j <= line_res; j++){//5 segments
             t = j/float(line_res);
 
@@ -89,12 +83,9 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             new_y = (1-t)*(1-t)*p0.y()+2*(1-t)*t*p1.y()+t*t*p2.y();
             new_p = (1-t)*(1-t)*p0.p()+2*(1-t)*t*p1.p()+t*t*p2.p();
 
-            //pen.setColor(QColor(rand()%255,rand()%255,rand()%255,255)); //display each bezier as random color
-
             line = QLineF(last_x, last_y, new_x, new_y);
-            //pen.setWidthF(this->pen->pressureToWidth(new_p));
-            pen.setWidthF(new_p);
-            painter->setPen(pen);
+            painter_pen.setWidthF(new_p);
+            painter->setPen(painter_pen);
             painter->drawLine(line);
 
             last_x = new_x;
@@ -109,7 +100,7 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
 void Stroke::updateBounds(PressurePoint point)
 {
-    float padding = 5;
+    float padding = width;
     bool changed = false;
     if(point.x() < bounds.left()+padding){
         bounds.setLeft(point.x()-padding);

@@ -22,6 +22,7 @@ public:
 public:
     void setWidth(float width){this->width = width;}
     void setColor(QColor color){this->color = color;}
+    float getWidth(){return width;}
     QColor getColor(){ return color;}
 
     float pressureToWidth(float pressure);

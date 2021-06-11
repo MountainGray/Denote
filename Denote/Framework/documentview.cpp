@@ -9,3 +9,9 @@ DocumentView::DocumentView(QMainWindow *parent, Document *doc) : SubWindow(paren
 
     setMinimumSize(150,150);
 }
+
+
+void DocumentView::setScale(float scale)
+{
+    graphics->setScale(scale);
+}

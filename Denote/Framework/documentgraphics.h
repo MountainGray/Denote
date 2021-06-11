@@ -12,6 +12,12 @@ class DocumentGraphics : public QGraphicsView{
 public:
     explicit DocumentGraphics(DocumentView *view, Document *doc);
 
+public:
+    QTransform getInverse(){return inverse;}
+
+public:
+    void setScale(float view_scale);
+
 protected:
     void tabletEvent(QTabletEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
@@ -23,8 +29,7 @@ protected:
 private:
     DocumentView *view;
     Document *doc;
-    float scale = 1;
-    float rotation = 0;
+    QTransform inverse;
 };
 
 #endif // DOCUMENTGRAPHICS_H

@@ -15,6 +15,15 @@ DocumentGraphics::DocumentGraphics(DocumentView *view, Document *doc) : QGraphic
 
     setRenderHint(QPainter::Antialiasing, true);
     setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+    centerOn(doc->width()/2,0);
+}
+
+
+void DocumentGraphics::setScale(float view_scale)
+{
+    float new_scale = view_scale / transform().m11();
+    scale(new_scale, new_scale);
 }
 
 
@@ -25,6 +34,7 @@ void DocumentGraphics::tabletEvent(QTabletEvent *event){
         event->type() == QEvent::TabletLeaveProximity) {
         //update cursor to specific writing cursor (if for tablet only)
     } else if(event->type() == QEvent::TabletPress){
+        inverse = viewportTransform().inverted();
         doc->getUI()->getTool()->drawPressEvent(DrawEvent(event, this));
     } else if(event->type() == QEvent::TabletMove){
         doc->getUI()->getTool()->drawMoveEvent(DrawEvent(event, this));
@@ -37,6 +47,7 @@ void DocumentGraphics::tabletEvent(QTabletEvent *event){
 void DocumentGraphics::mousePressEvent(QMouseEvent *event)
 {
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
+        inverse = viewportTransform().inverted();
         doc->getUI()->getTool()->drawPressEvent(DrawEvent(event, this));
     }
     QGraphicsView::mousePressEvent(event);
@@ -74,22 +85,18 @@ void DocumentGraphics::wheelEvent(QWheelEvent *e){
     if (e->modifiers() & Qt::ControlModifier){
         if(e->modifiers() & Qt::ShiftModifier){//rotate
             if (e->angleDelta().y() > 0)
-                rotation += 5;
+                rotate(5);
             else
-                rotation -= 5;
+                rotate(-5);
         } else {//zoom
             if (e->angleDelta().y() > 0)
-                scale *= 1.1;
+                scale(1.1,1.1);
             else
-                scale /= 1.1;
-        }
-        QTransform matrix;
-        matrix.scale(scale, scale);
-        matrix.rotate(rotation);
-        setTransform(matrix);
-        //might just use scale() and rotate() instead -------
+                scale(1/1.1,1/1.1);
+        }  
         e->accept();
     } else {
         QGraphicsView::wheelEvent(e);
     }
+    inverse = viewportTransform().inverted();
 }

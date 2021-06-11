@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setWindowTitle(tr("Denote"));
 
     ToolMenuViewer *tool_menu_viewer = new ToolMenuViewer(this);
+    subWindows.append(tool_menu_viewer);
 
     ui = new UI(tool_menu_viewer);
 
@@ -30,16 +31,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     page3->setBackgroundType(Graph);
     doc->addPage(page3);
 
-    DocumentView *doc_view = new DocumentView(this, doc);
-    addDockWidget(Qt::LeftDockWidgetArea, doc_view);
+    QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
 
+    DocumentView *doc_view = new DocumentView(this, doc);
+    subWindows.append(doc_view);
+    doc_view->setScale(1.2);
     DocumentView *doc_view2 = new DocumentView(this, doc);
-    addDockWidget(Qt::LeftDockWidgetArea, doc_view2);
+    doc_view2->setScale(0.2);
+    subWindows.append(doc_view2);
 
     addDockWidget(Qt::LeftDockWidgetArea, tool_menu_viewer);
+    addDockWidget(Qt::LeftDockWidgetArea, doc_view2);
+    addDockWidget(Qt::RightDockWidgetArea, doc_view);
 
+    resizeDocks(subWindows, {200, 1000, 200}, Qt::Orientation::Horizontal);
 
-    QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
     QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents);
 }
 

@@ -16,11 +16,11 @@ DrawEvent::DrawEvent(QMouseEvent *event, DocumentGraphics* view) :
                  event->button(),
                  event->buttons())
 {
-    doc_position = view->viewportTransform().inverted().map(event->position());
+    doc_position = view->getInverse().map(event->position());
 }
 
 
 DrawEvent::DrawEvent(QTabletEvent *event, DocumentGraphics* view) : QTabletEvent(*event)
 {
-    doc_position = view->viewportTransform().inverted().map(event->position());
+    doc_position = view->getInverse().map(event->position());
 }

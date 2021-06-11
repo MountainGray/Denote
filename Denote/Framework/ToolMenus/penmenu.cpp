@@ -8,6 +8,9 @@
 PenMenu::PenMenu(Pen* pen) : ToolMenu(pen)
 {
     QSlider *width_slider = new QSlider(Qt::Horizontal, this);
+    width_slider->setValue(2);
+    width_slider->setMaximum(40);
+    setPenWidth(2);
     QPushButton *button = new QPushButton("Select Color", this);
 
     connect(width_slider, &QSlider::valueChanged, this, &PenMenu::setPenWidth);
@@ -25,7 +28,6 @@ void PenMenu::setPenWidth(int width)
 {
     Pen* pen = static_cast<Pen*>(tool);
     float f_width = width;
-    f_width /= 10;
     pen->setWidth(f_width);
 }
 

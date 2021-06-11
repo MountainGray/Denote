@@ -11,7 +11,7 @@ class Pen;
 class Stroke : public QGraphicsItem
 {
 public:
-    Stroke(Pen *pen, QColor color);
+    Stroke(Pen *pen);
 
 public:
     void init(QPointF pos, float pressure);
@@ -25,9 +25,10 @@ protected:
 
 protected:
     QVector<PressurePoint> points;
+    QPen painter_pen;
     QRectF bounds;
-    Pen* pen;
     QColor color;
+    float width;
 };
 
 #endif // STROKE_H
