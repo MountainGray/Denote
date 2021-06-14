@@ -28,7 +28,8 @@ void Stroke::addpoint(QPointF pos, float pressure)
             points.pop_back();
             float avg_x = (points.last().x() + pos.x())/2;
             float avg_y = (points.last().y() + pos.y())/2;
-            points.append(PressurePoint(avg_x,avg_y,pressure));
+            float avg_p = (points.last().p() + pressure)/2;
+            points.append(PressurePoint(avg_x,avg_y,avg_p));
         }
         QRectF new_area = QRectF(pos,points.last());
         QRectF old_area = QRectF(points.last(),points.at(points.size()-2));
@@ -75,6 +76,8 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
         last_x = p0.x();
         last_y = p0.y();
+
+        painter_pen.setColor(QColor(((i%4)+1)*80,(i%4)*21,(i%4)*127)); //false color
 
         for(int j = 1; j <= line_res; j++){//5 segments
             t = j/float(line_res);

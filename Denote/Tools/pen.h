@@ -3,6 +3,7 @@
 #include <QColor>
 
 #include "Tools/tool.h"
+#include <QElapsedTimer>
 
 class Stroke;
 class UI;
@@ -30,9 +31,16 @@ public:
 private:
     UI* ui;
     QColor color = Qt::black;
-    QPointF lastPoint;
+    QPointF last_point;
+    QPointF true_last_point;
     Stroke *stroke = nullptr;
     float width = 0;
+    QElapsedTimer timer;
+    int count = 0;
+    float inverse_speed;
+    float speed_width;
+    float last_speed_width = 0;
+    float sum_dist = 0;
 };
 
 #endif // PEN_H

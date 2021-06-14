@@ -4,7 +4,7 @@
 DrawEvent::DrawEvent(QMouseEvent *event, DocumentGraphics* view) :
     QTabletEvent(event->type(),
                  event->pointingDevice(),
-                 event->position(),
+                 QPointF(float(event->position().x()), float(event->position().y())),
                  event->globalPosition(),
                  0.5, //pressure
                  0, //x_tilt
