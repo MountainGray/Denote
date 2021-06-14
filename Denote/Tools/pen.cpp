@@ -53,14 +53,16 @@ void Pen::drawMoveEvent(DrawEvent event)
         float dy = event.position().y()-last_point.y();
         float dist = sqrt(dx*dx+dy*dy);
 
-        if (event.deviceType() == QInputDevice::DeviceType::Mouse and dist > 3){//min distance to add new point for mouse
-            stroke->addpoint(event.docPos(), fmax(speed_width*width,0.1));
+        if (event.deviceType() == QInputDevice::DeviceType::Mouse and dist >= 3){//min distance to add new point for mouse
+            if(mode == "Speed") stroke->addpoint(event.docPos(), fmax(speed_width*width,0.1));
+            else stroke->addpoint(event.docPos(), width);
             last_point = event.position();
-        } else if (event.deviceType() == QInputDevice::DeviceType::Stylus and dist > 2){//min distance to add new point for pen
-            //stroke->addpoint(event.docPos(),(pressureToWidth(event.pressure()) + fmax(speed_width*width,0.1))/2);//average
-            stroke->addpoint(event.docPos(),fmax(event.pressure()*speed_width*width,0.1));//mult average
-            //stroke->addpoint(event.docPos(),pressureToWidth(event.pressure()));//pressure
-            //stroke->addpoint(event.docPos(),fmax(speed_width*width,0.1));//speed
+        } else if (event.deviceType() == QInputDevice::DeviceType::Stylus and dist >= 1){//min distance to add new point for pen
+            if(mode == "Speed") stroke->addpoint(event.docPos(),fmax(speed_width*width,0.1));//speed
+            else if(mode == "Pressure") stroke->addpoint(event.docPos(),pressureToWidth(event.pressure()));//pressure
+            else if(mode == "Average") stroke->addpoint(event.docPos(),(pressureToWidth(event.pressure()) + fmax(speed_width*width,0.1))/2);//average
+            else if(mode == "Combined") stroke->addpoint(event.docPos(),fmax(event.pressure()*speed_width*width,0.1));//mult average
+            else stroke->addpoint(event.docPos(), width);
             last_point = event.position();
         }
         true_last_point = event.position();
@@ -71,13 +73,11 @@ void Pen::drawMoveEvent(DrawEvent event)
 void Pen::drawReleaseEvent(DrawEvent event)
 {
     if(stroke != nullptr){
-
         if(event.deviceType() == QInputDevice::DeviceType::Mouse){
             stroke->finish(event.docPos(), 0.1);
         } else if(event.deviceType() == QInputDevice::DeviceType::Stylus){
             stroke->finish(event.docPos(),pressureToWidth(event.pressure()));
         }
-
         stroke = nullptr;
     }
 }

@@ -3,6 +3,8 @@
 
 #include "toolmenu.h"
 
+#include <QComboBox>
+
 class Pen;
 
 class PenMenu : public ToolMenu
@@ -13,6 +15,11 @@ public:
 public slots:
     void setPenWidth(int width);
     void setPenColor();
+    void setWidthMode();
+
+private:
+    QComboBox *combo;
+    Pen *tool;
 };
 
 #endif // PENMENU_H

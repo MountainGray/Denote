@@ -23,6 +23,7 @@ public:
 public:
     void setWidth(float width){this->width = width;}
     void setColor(QColor color){this->color = color;}
+    void setMode(QString mode){this->mode = mode;}
     float getWidth(){return width;}
     QColor getColor(){ return color;}
 
@@ -41,6 +42,7 @@ private:
     float speed_width;
     float last_speed_width = 0;
     float sum_dist = 0;
+    QString mode = "constant";
 };
 
 #endif // PEN_H

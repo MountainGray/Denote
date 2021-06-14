@@ -77,7 +77,7 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         last_x = p0.x();
         last_y = p0.y();
 
-        painter_pen.setColor(QColor(((i%4)+1)*80,(i%4)*21,(i%4)*127)); //false color
+        //painter_pen.setColor(QColor(((i%4)+1)*80,(i%4)*21,(i%4)*127)); //false color
 
         for(int j = 1; j <= line_res; j++){//5 segments
             t = j/float(line_res);
