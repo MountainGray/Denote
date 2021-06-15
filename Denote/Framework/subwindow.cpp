@@ -7,6 +7,7 @@
 SubWindow::SubWindow(QMainWindow *parent) : QDockWidget(parent){
     this->mainWindow = parent;
     connect(this, SIGNAL(topLevelChanged(bool)), this, SLOT(makeTopLevel(bool)));
+    /*
     QLabel *label = new QLabel("Test",this);
     QPushButton *close = new QPushButton("X",this);
     QPushButton *minimize = new QPushButton("-",this);
@@ -16,8 +17,8 @@ SubWindow::SubWindow(QMainWindow *parent) : QDockWidget(parent){
     layout->addWidget(minimize);
     titlebar = new QWidget();
     titlebar->setLayout(layout);
-
     setTitleBarWidget(titlebar);
+    */
 
 
 }

@@ -43,6 +43,8 @@ private:
     float last_speed_width = 0;
     float sum_dist = 0;
     QString mode = "constant";
+    float dir = 0;
+    float last_dir = 0;
 };
 
 #endif // PEN_H

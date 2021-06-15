@@ -42,6 +42,11 @@ void Pen::drawMoveEvent(DrawEvent event)
         last_speed_width = speed_width;
         count = 0;
         sum_dist = 0;
+        dir = atan2f(last_point.y()-event.position().y(), event.position().x()-last_point.x());
+        dir = (dir + last_dir)/2;
+        last_dir = dir;
+        //if(dir < 0) dir += 6.28;
+        //qDebug() << dir;
     } else {
         sum_dist += fabs(event.position().x()-true_last_point.x());
         sum_dist += fabs(event.position().y()-true_last_point.y());
@@ -62,7 +67,9 @@ void Pen::drawMoveEvent(DrawEvent event)
             else if(mode == "Pressure") stroke->addpoint(event.docPos(),pressureToWidth(event.pressure()));//pressure
             else if(mode == "Average") stroke->addpoint(event.docPos(),(pressureToWidth(event.pressure()) + fmax(speed_width*width,0.1))/2);//average
             else if(mode == "Combined") stroke->addpoint(event.docPos(),fmax(event.pressure()*speed_width*width,0.1));//mult average
-            else stroke->addpoint(event.docPos(), width);
+            //else stroke->addpoint(event.docPos(), width);
+            //else stroke->addpoint(event.docPos(), fmax(0.1,abs(width*event.xTilt()/60)));
+            else stroke->addpoint(event.docPos(), fmax(0.1, width*(abs(cosf(dir))*0.9+0.1)));
             last_point = event.position();
         }
         true_last_point = event.position();

@@ -31,6 +31,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     page3->setBackgroundType(Graph);
     doc->addPage(page3);
 
+    Page *page4 = new Page();
+    page4->setBackgroundType(LinesMargin);
+    doc->addPage(page4);
+
     QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
 
     DocumentView *doc_view = new DocumentView(this, doc);
