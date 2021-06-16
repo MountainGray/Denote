@@ -20,7 +20,7 @@ public:
     UI* getUI(){return ui;}
 
 public:
-    void deleteItems(QList<QGraphicsItem*> items);
+    void removeItems(QList<QGraphicsItem*> items);
 
 
 protected:

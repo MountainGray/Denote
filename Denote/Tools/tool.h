@@ -7,7 +7,8 @@
 #include <QGraphicsSceneWheelEvent>
 #include <QKeyEvent>
 
-// todo: add all event handling void methods
+class ToolMenu;
+
 class Tool
 {
 public:
@@ -18,6 +19,12 @@ public:
     virtual void drawMoveEvent(DrawEvent event) = 0;
     virtual void drawReleaseEvent(DrawEvent event) = 0;
     virtual void drawDoubleClickEvent(DrawEvent event) = 0;
+
+public:
+    ToolMenu* toolMenu(){return tool_menu;}
+
+protected:
+    ToolMenu* tool_menu = nullptr;
 };
 
 #endif // TOOL_H

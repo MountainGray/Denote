@@ -14,13 +14,17 @@ public:
     UI(ToolMenuViewer *tool_menu_viewer);
 
 public:
-    void setTool(Tool *tool);
-    Tool* getTool();
+    void addTool(Tool* tool);
+    void setActiveTool(Tool *tool);
+    Tool* getActiveTool();
     Document* getDocument();
     void addDocument(Document*);
 
+    void switchTool();
+
 private:
-    Tool *tool;
+    QList<Tool*> tools;
+    Tool *active_tool;
     ToolMenuViewer *tool_menu_viewer;
     Document* document;
 };

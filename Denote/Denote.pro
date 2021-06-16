@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Framework/ToolMenus/erasermenu.cpp \
     Framework/ToolMenus/penmenu.cpp \
     Framework/ToolMenus/toolmenu.cpp \
     Framework/ToolMenus/toolmenuviewer.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
     Framework/documentview.cpp \
     Framework/drawevent.cpp \
     Framework/subwindow.cpp \
+    Tools/eraser.cpp \
     Tools/pressurepoint.cpp \
     Tools/pen.cpp \
     Tools/stroke.cpp \
@@ -28,6 +30,7 @@ SOURCES += \
     Ui/ui.cpp
 
 HEADERS += \
+    Framework/ToolMenus/erasermenu.h \
     Framework/ToolMenus/penmenu.h \
     Framework/ToolMenus/toolmenu.h \
     Framework/ToolMenus/toolmenuviewer.h \
@@ -36,6 +39,7 @@ HEADERS += \
     Framework/documentview.h \
     Framework//subwindow.h \
     Framework/drawevent.h \
+    Tools/eraser.h \
     Tools/pressurepoint.h \
     Tools/pen.h \
     Tools/stroke.h \

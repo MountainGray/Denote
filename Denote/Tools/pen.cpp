@@ -3,11 +3,13 @@
 #include "Tools/stroke.h"
 #include "Ui/ui.h"
 #include "Framework/document.h"
+#include "Framework/ToolMenus/penmenu.h"
 
 
 Pen::Pen(UI* ui)
 {
     this->ui = ui;
+    tool_menu = new PenMenu(this);
 }
 
 

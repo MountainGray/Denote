@@ -35,11 +35,11 @@ void DocumentGraphics::tabletEvent(QTabletEvent *event){
         //update cursor to specific writing cursor (if for tablet only)
     } else if(event->type() == QEvent::TabletPress){
         inverse = viewportTransform().inverted();
-        doc->getUI()->getTool()->drawPressEvent(DrawEvent(event, this));
+        doc->getUI()->getActiveTool()->drawPressEvent(DrawEvent(event, this));
     } else if(event->type() == QEvent::TabletMove){
-        doc->getUI()->getTool()->drawMoveEvent(DrawEvent(event, this));
+        doc->getUI()->getActiveTool()->drawMoveEvent(DrawEvent(event, this));
     } else if(event->type() == QEvent::TabletRelease){
-        doc->getUI()->getTool()->drawReleaseEvent(DrawEvent(event, this));
+        doc->getUI()->getActiveTool()->drawReleaseEvent(DrawEvent(event, this));
     }
 }
 
@@ -48,7 +48,7 @@ void DocumentGraphics::mousePressEvent(QMouseEvent *event)
 {
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
         inverse = viewportTransform().inverted();
-        doc->getUI()->getTool()->drawPressEvent(DrawEvent(event, this));
+        doc->getUI()->getActiveTool()->drawPressEvent(DrawEvent(event, this));
     }
     QGraphicsView::mousePressEvent(event);
 }
@@ -57,7 +57,7 @@ void DocumentGraphics::mousePressEvent(QMouseEvent *event)
 void DocumentGraphics::mouseMoveEvent(QMouseEvent *event)
 {
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
-        doc->getUI()->getTool()->drawMoveEvent(DrawEvent(event, this));
+        doc->getUI()->getActiveTool()->drawMoveEvent(DrawEvent(event, this));
     }
     QGraphicsView::mouseMoveEvent(event);
 }
@@ -66,7 +66,7 @@ void DocumentGraphics::mouseMoveEvent(QMouseEvent *event)
 void DocumentGraphics::mouseReleaseEvent(QMouseEvent *event)
 {
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
-        doc->getUI()->getTool()->drawReleaseEvent(DrawEvent(event, this));
+        doc->getUI()->getActiveTool()->drawReleaseEvent(DrawEvent(event, this));
     }
     QGraphicsView::mouseReleaseEvent(event);//for zooming
 }
@@ -75,7 +75,7 @@ void DocumentGraphics::mouseReleaseEvent(QMouseEvent *event)
 void DocumentGraphics::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
-        doc->getUI()->getTool()->drawDoubleClickEvent(DrawEvent(event, this));
+        doc->getUI()->getActiveTool()->drawDoubleClickEvent(DrawEvent(event, this));
     }
     QGraphicsView::mouseDoubleClickEvent(event);//for zooming
 }
@@ -99,4 +99,12 @@ void DocumentGraphics::wheelEvent(QWheelEvent *e){
         QGraphicsView::wheelEvent(e);
     }
     inverse = viewportTransform().inverted();
+}
+
+
+void DocumentGraphics::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Space){
+        doc->getUI()->switchTool();
+    }
 }

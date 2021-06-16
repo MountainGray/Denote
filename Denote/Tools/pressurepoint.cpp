@@ -1,7 +1,7 @@
 #include "pressurepoint.h"
 
 
-PressurePoint::PressurePoint() : QPointF()
+PressurePoint::PressurePoint()
 {
     pressure = 0;
 }

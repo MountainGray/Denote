@@ -17,8 +17,7 @@ SubWindow::SubWindow(QMainWindow *parent) : QDockWidget(parent){
     layout->addWidget(minimize);
     titlebar = new QWidget();
     titlebar->setLayout(layout);
-    setTitleBarWidget(titlebar);
-    */
+    setTitleBarWidget(titlebar);*/
 
 
 }

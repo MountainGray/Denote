@@ -27,6 +27,14 @@ bool Document::removePage(int i){
 }
 
 
+void Document::removeItems(QList<QGraphicsItem *> items)
+{
+    foreach(QGraphicsItem* item, items){
+        removeItem(item);
+    }
+}
+
+
 void Document::drawBackground(QPainter *painter, const QRectF &rect){
     painter->fillRect(rect, QBrush(Qt::black));
     return;

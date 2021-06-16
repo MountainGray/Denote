@@ -17,8 +17,11 @@ public:
     void init(QPointF pos, float pressure);
     void addpoint(QPointF pos, float pressure);
     void finish(QPointF pos, float pressure);
+
+public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    int type() const override {return UserType + 1;}
 
 protected:
     void updateBounds(PressurePoint point);
