@@ -19,6 +19,8 @@ public:
     void setScale(float view_scale);
 
 protected:
+    void enterEvent(QEnterEvent *event) override;
+    void leaveEvent(QEvent *event) override;
     void tabletEvent(QTabletEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;

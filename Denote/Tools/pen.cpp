@@ -22,7 +22,7 @@ void Pen::drawPressEvent(DrawEvent event)
         stroke = new Stroke(this);
         if(event.deviceType() == QInputDevice::DeviceType::Stylus) stroke->init(event.docPos(), event.pressure());
         else stroke->init(event.docPos(), fmax(speed_width*width,0.1));
-        ui->getDocument()->addItem(stroke);
+        ui->getActiveDocument()->addItem(stroke);
     } else {
         drawReleaseEvent(event);
     }
@@ -90,12 +90,6 @@ void Pen::drawReleaseEvent(DrawEvent event)
         stroke = nullptr;
     }
 }
-
-
-void Pen::drawDoubleClickEvent(DrawEvent event){
-    Q_UNUSED(event);
-}
-
 
 
 float Pen::pressureToWidth(float pressure)

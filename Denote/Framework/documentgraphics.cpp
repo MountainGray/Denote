@@ -17,6 +17,9 @@ DocumentGraphics::DocumentGraphics(DocumentView *view, Document *doc) : QGraphic
     setRenderHint(QPainter::SmoothPixmapTransform, true);
 
     centerOn(doc->width()/2,0);
+
+    setTabletTracking(true);
+    setMouseTracking(true);
 }
 
 
@@ -27,14 +30,24 @@ void DocumentGraphics::setScale(float view_scale)
 }
 
 
+void DocumentGraphics::enterEvent(QEnterEvent *event)
+{
+    doc->getUI()->setActiveView(this);
+    inverse = viewportTransform().inverted();
+    doc->getUI()->getActiveTool()->documentProximityEvent(event);
+}
+
+
+void DocumentGraphics::leaveEvent(QEvent *event)
+{
+    doc->getUI()->getActiveTool()->documentProximityEvent(event);
+}
+
+
 void DocumentGraphics::tabletEvent(QTabletEvent *event){
     event->accept();
 
-    if (event->type() == QEvent::TabletEnterProximity ||
-        event->type() == QEvent::TabletLeaveProximity) {
-        //update cursor to specific writing cursor (if for tablet only)
-    } else if(event->type() == QEvent::TabletPress){
-        inverse = viewportTransform().inverted();
+    if(event->type() == QEvent::TabletPress){
         doc->getUI()->getActiveTool()->drawPressEvent(DrawEvent(event, this));
     } else if(event->type() == QEvent::TabletMove){
         doc->getUI()->getActiveTool()->drawMoveEvent(DrawEvent(event, this));
@@ -47,7 +60,6 @@ void DocumentGraphics::tabletEvent(QTabletEvent *event){
 void DocumentGraphics::mousePressEvent(QMouseEvent *event)
 {
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
-        inverse = viewportTransform().inverted();
         doc->getUI()->getActiveTool()->drawPressEvent(DrawEvent(event, this));
     }
     QGraphicsView::mousePressEvent(event);

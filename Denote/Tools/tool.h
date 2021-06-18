@@ -15,10 +15,15 @@ public:
     Tool();
 
 public:
-    virtual void drawPressEvent(DrawEvent event) = 0;
-    virtual void drawMoveEvent(DrawEvent event) = 0;
-    virtual void drawReleaseEvent(DrawEvent event) = 0;
-    virtual void drawDoubleClickEvent(DrawEvent event) = 0;
+    virtual void documentProximityEvent(QEvent *event){Q_UNUSED(event);}
+    virtual void tabletProximityEvent(QEvent *event){Q_UNUSED(event);}
+    virtual void drawPressEvent(DrawEvent event){Q_UNUSED(event);}
+    virtual void drawMoveEvent(DrawEvent event){Q_UNUSED(event);}
+    virtual void drawReleaseEvent(DrawEvent event){Q_UNUSED(event);}
+    virtual void drawDoubleClickEvent(DrawEvent event){Q_UNUSED(event);}
+
+    virtual void activate() = 0;
+    virtual void deactivate() = 0;
 
 public:
     ToolMenu* toolMenu(){return tool_menu;}

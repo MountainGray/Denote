@@ -5,6 +5,8 @@
 #include "Ui/ui.h"
 #include "Graphics/page.h"
 #include "Framework/ToolMenus/toolmenuviewer.h"
+#include "Tools/pen.h"
+#include "Tools/eraser.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -17,7 +19,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     ui = new UI(tool_menu_viewer);
 
     Document *doc = new Document(ui);
-    ui->addDocument(doc);    
+    ui->setActiveDocument(doc);
+
+    ui->addTool(new Pen(ui));
+    ui->addTool(new Eraser(ui));
 
     Page *page1 = new Page();
     page1->setBackgroundType(Engineering);

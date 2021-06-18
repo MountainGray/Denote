@@ -3,6 +3,7 @@
 #include "Ui/ui.h"
 #include "Framework/document.h"
 #include "Framework/ToolMenus/erasermenu.h"
+#include "Framework/documentgraphics.h"
 
 #include <QPainter>
 
@@ -15,26 +16,31 @@ Eraser::Eraser(UI* ui)
 }
 
 
+void Eraser::documentProximityEvent(QEvent *event)
+{
+    if(event->type() == QEvent::Enter) activate();
+    else if(event->type() == QEvent::Leave) deactivate();
+}
+
+
 void Eraser::drawPressEvent(DrawEvent event)
 {
     if(event.button() == Qt::LeftButton){
-        active = true;
-    }
-    if(added == false){
-        ui->getDocument()->addItem(this);
-        added = true;
+        erasing = true;
     }
 }
 
 
 void Eraser::drawMoveEvent(DrawEvent event)
 {
-    if(active){
+    if(visible){
         setPos(event.docPos());
-        QList<QGraphicsItem*> items = ui->getDocument()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
-        foreach(QGraphicsItem* item, items){
-            if(item->type() == UserType + 1){ //stroke
-                ui->getDocument()->removeItem(item);
+        if(erasing){
+            QList<QGraphicsItem*> items = ui->getActiveDocument()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
+            foreach(QGraphicsItem* item, items){
+                if(item->type() == UserType + 1){ //stroke
+                    ui->getActiveDocument()->removeItem(item);
+                }
             }
         }
     }
@@ -44,15 +50,26 @@ void Eraser::drawMoveEvent(DrawEvent event)
 void Eraser::drawReleaseEvent(DrawEvent event)
 {
     if(event.button() == Qt::LeftButton){
-        active = false;
+        erasing = false;
     }
 }
 
 
-void Eraser::drawDoubleClickEvent(DrawEvent event)
+void Eraser::activate()
 {
-    Q_UNUSED(event);
-    return;
+    if(not visible){
+        ui->getActiveDocument()->addItem(this);
+        visible = true;
+    }
+}
+
+
+void Eraser::deactivate()
+{
+    if(visible){
+        ui->getActiveDocument()->removeItem(this);
+        visible = false;
+    }
 }
 
 
@@ -65,7 +82,8 @@ QRectF Eraser::boundingRect() const
 void Eraser::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
-    Q_UNUSED(widget);
+
+    if(widget->parentWidget() != ui->getActiveView()) return;
 
     QPen pen = QPen(QColor(0,0,0,55), 1, Qt::SolidLine, Qt::RoundCap);
     painter->setPen(pen);

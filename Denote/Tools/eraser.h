@@ -12,10 +12,13 @@ public:
     Eraser(UI* ui);
 
 public:
+    void documentProximityEvent(QEvent* event) override;
     void drawPressEvent(DrawEvent event) override;
     void drawMoveEvent(DrawEvent event) override;
     void drawReleaseEvent(DrawEvent event) override;
-    void drawDoubleClickEvent(DrawEvent event) override;
+
+    void activate() override;
+    void deactivate() override;
 
 public:
     QRectF boundingRect() const override;
@@ -29,9 +32,9 @@ public:
 private:
     UI* ui;
     float width;
-    bool active = false;
+    bool erasing = false;
+    bool visible = false;
     QRectF bounds;
-    bool added = false;
 };
 
 #endif // ERASER_H

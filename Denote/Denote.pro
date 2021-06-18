@@ -1,4 +1,5 @@
 QT       += core gui
+QT       += openglwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,7 +28,8 @@ SOURCES += \
     mainwindow.cpp \
     Graphics/page.cpp \
     Graphics/pagebackground.cpp \
-    Ui/ui.cpp
+    Ui/ui.cpp \
+    tabletapplication.cpp
 
 HEADERS += \
     Framework/ToolMenus/erasermenu.h \
@@ -47,7 +49,8 @@ HEADERS += \
     mainwindow.h \
     Graphics/page.h \
     Graphics/pagebackground.h \
-    Ui/ui.h
+    Ui/ui.h \
+    tabletapplication.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

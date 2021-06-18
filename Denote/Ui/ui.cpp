@@ -8,9 +8,6 @@
 UI::UI(ToolMenuViewer *tool_menu_viewer)
 {
     this->tool_menu_viewer = tool_menu_viewer;
-
-    addTool(new Pen(this));
-    addTool(new Eraser(this));
 }
 
 
@@ -22,7 +19,9 @@ void UI::addTool(Tool *tool)
 
 
 void UI::setActiveTool(Tool *tool){
+    if(active_tool != nullptr) active_tool->deactivate();
     active_tool = tool;
+    tool->activate();
     tool_menu_viewer->setMenu(active_tool->toolMenu());
 }
 
@@ -32,14 +31,14 @@ Tool* UI::getActiveTool(){
 }
 
 
-Document *UI::getDocument()
+Document *UI::getActiveDocument()
 {
-    return document;
+    return active_document;
 }
 
 
-void UI::addDocument(Document *doc){
-    document = doc;
+void UI::setActiveDocument(Document *doc){
+    active_document = doc;
 }
 
 

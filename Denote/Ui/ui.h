@@ -7,6 +7,7 @@
 class Tool;
 class ToolMenuViewer;
 class Document;
+class DocumentGraphics;
 
 class UI
 {
@@ -16,17 +17,21 @@ public:
 public:
     void addTool(Tool* tool);
     void setActiveTool(Tool *tool);
+    void setActiveDocument(Document*);
+    void setActiveView(DocumentGraphics* view){active_view = view;}
     Tool* getActiveTool();
-    Document* getDocument();
-    void addDocument(Document*);
+    Document* getActiveDocument();
+    DocumentGraphics* getActiveView(){return active_view;}
 
     void switchTool();
 
 private:
-    QList<Tool*> tools;
-    Tool *active_tool;
     ToolMenuViewer *tool_menu_viewer;
-    Document* document;
+    QList<Tool*> tools;
+    Tool *active_tool = nullptr;
+    Document* active_document;
+    DocumentGraphics* active_view;
+
 };
 
 #endif // UI_H

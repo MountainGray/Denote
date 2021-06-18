@@ -18,7 +18,9 @@ public:
     void drawPressEvent(DrawEvent event) override;
     void drawMoveEvent(DrawEvent event) override;
     void drawReleaseEvent(DrawEvent event) override;
-    void drawDoubleClickEvent(DrawEvent event) override;
+
+    void activate() override{};
+    void deactivate() override{};
 
 public:
     void setWidth(float width){this->width = width;}
