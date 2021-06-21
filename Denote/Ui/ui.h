@@ -6,13 +6,14 @@
 
 class Tool;
 class ToolMenuViewer;
+class ToolLibrary;
 class Document;
 class DocumentGraphics;
 
 class UI
 {
 public:
-    UI(ToolMenuViewer *tool_menu_viewer);
+    UI(ToolMenuViewer *tool_menu_viewer, ToolLibrary *tool_library);
 
 public:
     void addTool(Tool* tool);
@@ -23,10 +24,9 @@ public:
     Document* getActiveDocument();
     DocumentGraphics* getActiveView(){return active_view;}
 
-    void switchTool();
-
 private:
     ToolMenuViewer *tool_menu_viewer;
+    ToolLibrary *tool_library;
     QList<Tool*> tools;
     Tool *active_tool = nullptr;
     Document* active_document;

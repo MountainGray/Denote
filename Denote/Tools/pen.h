@@ -22,9 +22,11 @@ public:
     void activate() override{};
     void deactivate() override{};
 
+    void paintPreset(QPaintEvent *event) override;
+
 public:
-    void setWidth(float width){this->width = width;}
-    void setColor(QColor color){this->color = color;}
+    void setWidth(float width);
+    void setColor(QColor color);
     void setMode(QString mode){this->mode = mode;}
     float getWidth(){return width;}
     QColor getColor(){ return color;}
@@ -32,7 +34,6 @@ public:
     float pressureToWidth(float pressure);
 
 private:
-    UI* ui;
     QColor color = Qt::black;
     QPointF last_point;
     QPointF true_last_point;
@@ -44,7 +45,7 @@ private:
     float speed_width;
     float last_speed_width = 0;
     float sum_dist = 0;
-    QString mode = "constant";
+    QString mode = "Pressure";
     float dir = 0;
     float last_dir = 0;
 };

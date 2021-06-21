@@ -19,6 +19,8 @@ SOURCES += \
     Framework/documentview.cpp \
     Framework/drawevent.cpp \
     Framework/subwindow.cpp \
+    Framework/toollibrary.cpp \
+    Framework/toolpreset.cpp \
     Tools/eraser.cpp \
     Tools/pressurepoint.cpp \
     Tools/pen.cpp \
@@ -41,6 +43,8 @@ HEADERS += \
     Framework/documentview.h \
     Framework//subwindow.h \
     Framework/drawevent.h \
+    Framework/toollibrary.h \
+    Framework/toolpreset.h \
     Tools/eraser.h \
     Tools/pressurepoint.h \
     Tools/pen.h \

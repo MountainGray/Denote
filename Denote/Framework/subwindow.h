@@ -12,7 +12,7 @@ public:
     ~SubWindow();
 
 protected:
-    void changeEvent(QEvent *e) override;
+    void changeEvent(QEvent *event) override;
 
 private slots:
     void makeTopLevel(bool);

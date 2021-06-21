@@ -5,11 +5,13 @@
 #include "Framework/document.h"
 #include "Framework/ToolMenus/penmenu.h"
 
+#include <QPainter>
 
-Pen::Pen(UI* ui)
+Pen::Pen(UI* ui) : Tool(ui)
 {
-    this->ui = ui;
     tool_menu = new PenMenu(this);
+    setWidth(4);
+    setColor(QColor("red"));
 }
 
 
@@ -89,6 +91,34 @@ void Pen::drawReleaseEvent(DrawEvent event)
         }
         stroke = nullptr;
     }
+}
+
+
+void Pen::paintPreset(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+    QPainter painter(tool_preset);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(QBrush(QColor("white")));
+    painter.setPen(QPen(QColor("black")));
+    painter.drawRect(QRectF(0,0,60,60));
+    painter.setBrush(QBrush(color));
+    painter.drawEllipse(QPointF(30,30),width/2,width/2);
+    painter.drawText(QPointF(2,12),"Pen");
+}
+
+
+void Pen::setWidth(float width)
+{
+    this->width = width;
+    tool_preset->update();
+}
+
+
+void Pen::setColor(QColor color)
+{
+    this->color = color;
+    tool_preset->update();
 }
 
 

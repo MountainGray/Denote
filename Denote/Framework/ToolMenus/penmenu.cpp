@@ -17,7 +17,7 @@ PenMenu::PenMenu(Pen* pen) : ToolMenu(pen)
 
     combo = new QComboBox(this);
     combo->addItems({QString("Constant"),QString("Pressure"),QString("Speed"),QString("Average"),QString("Combined")});
-    combo->setCurrentIndex(0);
+    combo->setCurrentIndex(1);
 
     connect(width_slider, &QSlider::valueChanged, this, &PenMenu::setPenWidth);
     connect(button, &QPushButton::clicked, this, &PenMenu::setPenColor);

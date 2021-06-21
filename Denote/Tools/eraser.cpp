@@ -8,11 +8,10 @@
 #include <QPainter>
 
 
-Eraser::Eraser(UI* ui)
+Eraser::Eraser(UI* ui) : Tool(ui)
 {
-    this->ui = ui;
     tool_menu = new EraserMenu(this);
-    setWidth(2);
+    setWidth(10);
 }
 
 
@@ -73,6 +72,20 @@ void Eraser::deactivate()
 }
 
 
+void Eraser::paintPreset(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+    QPainter painter(tool_preset);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(QBrush(QColor("white")));
+    painter.setPen(QPen(QColor("black")));
+    painter.drawRect(QRectF(0,0,60,60));
+    painter.setBrush(QBrush(QColor("Pink")));
+    painter.drawRect(30-width/2,30-width/2, width,width);
+    painter.drawText(QPointF(2,12),"Eraser");
+}
+
+
 QRectF Eraser::boundingRect() const
 {
     return bounds;
@@ -96,4 +109,5 @@ void Eraser::setWidth(float width)
 {
     this->width = width;
     bounds = QRectF(-0.5*width,-0.5*width, width, width).adjusted(-2,-2,2,2);
+    tool_preset->update();
 }

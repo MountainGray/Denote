@@ -7,21 +7,34 @@
 #include "Framework/ToolMenus/toolmenuviewer.h"
 #include "Tools/pen.h"
 #include "Tools/eraser.h"
+#include "Framework/toollibrary.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     createMenus();
     setWindowTitle(tr("Denote"));
 
+    ToolLibrary *tool_library = new ToolLibrary(this);
+    subWindows.append(tool_library);
+
     ToolMenuViewer *tool_menu_viewer = new ToolMenuViewer(this);
     subWindows.append(tool_menu_viewer);
 
-    ui = new UI(tool_menu_viewer);
+    ui = new UI(tool_menu_viewer, tool_library);
 
     Document *doc = new Document(ui);
     ui->setActiveDocument(doc);
 
-    ui->addTool(new Pen(ui));
+    for(int i = 0; i < 11; i ++){
+        Pen *pen = new Pen(ui);
+        QColor color;
+        if(i == 9) color.setHsv(0,0,240);
+        else if(i == 10) color.setHsv(0,0,0);
+        else color.setHsv(i*36,255,255);
+        pen->setColor(color);
+        pen->setWidth(i*2+4);
+        ui->addTool(pen);
+    }
     ui->addTool(new Eraser(ui));
 
     Page *page1 = new Page();
@@ -49,11 +62,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     doc_view2->setScale(0.2);
     subWindows.append(doc_view2);
 
+
     addDockWidget(Qt::LeftDockWidgetArea, tool_menu_viewer);
     addDockWidget(Qt::LeftDockWidgetArea, doc_view2);
+    addDockWidget(Qt::RightDockWidgetArea, tool_library);
     addDockWidget(Qt::RightDockWidgetArea, doc_view);
 
-    resizeDocks(subWindows, {200, 1000, 200}, Qt::Orientation::Horizontal);
+    resizeDocks(subWindows, {1000, 200, 1000, 200}, Qt::Orientation::Horizontal);
 
     QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents);
 }

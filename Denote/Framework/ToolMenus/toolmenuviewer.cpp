@@ -3,9 +3,6 @@
 
 ToolMenuViewer::ToolMenuViewer(QMainWindow *parent) : SubWindow(parent)
 {
-    //setWidget(graphics);
-    //docs.append(doc);
-
     setMinimumSize(200,200);
 }
 

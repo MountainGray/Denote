@@ -20,6 +20,8 @@ public:
     void activate() override;
     void deactivate() override;
 
+    void paintPreset(QPaintEvent *event) override;
+
 public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
@@ -30,7 +32,6 @@ public:
     float getWidth(){return width;}
 
 private:
-    UI* ui;
     float width;
     bool erasing = false;
     bool visible = false;

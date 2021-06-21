@@ -2,17 +2,20 @@
 #define TOOL_H
 
 #include "Framework/drawevent.h"
+#include "Framework/toolpreset.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
 #include <QKeyEvent>
 
+class UI;
 class ToolMenu;
+class ToolPreset;
 
 class Tool
 {
 public:
-    Tool();
+    Tool(UI* ui);
 
 public:
     virtual void documentProximityEvent(QEvent *event){Q_UNUSED(event);}
@@ -25,11 +28,17 @@ public:
     virtual void activate() = 0;
     virtual void deactivate() = 0;
 
+    virtual void paintPreset(QPaintEvent *event) = 0;
+
 public:
     ToolMenu* toolMenu(){return tool_menu;}
+    ToolPreset* toolPreset(){return tool_preset;}
+    UI* getUI(){return ui;}
 
 protected:
+    UI* ui;
     ToolMenu* tool_menu = nullptr;
+    ToolPreset* tool_preset = nullptr;
 };
 
 #endif // TOOL_H

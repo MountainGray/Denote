@@ -112,11 +112,3 @@ void DocumentGraphics::wheelEvent(QWheelEvent *e){
     }
     inverse = viewportTransform().inverted();
 }
-
-
-void DocumentGraphics::keyPressEvent(QKeyEvent *event)
-{
-    if(event->key() == Qt::Key_Space){
-        doc->getUI()->switchTool();
-    }
-}

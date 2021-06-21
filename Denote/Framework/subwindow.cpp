@@ -26,12 +26,12 @@ SubWindow::~SubWindow(){
 
 }
 
-void SubWindow::changeEvent(QEvent *e){
-    if (e->type() == QEvent::WindowStateChange){
+void SubWindow::changeEvent(QEvent *event){
+    if (event->type() == QEvent::WindowStateChange){
         if(isMinimized()){
             hide();
         } else {
-            QDockWidget::changeEvent(e);
+            QDockWidget::changeEvent(event);
         }
     }
 }
