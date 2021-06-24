@@ -5,6 +5,7 @@
 #include <QColorDialog>
 #include <QGridLayout>
 
+
 PenMenu::PenMenu(Pen* pen) : ToolMenu(pen)
 {
     this->tool = pen;

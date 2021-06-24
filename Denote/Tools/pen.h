@@ -12,7 +12,6 @@ class Pen : public Tool
 {
 public:
     Pen(UI* ui);
-    Pen(QColor color, int Width = 1);
 
 public:
     void drawPressEvent(DrawEvent event) override;

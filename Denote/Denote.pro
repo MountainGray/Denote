@@ -11,6 +11,7 @@ CONFIG += c++11
 
 SOURCES += \
     Framework/ToolMenus/erasermenu.cpp \
+    Framework/ToolMenus/fillmenu.cpp \
     Framework/ToolMenus/penmenu.cpp \
     Framework/ToolMenus/toolmenu.cpp \
     Framework/ToolMenus/toolmenuviewer.cpp \
@@ -22,6 +23,8 @@ SOURCES += \
     Framework/toollibrary.cpp \
     Framework/toolpreset.cpp \
     Tools/eraser.cpp \
+    Tools/fill.cpp \
+    Tools/fillstroke.cpp \
     Tools/pressurepoint.cpp \
     Tools/pen.cpp \
     Tools/stroke.cpp \
@@ -35,6 +38,7 @@ SOURCES += \
 
 HEADERS += \
     Framework/ToolMenus/erasermenu.h \
+    Framework/ToolMenus/fillmenu.h \
     Framework/ToolMenus/penmenu.h \
     Framework/ToolMenus/toolmenu.h \
     Framework/ToolMenus/toolmenuviewer.h \
@@ -46,6 +50,8 @@ HEADERS += \
     Framework/toollibrary.h \
     Framework/toolpreset.h \
     Tools/eraser.h \
+    Tools/fill.h \
+    Tools/fillstroke.h \
     Tools/pressurepoint.h \
     Tools/pen.h \
     Tools/stroke.h \

@@ -37,8 +37,9 @@ void Eraser::drawMoveEvent(DrawEvent event)
         if(erasing){
             QList<QGraphicsItem*> items = ui->getActiveDocument()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
             foreach(QGraphicsItem* item, items){
-                if(item->type() == UserType + 1){ //stroke
+                if(item->type() == UserType + 1 or item->type() == UserType + 4){ //stroke or fill
                     ui->getActiveDocument()->removeItem(item);
+                    delete item;
                 }
             }
         }

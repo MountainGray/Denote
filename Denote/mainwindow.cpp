@@ -6,6 +6,7 @@
 #include "Graphics/page.h"
 #include "Framework/ToolMenus/toolmenuviewer.h"
 #include "Tools/pen.h"
+#include "Tools/fill.h"
 #include "Tools/eraser.h"
 #include "Framework/toollibrary.h"
 
@@ -25,15 +26,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     Document *doc = new Document(ui);
     ui->setActiveDocument(doc);
 
-    for(int i = 0; i < 11; i ++){
+    for(int i = 0; i < 7; i ++){
         Pen *pen = new Pen(ui);
         QColor color;
-        if(i == 9) color.setHsv(0,0,240);
-        else if(i == 10) color.setHsv(0,0,0);
-        else color.setHsv(i*36,255,255);
+        color.setHsv(i*36,255,255);
         pen->setColor(color);
         pen->setWidth(i*2+4);
         ui->addTool(pen);
+    }
+    for(int i = 0; i < 4; i ++){
+        Fill *fill = new Fill(ui);
+        QColor color;
+        color.setHsv(i*36,255,255);
+        fill->setColor(color);
+        ui->addTool(fill);
     }
     ui->addTool(new Eraser(ui));
 

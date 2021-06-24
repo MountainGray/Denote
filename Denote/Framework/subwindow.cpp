@@ -18,13 +18,13 @@ SubWindow::SubWindow(QMainWindow *parent) : QDockWidget(parent){
     titlebar = new QWidget();
     titlebar->setLayout(layout);
     setTitleBarWidget(titlebar);*/
-
-
 }
+
 
 SubWindow::~SubWindow(){
 
 }
+
 
 void SubWindow::changeEvent(QEvent *event){
     if (event->type() == QEvent::WindowStateChange){
