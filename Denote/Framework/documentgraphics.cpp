@@ -4,6 +4,10 @@
 #include "Tools/tool.h"
 #include "drawevent.h"
 
+#include "Tools/image.h"
+#include <QClipboard>
+#include <QGuiApplication>
+
 
 DocumentGraphics::DocumentGraphics(DocumentView *view, Document *doc) : QGraphicsView(view){
     this->doc = doc;
@@ -62,7 +66,6 @@ void DocumentGraphics::mousePressEvent(QMouseEvent *event)
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
         doc->getUI()->getActiveTool()->drawPressEvent(DrawEvent(event, this));
     }
-    QGraphicsView::mousePressEvent(event);
 }
 
 
@@ -71,7 +74,7 @@ void DocumentGraphics::mouseMoveEvent(QMouseEvent *event)
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
         doc->getUI()->getActiveTool()->drawMoveEvent(DrawEvent(event, this));
     }
-    QGraphicsView::mouseMoveEvent(event);
+   QGraphicsView::mouseMoveEvent(event);//for zoom
 }
 
 
@@ -80,7 +83,6 @@ void DocumentGraphics::mouseReleaseEvent(QMouseEvent *event)
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
         doc->getUI()->getActiveTool()->drawReleaseEvent(DrawEvent(event, this));
     }
-    QGraphicsView::mouseReleaseEvent(event);//for zooming
 }
 
 
@@ -89,7 +91,6 @@ void DocumentGraphics::mouseDoubleClickEvent(QMouseEvent *event)
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
         doc->getUI()->getActiveTool()->drawDoubleClickEvent(DrawEvent(event, this));
     }
-    QGraphicsView::mouseDoubleClickEvent(event);//for zooming
 }
 
 
@@ -111,4 +112,22 @@ void DocumentGraphics::wheelEvent(QWheelEvent *e){
         QGraphicsView::wheelEvent(e);
     }
     inverse = viewportTransform().inverted();
+}
+
+
+void DocumentGraphics::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_V && event->modifiers() == Qt::ControlModifier){
+        QClipboard *clip = QGuiApplication::clipboard();
+        QImage image = clip->image(QClipboard::Clipboard);
+        if(not image.isNull()){
+            Image *new_image = new Image(doc->getUI());
+            new_image->setImage(image);
+        }
+    } else if(event->key() == Qt::Key_Delete){
+        foreach(QGraphicsItem *item, doc->selectedItems()){
+            doc->removeItem(item);
+            delete item;
+        }
+    }
 }

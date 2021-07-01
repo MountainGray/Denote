@@ -41,8 +41,8 @@ void PenMenu::setPenWidth(int width)
 
 
 void PenMenu::setPenColor(){
-    QColor newColor = QColorDialog::getColor(tool->getColor());
-    tool->setColor(newColor);
+    QColor new_color = QColorDialog::getColor(tool->getColor());
+    tool->setColor(new_color);
 }
 
 

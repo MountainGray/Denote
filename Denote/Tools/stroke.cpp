@@ -10,6 +10,7 @@ Stroke::Stroke(Pen* pen)
     color = pen->getColor();
     width = pen->getWidth();
     painter_pen = QPen(color, width, Qt::SolidLine, Qt::RoundCap);
+    setFlag(GraphicsItemFlag::ItemIsSelectable, true);
 }
 
 
@@ -77,7 +78,12 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         last_x = p0.x();
         last_y = p0.y();
 
-        //painter_pen.setColor(QColor(((i%4)+1)*80,(i%4)*21,(i%4)*127)); //false color
+        if(isSelected()){
+            //QColor(((i%4)+1)*80,(i%4)*21,(i%4)*127); //false color
+            painter_pen.setColor(color.darker());
+        } else {
+            painter_pen.setColor(color);
+        }
 
         for(int j = 1; j <= line_res; j++){//5 segments
             t = j/float(line_res);
@@ -87,6 +93,7 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             new_p = (1-t)*(1-t)*p0.p()+2*(1-t)*t*p1.p()+t*t*p2.p();
 
             line = QLineF(last_x, last_y, new_x, new_y);
+
             painter_pen.setWidthF(new_p);
             painter->setPen(painter_pen);
             painter->drawLine(line);

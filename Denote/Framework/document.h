@@ -22,7 +22,6 @@ public:
 public:
     void removeItems(QList<QGraphicsItem*> items);
 
-
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
 

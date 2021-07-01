@@ -9,6 +9,8 @@
 #include "Tools/fill.h"
 #include "Tools/eraser.h"
 #include "Framework/toollibrary.h"
+#include "Tools/selectionbox.h"
+#include "Tools/circleselect.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -26,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     Document *doc = new Document(ui);
     ui->setActiveDocument(doc);
 
-    for(int i = 0; i < 7; i ++){
+    for(int i = 0; i < 5; i ++){
         Pen *pen = new Pen(ui);
         QColor color;
         color.setHsv(i*36,255,255);
@@ -42,6 +44,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         ui->addTool(fill);
     }
     ui->addTool(new Eraser(ui));
+    ui->addTool(new SelectionBox(ui));
+    ui->addTool(new CircleSelect(ui));
 
     Page *page1 = new Page();
     page1->setBackgroundType(Engineering);

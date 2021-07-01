@@ -20,6 +20,6 @@ FillMenu::FillMenu(Fill* fill) : ToolMenu(fill)
 
 
 void FillMenu::setFillColor(){
-    QColor newColor = QColorDialog::getColor(tool->getColor());
-    tool->setColor(newColor);
+    QColor new_color = QColorDialog::getColor(tool->getColor());
+    tool->setColor(new_color);
 }

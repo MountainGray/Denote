@@ -7,9 +7,11 @@
 FillStroke::FillStroke(Fill* fill)
 {
     color = fill->getColor();
-    painter_pen = QPen(color,0,Qt::SolidLine, Qt::RoundCap);
+    painter_pen = QPen(color,3,Qt::SolidLine, Qt::RoundCap);
     painter_brush = QBrush(color);
+    setFlag(GraphicsItemFlag::ItemIsSelectable, true);
 }
+
 
 void FillStroke::init(QPointF pos)
 {
@@ -74,7 +76,17 @@ void FillStroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         p1 = points.at(i+1);
         p2 = points.at(i+2);
 
-        //painter_pen.setColor(QColor(((i%4)+1)*80,(i%4)*21,(i%4)*127)); //false color
+
+        if(isSelected()){
+            //QColor(((i%4)+1)*80,(i%4)*21,(i%4)*127)// false color
+            painter_pen.setColor(color.darker());
+            painter->setPen(painter_pen);
+        } else {
+            painter_pen.setColor(color);
+            painter->setPen(painter_pen);
+        }
+
+
 
         for(int j = 1; j <= line_res; j++){//5 segments
             t = j/float(line_res);

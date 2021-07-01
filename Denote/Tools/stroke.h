@@ -20,7 +20,7 @@ public:
 
 public:
     QRectF boundingRect() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    void paint(QPainter *ogpainter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     int type() const override {return UserType + 1;}
 
 protected:
