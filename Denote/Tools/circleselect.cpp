@@ -2,16 +2,26 @@
 
 #include "Ui/ui.h"
 #include "Framework/document.h"
-#include "Framework/ToolMenus/circleselectmenu.h"
 #include "Framework/documentgraphics.h"
+#include "Framework/toolmenu.h"
 
 #include <QPainter>
 
 
 CircleSelect::CircleSelect(UI* ui) : Tool(ui)
 {
-    tool_menu = new CircleSelectMenu(this);
-    setWidth(10);
+    width = 10;
+
+    width_slider = new QSlider(Qt::Horizontal);
+    width_slider->setValue(width);
+    width_slider->setMaximum(40);
+
+    menu_layout = new QGridLayout();
+    menu_layout->addWidget(width_slider,0,0);
+
+    tool_menu->setLayout(menu_layout);
+
+    connect(width_slider, &QSlider::valueChanged, this, &CircleSelect::updateWidth);
 }
 
 
@@ -113,6 +123,13 @@ void CircleSelect::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 void CircleSelect::setWidth(float width)
 {
     this->width = width;
+    width_slider->setValue(width);
     bounds = QRectF(-0.5*width,-0.5*width, width, width).adjusted(-2,-2,2,2);
     tool_preset->update();
+}
+
+
+void CircleSelect::updateWidth(int width)
+{
+    this->width = float(width);
 }

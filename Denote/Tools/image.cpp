@@ -1,6 +1,6 @@
 #include "image.h"
 
-#include "Framework/ToolMenus/toolmenu.h"
+#include "Framework/toolmenu.h"
 #include "Framework/document.h"
 #include "Ui/ui.h"
 #include <QPainter>
@@ -8,7 +8,6 @@
 
 Image::Image(UI* ui) : Tool(ui) //really shouldn't be a tool
 {
-    tool_menu = new ToolMenu(this);
     setFlag(ItemIsSelectable, true);
 }
 

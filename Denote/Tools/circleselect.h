@@ -4,10 +4,12 @@
 #include "tool.h"
 
 #include <QGraphicsItem>
+#include <QSlider>
+#include <QGridLayout>
 
 class UI;
 
-class CircleSelect : public Tool, public QGraphicsItem
+class CircleSelect : public Tool, public QGraphicsItem, public QObject
 {
 public:
     CircleSelect(UI* ui);
@@ -33,11 +35,18 @@ public:
     void setWidth(float width);
     float getWidth(){return width;}
 
+private slots:
+    void updateWidth(int width);
+
 private:
     float width;
     bool selecting = false;
     bool visible = false;
     QRectF bounds;
+
+private:
+    QSlider *width_slider;
+    QGridLayout *menu_layout;
 };
 
 #endif // CIRCLESELECT_H

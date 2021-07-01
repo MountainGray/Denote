@@ -10,12 +10,8 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Framework/ToolMenus/circleselectmenu.cpp \
-    Framework/ToolMenus/erasermenu.cpp \
-    Framework/ToolMenus/fillmenu.cpp \
-    Framework/ToolMenus/penmenu.cpp \
-    Framework/ToolMenus/toolmenu.cpp \
-    Framework/ToolMenus/toolmenuviewer.cpp \
+    Framework/toolmenu.cpp \
+    Framework/toolmenuviewer.cpp \
     Framework/document.cpp \
     Framework/documentgraphics.cpp \
     Framework/documentview.cpp \
@@ -41,12 +37,8 @@ SOURCES += \
     tabletapplication.cpp
 
 HEADERS += \
-    Framework/ToolMenus/circleselectmenu.h \
-    Framework/ToolMenus/erasermenu.h \
-    Framework/ToolMenus/fillmenu.h \
-    Framework/ToolMenus/penmenu.h \
-    Framework/ToolMenus/toolmenu.h \
-    Framework/ToolMenus/toolmenuviewer.h \
+    Framework/toolmenu.h \
+    Framework/toolmenuviewer.h \
     Framework/document.h \
     Framework/documentgraphics.h \
     Framework/documentview.h \

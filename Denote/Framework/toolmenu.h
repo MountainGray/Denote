@@ -8,10 +8,7 @@ class Tool;
 class ToolMenu : public QWidget
 {
 public:
-    ToolMenu(Tool* tool);
-
-protected:
-    Tool* tool;
+    ToolMenu();
 };
 
 #endif // TOOLMENU_H

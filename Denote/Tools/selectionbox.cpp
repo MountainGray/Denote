@@ -1,5 +1,5 @@
 #include "selectionbox.h"
-#include "Framework/ToolMenus/toolmenu.h"
+#include "Framework/toolmenu.h"
 #include "Framework/documentgraphics.h"
 #include "Framework/document.h"
 #include "Ui/ui.h"
@@ -8,7 +8,7 @@
 
 SelectionBox::SelectionBox(UI* ui) : Tool(ui)
 {
-    tool_menu = new ToolMenu(this);
+
 }
 
 

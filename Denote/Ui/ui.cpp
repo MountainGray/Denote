@@ -3,6 +3,7 @@
 #include "Tools/pen.h"
 #include "Tools/eraser.h"
 #include "Framework/ToolMenus/toolmenuviewer.h"
+#include "Framework/ToolMenus/toolmenu.h"
 #include "Framework/toollibrary.h"
 
 
@@ -22,11 +23,13 @@ void UI::addTool(Tool *tool)
 
 
 void UI::setActiveTool(Tool *tool){
-    if(active_tool != nullptr) active_tool->deactivate();
+    if(active_tool != nullptr){
+        active_tool->deactivate();
+    }
     active_tool = tool;
-    tool->activate();
-    tool_menu_viewer->setMenu(active_tool->toolMenu());
     tool_library->setActiveTool(tool);
+    tool_menu_viewer->setWidget(tool->getToolMenu());
+    tool->activate();
 }
 
 
@@ -38,6 +41,12 @@ Tool* UI::getActiveTool(){
 Document *UI::getActiveDocument()
 {
     return active_document;
+}
+
+
+ToolMenu *UI::getToolMenu()
+{
+    return tool_menu_viewer->getMenu();
 }
 
 

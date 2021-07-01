@@ -2,14 +2,23 @@
 
 #include "Tools/fillstroke.h"
 #include "Framework/document.h"
-#include "Framework/ToolMenus/fillmenu.h"
-
+#include "Framework/toolmenu.h"
+#include <QColorDialog>
 #include <QPainter>
+
 
 Fill::Fill(UI* ui) : Tool(ui)
 {
-    tool_menu = new FillMenu(this);
-    setColor(QColor("red"));
+    color = QColor("red");
+
+    color_button = new QPushButton("Select Color");
+
+    menu_layout = new QGridLayout();
+    menu_layout->addWidget(color_button,0,0);
+
+    tool_menu->setLayout(menu_layout);
+
+    connect(color_button, &QPushButton::clicked, this, &Fill::updateColor);
 }
 
 
@@ -76,4 +85,9 @@ void Fill::setColor(QColor color)
 {
     this->color = color;
     tool_preset->update();
+}
+
+void Fill::updateColor()
+{
+    color = QColorDialog::getColor(color);
 }

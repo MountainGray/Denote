@@ -7,6 +7,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
 #include <QKeyEvent>
+#include <QGridLayout>
 
 class UI;
 class ToolMenu;
@@ -31,7 +32,9 @@ public:
     virtual void paintPreset(QPaintEvent *event) = 0;
 
 public:
-    ToolMenu* toolMenu(){return tool_menu;}
+    ToolMenu* getToolMenu(){return tool_menu;}
+
+public:
     ToolPreset* toolPreset(){return tool_preset;}
     UI* getUI(){return ui;}
 

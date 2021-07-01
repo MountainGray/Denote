@@ -3,15 +3,36 @@
 #include "Tools/stroke.h"
 #include "Ui/ui.h"
 #include "Framework/document.h"
-#include "Framework/ToolMenus/penmenu.h"
-
+#include "Framework/toolmenu.h"
 #include <QPainter>
+#include <QColorDialog>
+
 
 Pen::Pen(UI* ui) : Tool(ui)
 {
-    tool_menu = new PenMenu(this);
-    setWidth(4);
-    setColor(QColor("red"));
+    width = 4;
+    color = QColor("red");
+
+    width_slider = new QSlider(Qt::Horizontal);
+    width_slider->setValue(width);
+    width_slider->setMaximum(40);
+
+    color_button = new QPushButton("Select Color");
+
+    mode_combo = new QComboBox();
+    mode_combo->addItems({QString("Constant"),QString("Pressure"),QString("Speed"),QString("Average"),QString("Combined")});
+    mode_combo->setCurrentIndex(1);
+
+    menu_layout = new QGridLayout();
+    menu_layout->addWidget(mode_combo,0,0);
+    menu_layout->addWidget(width_slider,1,0);
+    menu_layout->addWidget(color_button,2,0);
+
+    tool_menu->setLayout(menu_layout);
+
+    connect(width_slider, &QSlider::valueChanged, this, &Pen::updateWidth);
+    connect(color_button, &QPushButton::clicked, this, &Pen::updateColor);
+    connect(mode_combo, &QComboBox::currentIndexChanged, this, &Pen::updateMode);
 }
 
 
@@ -111,6 +132,7 @@ void Pen::paintPreset(QPaintEvent *event)
 void Pen::setWidth(float width)
 {
     this->width = width;
+    width_slider->setValue(width);
     tool_preset->update();
 }
 
@@ -125,4 +147,22 @@ void Pen::setColor(QColor color)
 float Pen::pressureToWidth(float pressure)
 {
     return pressure*width + 0.1;
+}
+
+
+void Pen::updateWidth(int width)
+{
+    this->width = float(width);
+}
+
+
+void Pen::updateColor()
+{
+    color = QColorDialog::getColor(color);
+}
+
+
+void Pen::updateMode()
+{
+    mode = mode_combo->currentText();
 }

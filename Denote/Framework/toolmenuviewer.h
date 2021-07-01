@@ -11,7 +11,11 @@ public:
     ToolMenuViewer(QMainWindow *parent);
 
 public:
-    void setMenu(ToolMenu* menu);
+    ToolMenu* getMenu(){return tool_menu;}
+
+private:
+    ToolMenu* tool_menu;
+
 };
 
 #endif // TOOLMENUVIEWER_H

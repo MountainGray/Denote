@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 
 class Tool;
+class ToolMenu;
 class ToolMenuViewer;
 class ToolLibrary;
 class Document;
@@ -23,6 +24,7 @@ public:
     Tool* getActiveTool();
     Document* getActiveDocument();
     DocumentGraphics* getActiveView(){return active_view;}
+    ToolMenu* getToolMenu();
 
 private:
     ToolMenuViewer *tool_menu_viewer;

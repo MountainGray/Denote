@@ -4,9 +4,6 @@
 ToolMenuViewer::ToolMenuViewer(QMainWindow *parent) : SubWindow(parent)
 {
     setMinimumSize(200,200);
-}
-
-void ToolMenuViewer::setMenu(ToolMenu *menu)
-{
-    setWidget(menu);
+    tool_menu = new ToolMenu();
+    setWidget(tool_menu);
 }
