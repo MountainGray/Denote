@@ -4,7 +4,7 @@
 #include "Framework/subwindow.h"
 #include "Ui/ui.h"
 #include "Graphics/page.h"
-#include "Framework/ToolMenus/toolmenuviewer.h"
+#include "Framework/toolmenuviewer.h"
 #include "Tools/pen.h"
 #include "Tools/fill.h"
 #include "Tools/eraser.h"
@@ -44,8 +44,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         ui->addTool(fill);
     }
     ui->addTool(new Eraser(ui));
-    ui->addTool(new SelectionBox(ui));
-    ui->addTool(new CircleSelect(ui));
+    SelectionBox* box = new SelectionBox(ui);
+    ui->addTool(box);
+    ui->addTool(new CircleSelect(ui, box));
 
     Page *page1 = new Page();
     page1->setBackgroundType(Engineering);

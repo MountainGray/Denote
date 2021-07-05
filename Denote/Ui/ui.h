@@ -25,6 +25,7 @@ public:
     Document* getActiveDocument();
     DocumentGraphics* getActiveView(){return active_view;}
     ToolMenu* getToolMenu();
+    QList<Tool*> getTools(){return tools;}
 
 private:
     ToolMenuViewer *tool_menu_viewer;

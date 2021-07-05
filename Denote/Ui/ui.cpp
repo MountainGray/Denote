@@ -2,8 +2,8 @@
 #include "Tools/tool.h"
 #include "Tools/pen.h"
 #include "Tools/eraser.h"
-#include "Framework/ToolMenus/toolmenuviewer.h"
-#include "Framework/ToolMenus/toolmenu.h"
+#include "Framework/toolmenuviewer.h"
+#include "Framework/toolmenu.h"
 #include "Framework/toollibrary.h"
 
 

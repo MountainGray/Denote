@@ -4,12 +4,14 @@
 #include "Framework/document.h"
 #include "Framework/documentgraphics.h"
 #include "Framework/toolmenu.h"
+#include "Tools/selectionbox.h"
 
 #include <QPainter>
 
 
-CircleSelect::CircleSelect(UI* ui) : Tool(ui)
+CircleSelect::CircleSelect(UI* ui, SelectionBox* box) : Tool(ui)
 {
+    this->box = box;
     width = 10;
 
     width_slider = new QSlider(Qt::Horizontal);
@@ -65,6 +67,8 @@ void CircleSelect::drawDoubleClickEvent(DrawEvent event)
 {
     if(event.button() == Qt::RightButton){
         ui->getActiveDocument()->clearSelection();
+    } else if(event.button() == Qt::LeftButton){
+        ui->setActiveTool(box);
     }
 }
 

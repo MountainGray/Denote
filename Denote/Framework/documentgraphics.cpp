@@ -3,7 +3,8 @@
 #include "Framework/documentview.h"
 #include "Tools/tool.h"
 #include "drawevent.h"
-
+#include "Tools/fillstroke.h"
+#include "Tools/stroke.h"
 #include "Tools/image.h"
 #include <QClipboard>
 #include <QGuiApplication>
@@ -129,5 +130,19 @@ void DocumentGraphics::keyPressEvent(QKeyEvent *event)
             doc->removeItem(item);
             delete item;
         }
+    } else if(event->key() == Qt::Key_D){
+        foreach(QGraphicsItem *item, doc->selectedItems()){
+
+            Stroke* stroke = static_cast<Stroke*>(item);
+            if(stroke){
+                stroke->setSelected(false);
+                Stroke* new_stroke = new Stroke(stroke);
+                new_stroke->moveBy(20,20);
+                doc->addItem(new_stroke);
+                new_stroke->setSelected(true);
+            }
+
+        }
+        doc->getUI()->setActiveTool(doc->getUI()->getActiveTool());
     }
 }

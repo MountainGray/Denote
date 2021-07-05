@@ -8,11 +8,12 @@
 #include <QGridLayout>
 
 class UI;
+class SelectionBox;
 
 class CircleSelect : public Tool, public QGraphicsItem, public QObject
 {
 public:
-    CircleSelect(UI* ui);
+    CircleSelect(UI* ui, SelectionBox* box);
 
 public:
     void documentProximityEvent(QEvent* event) override;
@@ -47,6 +48,7 @@ private:
 private:
     QSlider *width_slider;
     QGridLayout *menu_layout;
+    SelectionBox* box;
 };
 
 #endif // CIRCLESELECT_H

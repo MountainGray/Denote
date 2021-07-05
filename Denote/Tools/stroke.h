@@ -12,6 +12,7 @@ class Stroke : public QGraphicsItem
 {
 public:
     Stroke(Pen *pen);
+    Stroke(Stroke *stroke);
 
 public:
     void init(QPointF pos, float pressure);

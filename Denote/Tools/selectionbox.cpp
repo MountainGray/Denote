@@ -18,6 +18,9 @@ void SelectionBox::drawPressEvent(DrawEvent event)
     if(event.button() == Qt::LeftButton and contains(mapFromScene(event.docPos()))){
         moving = true;
         first_point_diff = event.docPos()-pos();
+    } else {
+        ui->getActiveDocument()->clearSelection();
+        deactivate();
     }
 }
 
@@ -38,10 +41,12 @@ void SelectionBox::drawReleaseEvent(DrawEvent event)
 
 void SelectionBox::activate()
 {
-    visible = true;
-    ui->getActiveDocument()->addItem(this);
-    foreach(QGraphicsItem *item, ui->getActiveDocument()->selectedItems()){
-        addToGroup(item);
+    if(not ui->getActiveDocument()->selectedItems().isEmpty()){
+        visible = true;
+        ui->getActiveDocument()->addItem(this);
+        foreach(QGraphicsItem *item, ui->getActiveDocument()->selectedItems()){
+            addToGroup(item);
+        }
     }
 }
 
@@ -49,7 +54,7 @@ void SelectionBox::activate()
 void SelectionBox::deactivate()
 {
     visible = false;
-    foreach(QGraphicsItem *item, ui->getActiveDocument()->selectedItems()){
+    foreach(QGraphicsItem *item, childItems()){
         removeFromGroup(item);
     }
     ui->getActiveDocument()->removeItem(this);
