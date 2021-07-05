@@ -17,17 +17,12 @@ class DocumentView : public SubWindow{
 public:
     DocumentView(QMainWindow *parent, Document* doc);
 
-protected:
-    //void tabletEvent(QTabletEvent *event) override;
-    //void paintEvent(QPaintEvent *event) override;
-    //void resizeEvent(QResizeEvent *event) override;
+public:
+    void setScale(float scale);
 
 private:
     QList<Document*> docs;
-    DocumentGraphics* graphics;
-    float scale = 1;
-    float rotation = 0;
-    
+    DocumentGraphics* graphics;    
 };
 
 #endif // DOCUMENTVIEW_H

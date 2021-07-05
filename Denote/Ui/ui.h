@@ -5,31 +5,35 @@
 #include <QKeyEvent>
 
 class Tool;
+class ToolMenu;
+class ToolMenuViewer;
+class ToolLibrary;
 class Document;
+class DocumentGraphics;
 
 class UI
 {
 public:
-    UI();
-public:
-    void setTool(Tool *tool);
-    Tool* getTool();
-    Document* getDocument();
-    void addDocument(Document*);
+    UI(ToolMenuViewer *tool_menu_viewer, ToolLibrary *tool_library);
 
 public:
-    void tabletPressEvent(QTabletEvent *event);
-    void tabletMoveEvent(QTabletEvent *event);
-    void tabletReleaseEvent(QTabletEvent *event);
-
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+    void addTool(Tool* tool);
+    void setActiveTool(Tool *tool);
+    void setActiveDocument(Document*);
+    void setActiveView(DocumentGraphics* view){active_view = view;}
+    Tool* getActiveTool();
+    Document* getActiveDocument();
+    DocumentGraphics* getActiveView(){return active_view;}
+    ToolMenu* getToolMenu();
 
 private:
-    Tool *tool;
-    Document* document;
+    ToolMenuViewer *tool_menu_viewer;
+    ToolLibrary *tool_library;
+    QList<Tool*> tools;
+    Tool *active_tool = nullptr;
+    Document* active_document;
+    DocumentGraphics* active_view;
+
 };
 
 #endif // UI_H

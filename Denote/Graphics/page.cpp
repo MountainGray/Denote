@@ -20,12 +20,12 @@ void Page::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     painter->setBrush(QBrush(QColor("white")));
     painter->drawRect(QRect(0,0,width,height));
 
-    if(type == Lines) paintLines(painter);
-    else if(type == LinesMargin) paintLinesMargin(painter);
-    else if(type == Engineering) paintEngineering(painter);
-    else if(type == Graph) paintGraph(painter);
-    else if(type == Staves) paintStaves(painter);
-    else if(type == Custom) paintEngineering(painter);
+    if(page_type == Lines) paintLines(painter);
+    else if(page_type == LinesMargin) paintLinesMargin(painter);
+    else if(page_type == Engineering) paintEngineering(painter);
+    else if(page_type == Graph) paintGraph(painter);
+    else if(page_type == Staves) paintStaves(painter);
+    else if(page_type == Custom) paintEngineering(painter);
     else paintEngineering(painter);
 
     painter->setPen(QPen(QColor("black"),2));
@@ -123,5 +123,6 @@ void Page::paintStaves(QPainter *painter){
 
 
 void Page::paintCustom(QPainter *painter){
+    Q_UNUSED(painter);
     return;
 }

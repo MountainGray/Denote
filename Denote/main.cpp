@@ -1,13 +1,15 @@
 #include "mainwindow.h"
 
-#include <QApplication>
+#include "tabletapplication.h"
 
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    TabletApplication a(argc, argv);
     MainWindow w;
-    w.resize(800,600);
+    a.setUI(w.getUI());
+    w.resize(1200,600);
+    w.showMaximized();
     w.show();
     return a.exec();
 }

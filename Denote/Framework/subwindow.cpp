@@ -7,6 +7,7 @@
 SubWindow::SubWindow(QMainWindow *parent) : QDockWidget(parent){
     this->mainWindow = parent;
     connect(this, SIGNAL(topLevelChanged(bool)), this, SLOT(makeTopLevel(bool)));
+    /*
     QLabel *label = new QLabel("Test",this);
     QPushButton *close = new QPushButton("X",this);
     QPushButton *minimize = new QPushButton("-",this);
@@ -16,22 +17,21 @@ SubWindow::SubWindow(QMainWindow *parent) : QDockWidget(parent){
     layout->addWidget(minimize);
     titlebar = new QWidget();
     titlebar->setLayout(layout);
-
-    setTitleBarWidget(titlebar);
-
-
+    setTitleBarWidget(titlebar);*/
 }
+
 
 SubWindow::~SubWindow(){
 
 }
 
-void SubWindow::changeEvent(QEvent *e){
-    if (e->type() == QEvent::WindowStateChange){
+
+void SubWindow::changeEvent(QEvent *event){
+    if (event->type() == QEvent::WindowStateChange){
         if(isMinimized()){
             hide();
         } else {
-            QDockWidget::changeEvent(e);
+            QDockWidget::changeEvent(event);
         }
     }
 }

@@ -3,34 +3,66 @@
 #include <QColor>
 
 #include "Tools/tool.h"
+#include <QElapsedTimer>
+#include <QSlider>
+#include <QPushButton>
+#include <QComboBox>
+#include <QGridLayout>
+
 
 class Stroke;
 class UI;
 
-class Pen : public Tool
+class Pen : public Tool, public QObject
 {
 public:
     Pen(UI* ui);
-    Pen(QColor color, int Width = 1);
 
 public:
-    void tabletPressEvent(QTabletEvent *event) override;
-    void tabletMoveEvent(QTabletEvent *event) override;
-    void tabletReleaseEvent(QTabletEvent *event) override;
+    void drawPressEvent(DrawEvent event) override;
+    void drawMoveEvent(DrawEvent event) override;
+    void drawReleaseEvent(DrawEvent event) override;
 
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void activate() override{};
+    void deactivate() override{};
 
-    //void keyPressEvent(QKeyEvent *event) override;
-    //void wheelEvent(QGraphicsSceneWheelEvent *) override;
+    void paintPreset(QPaintEvent *event) override;
+
+public:
+    void setWidth(float width);
+    void setColor(QColor color);
+    void setMode(QString mode){this->mode = mode;}
+    float getWidth(){return width;}
+    QColor getColor(){ return color;}
+
+    float pressureToWidth(float pressure);
+
+private slots:
+    void updateWidth(int width);
+    void updateColor();
+    void updateMode();
 
 private:
-    UI* ui;
-    QColor color = Qt::blue;
-    QPointF lastPoint;
+    QColor color = Qt::black;
+    QPointF last_point;
+    QPointF true_last_point;
     Stroke *stroke = nullptr;
+    float width = 2;
+    QElapsedTimer timer;
+    int count = 0;
+    float inverse_speed;
+    float speed_width;
+    float last_speed_width = 0;
+    float sum_dist = 0;
+    QString mode = "Pressure";
+    float dir = 0;
+    float last_dir = 0;
+
+private:
+    QSlider *width_slider;
+    QPushButton *color_button;
+    QComboBox *mode_combo;
+    QGridLayout* menu_layout;
 };
 
 #endif // PEN_H

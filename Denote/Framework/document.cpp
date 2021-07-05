@@ -2,6 +2,7 @@
 #include "Graphics/page.h"
 #include "Ui/ui.h"
 
+
 Document::Document(UI* ui, QObject* parent):QGraphicsScene(parent){
     this->ui = ui;
 }
@@ -27,33 +28,18 @@ bool Document::removePage(int i){
 }
 
 
+void Document::removeItems(QList<QGraphicsItem *> items)
+{
+    foreach(QGraphicsItem* item, items){
+        removeItem(item);
+    }
+}
+
+
 void Document::drawBackground(QPainter *painter, const QRectF &rect){
     painter->fillRect(rect, QBrush(Qt::black));
     return;
     painter->drawPixmap(QPoint(0,0), background);
     painter->drawPixmap(QPoint(0,background.height()+50), background); //page 2
-}
-
-
-void Document::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    ui->mousePressEvent(event);
-}
-
-
-void Document::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-   ui->mouseMoveEvent(event);
-}
-
-
-void Document::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    ui->mouseReleaseEvent(event);
-}
-
-
-void Document::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event){
-    ui->mouseDoubleClickEvent(event);
 }
 

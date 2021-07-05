@@ -14,11 +14,12 @@ public:
 
     int getWidth(){ return width; }
     int getHeight(){ return height; }
-    void setBackgroundType(BackgroundType t){ type = t; }
+    void setBackgroundType(BackgroundType t){ page_type = t; }
 
 protected:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    int type() const override {return UserType + 3;}
 
 private:
     void paintLines(QPainter *painter);
@@ -31,7 +32,7 @@ private:
 private:
     int width, height = 0;
     PageBackground background;
-    BackgroundType type = Engineering;
+    BackgroundType page_type = Engineering;
 
 };
 

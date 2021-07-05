@@ -1,72 +1,57 @@
 #include "ui.h"
 #include "Tools/tool.h"
 #include "Tools/pen.h"
+#include "Tools/eraser.h"
+#include "Framework/ToolMenus/toolmenuviewer.h"
+#include "Framework/ToolMenus/toolmenu.h"
+#include "Framework/toollibrary.h"
 
 
-UI::UI()
+UI::UI(ToolMenuViewer *tool_menu_viewer, ToolLibrary *tool_library)
 {
-    tool = new Pen(this);
+    this->tool_menu_viewer = tool_menu_viewer;
+    this->tool_library = tool_library;
 }
 
 
-void UI::setTool(Tool *tool){
-    this->tool = tool;
-}
-
-
-Tool* UI::getTool(){
-    return this->tool;
-}
-
-
-Document *UI::getDocument()
+void UI::addTool(Tool *tool)
 {
-    return this->document;
+    tools.append(tool);
+    tool_library->addTool(tool);
+    setActiveTool(tool);
 }
 
-void UI::addDocument(Document *doc){
-    this->document = doc;
+
+void UI::setActiveTool(Tool *tool){
+    if(active_tool != nullptr){
+        active_tool->deactivate();
+    }
+    active_tool = tool;
+    tool_library->setActiveTool(tool);
+    tool_menu_viewer->setWidget(tool->getToolMenu());
+    tool->activate();
 }
 
 
-void UI::tabletPressEvent(QTabletEvent *event)
+Tool* UI::getActiveTool(){
+    return active_tool;
+}
+
+
+Document *UI::getActiveDocument()
 {
-    tool->tabletPressEvent(event);
+    return active_document;
 }
 
 
-void UI::tabletMoveEvent(QTabletEvent *event)
+ToolMenu *UI::getToolMenu()
 {
-    tool->tabletMoveEvent(event);
+    return tool_menu_viewer->getMenu();
 }
 
 
-void UI::tabletReleaseEvent(QTabletEvent *event)
-{
-    tool->tabletReleaseEvent(event);
-}
-
-
-void UI::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    tool->mouseMoveEvent(event);
-}
-
-
-void UI::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    tool->mousePressEvent(event);
-}
-
-
-void UI::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    tool->mouseReleaseEvent(event);
-}
-
-
-void UI::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
-{
-    tool->mouseDoubleClickEvent(event);
+void UI::setActiveDocument(Document *doc){
+    active_document = doc;
 }
 
 

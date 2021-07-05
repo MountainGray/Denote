@@ -20,16 +20,10 @@ public:
     UI* getUI(){return ui;}
 
 public:
-    void deleteItems(QList<QGraphicsItem*> items);
-
+    void removeItems(QList<QGraphicsItem*> items);
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
-
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     QPixmap background;
