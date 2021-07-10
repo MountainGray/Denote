@@ -3,6 +3,7 @@
 #include "Tools/fillstroke.h"
 #include "Framework/document.h"
 #include "Framework/toolmenu.h"
+#include "Graphics/page.h"
 #include <QColorDialog>
 #include <QPainter>
 
@@ -29,7 +30,7 @@ void Fill::drawPressEvent(DrawEvent event)
         fill_stroke = new FillStroke(this);
         if(event.deviceType() == QInputDevice::DeviceType::Stylus) fill_stroke->init(event.docPos());
         else fill_stroke->init(event.docPos());
-        ui->getActiveDocument()->addItem(fill_stroke);
+        ui->getActiveDocument()->getActivePage()->addToGroup(fill_stroke);
     } else {
         drawReleaseEvent(event);
     }

@@ -1,10 +1,12 @@
 #include "document.h"
-#include "Graphics/page.h"
+#include "Framework/pagelayout.h"
 #include "Ui/ui.h"
+#include "Framework/documentgraphics.h"
 
 
 Document::Document(UI* ui, QObject* parent):QGraphicsScene(parent){
     this->ui = ui;
+    page_layout = new PageLayout(this);
 }
 
 
@@ -15,16 +17,35 @@ Document::~Document(){
 
 void Document::addPage(Page *page){
     addItem(page);
-    page->setY(pages.length()*(page->getHeight()+50));
     pages.append(page);
+    updatePages();
+    updateSceneRect();
 }
 
 
 bool Document::removePage(int i){
     if(i < pages.length()){
         pages.removeAt(i);
+        updatePages();
+        updateSceneRect();
         return true;
     } else return false;
+}
+
+
+QRectF Document::getDocBounds()
+{
+    return page_layout->getBounds();
+}
+
+
+void Document::updateActivePage()
+{
+    foreach(Page* page, pages){
+        if(page->isUnderMouse()){
+            active_page = page;
+        }
+    }
 }
 
 
@@ -36,10 +57,21 @@ void Document::removeItems(QList<QGraphicsItem *> items)
 }
 
 
+void Document::updateSceneRect()
+{
+    foreach(QGraphicsView* graphics, ui->getGraphics()){
+        graphics->setSceneRect(page_layout->getBounds());
+    }
+}
+
+
+void Document::updatePages()
+{
+    page_layout->updatePositions();
+}
+
+
 void Document::drawBackground(QPainter *painter, const QRectF &rect){
     painter->fillRect(rect, QBrush(Qt::black));
-    return;
-    painter->drawPixmap(QPoint(0,0), background);
-    painter->drawPixmap(QPoint(0,background.height()+50), background); //page 2
 }
 

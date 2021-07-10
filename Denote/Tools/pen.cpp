@@ -4,6 +4,7 @@
 #include "Ui/ui.h"
 #include "Framework/document.h"
 #include "Framework/toolmenu.h"
+#include "Graphics/page.h"
 #include <QPainter>
 #include <QColorDialog>
 
@@ -45,7 +46,7 @@ void Pen::drawPressEvent(DrawEvent event)
         stroke = new Stroke(this);
         if(event.deviceType() == QInputDevice::DeviceType::Stylus) stroke->init(event.docPos(), event.pressure());
         else stroke->init(event.docPos(), fmax(speed_width*width,0.1));
-        ui->getActiveDocument()->addItem(stroke);
+        ui->getActiveDocument()->getActivePage()->addToGroup(stroke);
     } else {
         drawReleaseEvent(event);
     }

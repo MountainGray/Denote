@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QGraphicsView>
+#include "mainwindow.h"
 
 class Document;
 class DocumentGraphics;
@@ -15,7 +16,7 @@ class DocumentView : public SubWindow{
     Q_OBJECT
     
 public:
-    DocumentView(QMainWindow *parent, Document* doc);
+    DocumentView(MainWindow *parent, Document* doc);
 
 public:
     void setScale(float scale);

@@ -1,9 +1,11 @@
 #include "Graphics/page.h"
 
 
-Page::Page() : QGraphicsItem(){
+Page::Page() : QGraphicsItemGroup(){
     width = 850;
     height = 1100;
+
+    setFlag(GraphicsItemFlag::ItemIsSelectable, true);
 }
 
 
@@ -36,6 +38,13 @@ void Page::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     painter->drawEllipse(hole_x, 0.12*height, hole_size, hole_size);
     painter->drawEllipse(hole_x, 0.5*height, hole_size, hole_size);
     painter->drawEllipse(hole_x, 0.88*height, hole_size, hole_size);
+
+    if(isSelected()){
+        int thickness = 8;
+        painter->setPen(QPen(QColor(120,180,255),thickness,Qt::SolidLine,Qt::SquareCap,Qt::RoundJoin));
+        painter->setBrush(Qt::NoBrush);
+        painter->drawRect(QRect(0,0,width,height).adjusted(-thickness/2,-thickness/2,thickness/2,thickness/2));
+    }
 }
 
 

@@ -23,7 +23,7 @@ public:
 
 public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    int type() const override {return UserType + 2;}
+    int type() const override {return TypeSelectionBox;}
 
 private:
     QPointF first_point_diff;

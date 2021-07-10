@@ -30,7 +30,7 @@ public:
 public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    int type() const override {return UserType + 2;}
+    int type() const override {return TypeLassoSelect;}
 
 public:
     void setWidth(float width);

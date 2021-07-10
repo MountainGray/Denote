@@ -47,7 +47,7 @@ void Eraser::drawMoveEvent(DrawEvent event)
         if(erasing){
             QList<QGraphicsItem*> items = ui->getActiveDocument()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
             foreach(QGraphicsItem* item, items){
-                if(item->type() == UserType + 1 or item->type() == UserType + 4 or item->type() == UserType + 5){ //stroke or fill
+                if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){
                     ui->getActiveDocument()->removeItem(item);
                     delete item;
                 }
@@ -109,7 +109,8 @@ void Eraser::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
     if(widget->parentWidget() != ui->getActiveView()) return;
 
-    QPen pen = QPen(QColor(0,0,0,55), 1, Qt::SolidLine, Qt::RoundCap);
+    QPen pen = QPen(QColor(0,0,0,55), 2, Qt::SolidLine, Qt::RoundCap);
+    pen.setCosmetic(true);
     painter->setPen(pen);
     painter->setBrush(Qt::NoBrush);
     painter->drawEllipse(QPointF(0,0),0.5*width,0.5*width);

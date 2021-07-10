@@ -10,6 +10,9 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Framework/pagelayout.cpp \
+    Framework/pagelist.cpp \
+    Framework/pagelistviewer.cpp \
     Framework/toolmenu.cpp \
     Framework/toolmenuviewer.cpp \
     Framework/document.cpp \
@@ -24,6 +27,7 @@ SOURCES += \
     Tools/fill.cpp \
     Tools/fillstroke.cpp \
     Tools/image.cpp \
+    Tools/lassoselect.cpp \
     Tools/pressurepoint.cpp \
     Tools/pen.cpp \
     Tools/selectionbox.cpp \
@@ -37,6 +41,9 @@ SOURCES += \
     tabletapplication.cpp
 
 HEADERS += \
+    Framework/pagelayout.h \
+    Framework/pagelist.h \
+    Framework/pagelistviewer.h \
     Framework/toolmenu.h \
     Framework/toolmenuviewer.h \
     Framework/document.h \
@@ -51,6 +58,7 @@ HEADERS += \
     Tools/fill.h \
     Tools/fillstroke.h \
     Tools/image.h \
+    Tools/lassoselect.h \
     Tools/pressurepoint.h \
     Tools/pen.h \
     Tools/selectionbox.h \

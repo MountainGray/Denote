@@ -11,6 +11,8 @@
 #include "Framework/toollibrary.h"
 #include "Tools/selectionbox.h"
 #include "Tools/circleselect.h"
+#include "Tools/lassoselect.h"
+#include "Framework/pagelistviewer.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -47,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     SelectionBox* box = new SelectionBox(ui);
     ui->addTool(box);
     ui->addTool(new CircleSelect(ui, box));
+    ui->addTool(new LassoSelect(ui, box));
 
     Page *page1 = new Page();
     page1->setBackgroundType(Engineering);
@@ -69,17 +72,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     DocumentView *doc_view = new DocumentView(this, doc);
     subWindows.append(doc_view);
     doc_view->setScale(1.2);
-    DocumentView *doc_view2 = new DocumentView(this, doc);
-    doc_view2->setScale(0.2);
-    subWindows.append(doc_view2);
 
+    PageListViewer *page_list_viewer = new PageListViewer(this, doc);
+    subWindows.append(page_list_viewer);
 
-    addDockWidget(Qt::LeftDockWidgetArea, tool_menu_viewer);
-    addDockWidget(Qt::LeftDockWidgetArea, doc_view2);
-    addDockWidget(Qt::RightDockWidgetArea, tool_library);
-    addDockWidget(Qt::RightDockWidgetArea, doc_view);
+    addDockWidget(Qt::TopDockWidgetArea, tool_library);
+    addDockWidget(Qt::BottomDockWidgetArea, page_list_viewer);
+    addDockWidget(Qt::BottomDockWidgetArea, doc_view);
+    addDockWidget(Qt::BottomDockWidgetArea, tool_menu_viewer);
 
-    resizeDocks(subWindows, {1000, 200, 1000, 200}, Qt::Orientation::Horizontal);
+    //resizeDocks(subWindows, {2000, 120, 1000, 100}, Qt::Orientation::Horizontal);
 
     QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents);
 }

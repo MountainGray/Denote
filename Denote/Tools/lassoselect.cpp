@@ -1,4 +1,4 @@
-#include "circleselect.h"
+#include "lassoselect.h"
 
 #include "Ui/ui.h"
 #include "Framework/document.h"
@@ -8,43 +8,34 @@
 
 #include <QPainter>
 
-
-CircleSelect::CircleSelect(UI* ui, SelectionBox* box) : Tool(ui)
+LassoSelect::LassoSelect(UI* ui, SelectionBox* box) : Tool(ui)
 {
     this->box = box;
-    width = 10;
-
-    width_slider = new QSlider(Qt::Horizontal);
-    width_slider->setValue(width);
-    width_slider->setMaximum(40);
-
-    menu_layout = new QGridLayout();
-    menu_layout->addWidget(width_slider,0,0);
-
-    tool_menu->setLayout(menu_layout);
-
-    connect(width_slider, &QSlider::valueChanged, this, &CircleSelect::updateWidth);
 }
 
 
-void CircleSelect::documentProximityEvent(QEvent *event)
+void LassoSelect::documentProximityEvent(QEvent *event)
 {
     if(event->type() == QEvent::Enter) activate();
     else if(event->type() == QEvent::Leave) deactivate();
 }
 
 
-void CircleSelect::drawPressEvent(DrawEvent event)
+void LassoSelect::drawPressEvent(DrawEvent event)
 {
+    Q_UNUSED(event);
     selecting = true;
 }
 
 
-void CircleSelect::drawMoveEvent(DrawEvent event)
+void LassoSelect::drawMoveEvent(DrawEvent event)
 {
-    if(visible){
-        setPos(event.docPos());
+    if(added){
         if(selecting){
+            lasso << event.docPos();
+            bounds = lasso.boundingRect();
+            update(bounds);
+
             QList<QGraphicsItem*> items = ui->getActiveDocument()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
             foreach(QGraphicsItem* item, items){
                 if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){ //stroke or fill or image
@@ -57,13 +48,15 @@ void CircleSelect::drawMoveEvent(DrawEvent event)
 }
 
 
-void CircleSelect::drawReleaseEvent(DrawEvent event)
+void LassoSelect::drawReleaseEvent(DrawEvent event)
 {
+    Q_UNUSED(event);
     selecting = false;
+    lasso.clear();
 }
 
 
-void CircleSelect::drawDoubleClickEvent(DrawEvent event)
+void LassoSelect::drawDoubleClickEvent(DrawEvent event)
 {
     if(event.button() == Qt::RightButton){
         ui->getActiveDocument()->clearSelection();
@@ -73,25 +66,25 @@ void CircleSelect::drawDoubleClickEvent(DrawEvent event)
 }
 
 
-void CircleSelect::activate()
+void LassoSelect::activate()
 {
-    if(not visible){
+    if(not added){
         ui->getActiveDocument()->addItem(this);
-        visible = true;
+        added = true;
     }
 }
 
 
-void CircleSelect::deactivate()
+void LassoSelect::deactivate()
 {
-    if(visible){
+    if(added){
         ui->getActiveDocument()->removeItem(this);
-        visible = false;
+        added = false;
     }
 }
 
 
-void CircleSelect::paintPreset(QPaintEvent *event)
+void LassoSelect::paintPreset(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter painter(tool_preset);
@@ -99,42 +92,29 @@ void CircleSelect::paintPreset(QPaintEvent *event)
     painter.setBrush(QBrush(QColor("white")));
     painter.setPen(QPen(QColor("black")));
     painter.drawRect(QRectF(0,0,60,60));
-    painter.setBrush(QBrush(QColor("Blue")));
-    painter.drawEllipse(QPointF(30,30),width/2,width/2);
-    painter.drawText(QPointF(2,12),"Circle Select");
+    painter.drawText(QPointF(2,12),"Lasso Select");
+    painter.setPen(QPen(QColor("blue")));
+    painter.setBrush(QBrush(QColor(0,30,255,40)));
+    painter.drawEllipse(QPointF(30,30),15,10);
 }
 
 
-QRectF CircleSelect::boundingRect() const
+QRectF LassoSelect::boundingRect() const
 {
     return bounds;
 }
 
 
-void CircleSelect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void LassoSelect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
 
     if(widget->parentWidget() != ui->getActiveView()) return;
 
     QPen pen = QPen(QColor(0,0,255,55), 2, Qt::SolidLine, Qt::RoundCap);
+    QBrush brush = QBrush(QColor(0,30,255,40));
     pen.setCosmetic(true);
     painter->setPen(pen);
-    painter->setBrush(Qt::NoBrush);
-    painter->drawEllipse(QPointF(0,0),0.5*width,0.5*width);
-}
-
-
-void CircleSelect::setWidth(float width)
-{
-    this->width = width;
-    width_slider->setValue(width);
-    bounds = QRectF(-0.5*width,-0.5*width, width, width).adjusted(-2,-2,2,2);
-    tool_preset->update();
-}
-
-
-void CircleSelect::updateWidth(int width)
-{
-    this->width = float(width);
+    painter->setBrush(brush);
+    painter->drawPolygon(lasso);
 }

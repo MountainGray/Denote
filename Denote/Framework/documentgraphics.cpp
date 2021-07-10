@@ -13,7 +13,7 @@
 DocumentGraphics::DocumentGraphics(DocumentView *view, Document *doc) : QGraphicsView(view){
     this->doc = doc;
     setScene(doc);
-    setSceneRect(0,0,850, 4*1150);
+    setSceneRect(doc->getDocBounds());
 
     setDragMode(QGraphicsView::NoDrag);
     setTransformationAnchor(AnchorUnderMouse);
@@ -53,6 +53,7 @@ void DocumentGraphics::tabletEvent(QTabletEvent *event){
     event->accept();
 
     if(event->type() == QEvent::TabletPress){
+        doc->updateActivePage();
         doc->getUI()->getActiveTool()->drawPressEvent(DrawEvent(event, this));
     } else if(event->type() == QEvent::TabletMove){
         doc->getUI()->getActiveTool()->drawMoveEvent(DrawEvent(event, this));
@@ -65,6 +66,7 @@ void DocumentGraphics::tabletEvent(QTabletEvent *event){
 void DocumentGraphics::mousePressEvent(QMouseEvent *event)
 {
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
+        doc->updateActivePage();
         doc->getUI()->getActiveTool()->drawPressEvent(DrawEvent(event, this));
     }
 }

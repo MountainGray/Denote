@@ -45,7 +45,9 @@ void SelectionBox::activate()
         visible = true;
         ui->getActiveDocument()->addItem(this);
         foreach(QGraphicsItem *item, ui->getActiveDocument()->selectedItems()){
-            addToGroup(item);
+            if(item->type() != TypePage or true){
+                addToGroup(item);
+            }
         }
     }
 }
@@ -56,6 +58,7 @@ void SelectionBox::deactivate()
     visible = false;
     foreach(QGraphicsItem *item, childItems()){
         removeFromGroup(item);
+        //needs to return to original group;
     }
     ui->getActiveDocument()->removeItem(this);
     setPos(0,0);

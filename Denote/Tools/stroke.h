@@ -2,6 +2,7 @@
 #define STROKE_H
 
 #include "pressurepoint.h"
+#include "enums.h"
 
 #include <QPainter>
 #include <QGraphicsItem>
@@ -22,7 +23,7 @@ public:
 public:
     QRectF boundingRect() const override;
     void paint(QPainter *ogpainter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    int type() const override {return UserType + 1;}
+    int type() const override {return TypePenStroke;}
 
 protected:
     void updateBounds(PressurePoint point);

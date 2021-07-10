@@ -2,6 +2,7 @@
 #define FILLSTROKE_H
 
 #include "pressurepoint.h"
+#include "enums.h"
 
 #include <QPainter>
 #include <QGraphicsItem>
@@ -21,7 +22,7 @@ public:
 public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    int type() const override {return UserType + 4;}
+    int type() const override {return TypeFillStroke;}
 
 protected:
     void updateBounds(QPointF point);
