@@ -1,12 +1,10 @@
 #include "document.h"
-#include "Framework/pagelayout.h"
+#include "Graphics/pagelayoutscene.h"
 #include "Ui/ui.h"
-#include "Framework/documentgraphics.h"
 
 
-Document::Document(UI* ui, QObject* parent):QGraphicsScene(parent){
+Document::Document(UI* ui){
     this->ui = ui;
-    page_layout = new PageLayout(this);
 }
 
 
@@ -16,62 +14,29 @@ Document::~Document(){
 
 
 void Document::addPage(Page *page){
-    addItem(page);
     pages.append(page);
-    updatePages();
-    updateSceneRect();
-}
-
-
-bool Document::removePage(int i){
-    if(i < pages.length()){
-        pages.removeAt(i);
-        updatePages();
-        updateSceneRect();
-        return true;
-    } else return false;
-}
-
-
-QRectF Document::getDocBounds()
-{
-    return page_layout->getBounds();
-}
-
-
-void Document::updateActivePage()
-{
-    foreach(Page* page, pages){
-        if(page->isUnderMouse()){
-            active_page = page;
-        }
+    foreach(PageLayoutScene* page_layout, page_layouts){
+        page_layout->addPortal(page);
     }
 }
 
 
-void Document::removeItems(QList<QGraphicsItem *> items)
-{
-    foreach(QGraphicsItem* item, items){
-        removeItem(item);
+void Document::removePage(Page *page){
+    pages.remove(pages.indexOf(page));
+    foreach(PageLayoutScene* page_layout, page_layouts){
+        page_layout->removePortal(page);
     }
 }
 
 
-void Document::updateSceneRect()
+void Document::addPageLayout(PageLayoutScene *page_layout)
 {
-    foreach(QGraphicsView* graphics, ui->getGraphics()){
-        graphics->setSceneRect(page_layout->getBounds());
-    }
+    page_layouts.append(page_layout);
 }
 
 
-void Document::updatePages()
+void Document::removePageLayout(PageLayoutScene *page_layout)
 {
-    page_layout->updatePositions();
-}
-
-
-void Document::drawBackground(QPainter *painter, const QRectF &rect){
-    painter->fillRect(rect, QBrush(Qt::black));
+    page_layouts.remove(page_layouts.indexOf(page_layout));
 }
 

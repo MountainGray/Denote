@@ -2,9 +2,10 @@
 
 #include "Ui/ui.h"
 #include "Framework/document.h"
-#include "Framework/documentgraphics.h"
+#include "Graphics/pagelayoutscene.h"
 #include "Framework/toolmenu.h"
 #include "Tools/selectionbox.h"
+#include "Graphics/page.h"
 
 #include <QPainter>
 
@@ -34,18 +35,18 @@ void CircleSelect::documentProximityEvent(QEvent *event)
 }
 
 
-void CircleSelect::drawPressEvent(DrawEvent event)
+void CircleSelect::drawPressEvent(ToolEvent event)
 {
     selecting = true;
 }
 
 
-void CircleSelect::drawMoveEvent(DrawEvent event)
+void CircleSelect::drawMoveEvent(ToolEvent event)
 {
     if(visible){
-        setPos(event.docPos());
+        setPos(event.layoutPos());
         if(selecting){
-            QList<QGraphicsItem*> items = ui->getActiveDocument()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
+            QList<QGraphicsItem*> items = ui->getActivePage()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
             foreach(QGraphicsItem* item, items){
                 if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){ //stroke or fill or image
                     if(event.buttons() & Qt::LeftButton) item->setSelected(true);
@@ -57,16 +58,16 @@ void CircleSelect::drawMoveEvent(DrawEvent event)
 }
 
 
-void CircleSelect::drawReleaseEvent(DrawEvent event)
+void CircleSelect::drawReleaseEvent(ToolEvent event)
 {
     selecting = false;
 }
 
 
-void CircleSelect::drawDoubleClickEvent(DrawEvent event)
+void CircleSelect::drawDoubleClickEvent(ToolEvent event)
 {
     if(event.button() == Qt::RightButton){
-        ui->getActiveDocument()->clearSelection();
+        ui->getActivePage()->clearSelection();
     } else if(event.button() == Qt::LeftButton){
         ui->setActiveTool(box);
     }
@@ -76,7 +77,7 @@ void CircleSelect::drawDoubleClickEvent(DrawEvent event)
 void CircleSelect::activate()
 {
     if(not visible){
-        ui->getActiveDocument()->addItem(this);
+        ui->getActiveLayout()->addItem(this);
         visible = true;
     }
 }
@@ -85,7 +86,7 @@ void CircleSelect::activate()
 void CircleSelect::deactivate()
 {
     if(visible){
-        ui->getActiveDocument()->removeItem(this);
+        ui->getActiveLayout()->removeItem(this);
         visible = false;
     }
 }
@@ -114,8 +115,7 @@ QRectF CircleSelect::boundingRect() const
 void CircleSelect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
-
-    if(widget->parentWidget() != ui->getActiveView()) return;
+    Q_UNUSED(widget);
 
     QPen pen = QPen(QColor(0,0,255,55), 2, Qt::SolidLine, Qt::RoundCap);
     pen.setCosmetic(true);

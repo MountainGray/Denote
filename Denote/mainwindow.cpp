@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "Framework/document.h"
-#include "Framework/documentview.h"
+#include "Graphics/documentinteractionframe.h"
+#include "Graphics/documentsummaryframe.h"
 #include "Framework/subwindow.h"
 #include "Ui/ui.h"
 #include "Graphics/page.h"
@@ -12,7 +13,6 @@
 #include "Tools/selectionbox.h"
 #include "Tools/circleselect.h"
 #include "Tools/lassoselect.h"
-#include "Framework/pagelistviewer.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -29,6 +29,31 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     Document *doc = new Document(ui);
     ui->setActiveDocument(doc);
+
+    Page *page1 = new Page();
+    page1->setBackgroundType(Engineering);
+    doc->addPage(page1);
+
+    Page *page2 = new Page();
+    page2->setBackgroundType(Staves);
+    doc->addPage(page2);
+
+    Page *page3 = new Page();
+    page3->setBackgroundType(Graph);
+    doc->addPage(page3);
+
+    Page *page4 = new Page();
+    page4->setBackgroundType(LinesMargin);
+    doc->addPage(page4);
+
+    QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
+
+    DocumentInteractionFrame *interaction_frame = new DocumentInteractionFrame(this, doc);
+    subWindows.append(interaction_frame);
+    interaction_frame->setScale(1.2);
+
+    DocumentSummaryFrame *summary_frame = new DocumentSummaryFrame(this, doc);
+    subWindows.append(summary_frame);
 
     for(int i = 0; i < 5; i ++){
         Pen *pen = new Pen(ui);
@@ -51,34 +76,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     ui->addTool(new CircleSelect(ui, box));
     ui->addTool(new LassoSelect(ui, box));
 
-    Page *page1 = new Page();
-    page1->setBackgroundType(Engineering);
-    doc->addPage(page1);
-
-    Page *page2 = new Page();
-    page2->setBackgroundType(Staves);
-    doc->addPage(page2);
-
-    Page *page3 = new Page();
-    page3->setBackgroundType(Graph);
-    doc->addPage(page3);
-
-    Page *page4 = new Page();
-    page4->setBackgroundType(LinesMargin);
-    doc->addPage(page4);
-
-    QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
-
-    DocumentView *doc_view = new DocumentView(this, doc);
-    subWindows.append(doc_view);
-    doc_view->setScale(1.2);
-
-    PageListViewer *page_list_viewer = new PageListViewer(this, doc);
-    subWindows.append(page_list_viewer);
-
     addDockWidget(Qt::TopDockWidgetArea, tool_library);
-    addDockWidget(Qt::BottomDockWidgetArea, page_list_viewer);
-    addDockWidget(Qt::BottomDockWidgetArea, doc_view);
+    addDockWidget(Qt::BottomDockWidgetArea, summary_frame);
+    addDockWidget(Qt::BottomDockWidgetArea, interaction_frame);
     addDockWidget(Qt::BottomDockWidgetArea, tool_menu_viewer);
 
     //resizeDocks(subWindows, {2000, 120, 1000, 100}, Qt::Orientation::Horizontal);

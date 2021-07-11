@@ -1,7 +1,5 @@
 #include "ui.h"
 #include "Tools/tool.h"
-#include "Tools/pen.h"
-#include "Tools/eraser.h"
 #include "Framework/toolmenuviewer.h"
 #include "Framework/toolmenu.h"
 #include "Framework/toollibrary.h"
@@ -33,26 +31,11 @@ void UI::setActiveTool(Tool *tool){
 }
 
 
-Tool* UI::getActiveTool(){
-    return active_tool;
-}
-
-
-Document *UI::getActiveDocument()
-{
-    return active_document;
-}
-
-
 ToolMenu *UI::getToolMenu()
 {
     return tool_menu_viewer->getMenu();
 }
 
-
-void UI::setActiveDocument(Document *doc){
-    active_document = doc;
-}
 
 
 

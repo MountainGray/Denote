@@ -2,9 +2,10 @@
 
 #include "Ui/ui.h"
 #include "Framework/document.h"
-#include "Framework/documentgraphics.h"
 #include "Framework/toolmenu.h"
 #include "Tools/selectionbox.h"
+#include "Graphics/page.h"
+#include "Graphics/pagelayoutscene.h"
 
 #include <QPainter>
 
@@ -21,22 +22,22 @@ void LassoSelect::documentProximityEvent(QEvent *event)
 }
 
 
-void LassoSelect::drawPressEvent(DrawEvent event)
+void LassoSelect::drawPressEvent(ToolEvent event)
 {
     Q_UNUSED(event);
     selecting = true;
 }
 
 
-void LassoSelect::drawMoveEvent(DrawEvent event)
+void LassoSelect::drawMoveEvent(ToolEvent event)
 {
     if(added){
         if(selecting){
-            lasso << event.docPos();
+            lasso << event.layoutPos();
             bounds = lasso.boundingRect();
             update(bounds);
 
-            QList<QGraphicsItem*> items = ui->getActiveDocument()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
+            QList<QGraphicsItem*> items = ui->getActivePage()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
             foreach(QGraphicsItem* item, items){
                 if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){ //stroke or fill or image
                     if(event.buttons() & Qt::LeftButton) item->setSelected(true);
@@ -48,7 +49,7 @@ void LassoSelect::drawMoveEvent(DrawEvent event)
 }
 
 
-void LassoSelect::drawReleaseEvent(DrawEvent event)
+void LassoSelect::drawReleaseEvent(ToolEvent event)
 {
     Q_UNUSED(event);
     selecting = false;
@@ -56,10 +57,10 @@ void LassoSelect::drawReleaseEvent(DrawEvent event)
 }
 
 
-void LassoSelect::drawDoubleClickEvent(DrawEvent event)
+void LassoSelect::drawDoubleClickEvent(ToolEvent event)
 {
     if(event.button() == Qt::RightButton){
-        ui->getActiveDocument()->clearSelection();
+        ui->getActivePage()->clearSelection();
     } else if(event.button() == Qt::LeftButton){
         ui->setActiveTool(box);
     }
@@ -69,7 +70,7 @@ void LassoSelect::drawDoubleClickEvent(DrawEvent event)
 void LassoSelect::activate()
 {
     if(not added){
-        ui->getActiveDocument()->addItem(this);
+        ui->getActiveLayout()->addItem(this);
         added = true;
     }
 }
@@ -78,7 +79,7 @@ void LassoSelect::activate()
 void LassoSelect::deactivate()
 {
     if(added){
-        ui->getActiveDocument()->removeItem(this);
+        ui->getActiveLayout()->removeItem(this);
         added = false;
     }
 }
@@ -108,8 +109,7 @@ QRectF LassoSelect::boundingRect() const
 void LassoSelect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
-
-    if(widget->parentWidget() != ui->getActiveView()) return;
+    Q_UNUSED(widget);
 
     QPen pen = QPen(QColor(0,0,255,55), 2, Qt::SolidLine, Qt::RoundCap);
     QBrush brush = QBrush(QColor(0,30,255,40));

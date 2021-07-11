@@ -1,6 +1,7 @@
 #include "selectionbox.h"
 #include "Framework/toolmenu.h"
-#include "Framework/documentgraphics.h"
+#include "Graphics/pagelayoutscene.h"
+#include "Graphics/page.h"
 #include "Framework/document.h"
 #include "Ui/ui.h"
 #include <QPainter>
@@ -12,28 +13,28 @@ SelectionBox::SelectionBox(UI* ui) : Tool(ui)
 }
 
 
-void SelectionBox::drawPressEvent(DrawEvent event)
+void SelectionBox::drawPressEvent(ToolEvent event)
 {
 
-    if(event.button() == Qt::LeftButton and contains(mapFromScene(event.docPos()))){
+    if(event.button() == Qt::LeftButton and contains(mapFromScene(event.layoutPos()))){
         moving = true;
-        first_point_diff = event.docPos()-pos();
+        first_point_diff = event.layoutPos()-pos();
     } else {
-        ui->getActiveDocument()->clearSelection();
+        ui->getActivePage()->clearSelection();
         deactivate();
     }
 }
 
 
-void SelectionBox::drawMoveEvent(DrawEvent event)
+void SelectionBox::drawMoveEvent(ToolEvent event)
 {
     if(moving){
-        setPos(event.docPos()-first_point_diff);
+        setPos(event.layoutPos()-first_point_diff);
     }
 }
 
 
-void SelectionBox::drawReleaseEvent(DrawEvent event)
+void SelectionBox::drawReleaseEvent(ToolEvent event)
 {
     moving = false;
 }
@@ -41,10 +42,10 @@ void SelectionBox::drawReleaseEvent(DrawEvent event)
 
 void SelectionBox::activate()
 {
-    if(not ui->getActiveDocument()->selectedItems().isEmpty()){
+    if(not ui->getActiveLayout()->selectedItems().isEmpty()){
         visible = true;
-        ui->getActiveDocument()->addItem(this);
-        foreach(QGraphicsItem *item, ui->getActiveDocument()->selectedItems()){
+        ui->getActiveLayout()->addItem(this);
+        foreach(QGraphicsItem *item, ui->getActivePage()->selectedItems()){
             if(item->type() != TypePage or true){
                 addToGroup(item);
             }
@@ -60,7 +61,7 @@ void SelectionBox::deactivate()
         removeFromGroup(item);
         //needs to return to original group;
     }
-    ui->getActiveDocument()->removeItem(this);
+    ui->getActiveLayout()->removeItem(this);
     setPos(0,0);
 }
 
@@ -84,8 +85,7 @@ void SelectionBox::paintPreset(QPaintEvent *event)
 void SelectionBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
-
-    if(widget->parentWidget() != ui->getActiveView() or not visible) return;
+    Q_UNUSED(widget);
 
     QPen pen = QPen(QColor(0,0,0,120), 2, Qt::DashLine, Qt::RoundCap);
     QBrush brush = QBrush(QColor(0,30,255,40));

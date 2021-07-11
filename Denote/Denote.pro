@@ -10,18 +10,19 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Framework/pagelayout.cpp \
-    Framework/pagelist.cpp \
-    Framework/pagelistviewer.cpp \
+    Framework/toolevent.cpp \
     Framework/toolmenu.cpp \
     Framework/toolmenuviewer.cpp \
     Framework/document.cpp \
-    Framework/documentgraphics.cpp \
-    Framework/documentview.cpp \
-    Framework/drawevent.cpp \
     Framework/subwindow.cpp \
     Framework/toollibrary.cpp \
     Framework/toolpreset.cpp \
+    Graphics/documentinteractionframe.cpp \
+    Graphics/documentinteractionview.cpp \
+    Graphics/documentsummaryframe.cpp \
+    Graphics/documentsummaryview.cpp \
+    Graphics/pagelayoutscene.cpp \
+    Graphics/pageportal.cpp \
     Tools/circleselect.cpp \
     Tools/eraser.cpp \
     Tools/fill.cpp \
@@ -36,23 +37,23 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     Graphics/page.cpp \
-    Graphics/pagebackground.cpp \
     Ui/ui.cpp \
     tabletapplication.cpp
 
 HEADERS += \
-    Framework/pagelayout.h \
-    Framework/pagelist.h \
-    Framework/pagelistviewer.h \
+    Framework/toolevent.h \
     Framework/toolmenu.h \
     Framework/toolmenuviewer.h \
     Framework/document.h \
-    Framework/documentgraphics.h \
-    Framework/documentview.h \
     Framework//subwindow.h \
-    Framework/drawevent.h \
     Framework/toollibrary.h \
     Framework/toolpreset.h \
+    Graphics/documentinteractionframe.h \
+    Graphics/documentinteractionview.h \
+    Graphics/documentsummaryframe.h \
+    Graphics/documentsummaryview.h \
+    Graphics/pagelayoutscene.h \
+    Graphics/pageportal.h \
     Tools/circleselect.h \
     Tools/eraser.h \
     Tools/fill.h \
@@ -66,7 +67,6 @@ HEADERS += \
     Tools/tool.h \
     mainwindow.h \
     Graphics/page.h \
-    Graphics/pagebackground.h \
     Ui/ui.h \
     tabletapplication.h
 

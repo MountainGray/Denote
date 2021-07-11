@@ -1,23 +1,29 @@
 #include "Graphics/page.h"
+#include "pageportal.h"
+#include <QPainter>
 
 
-Page::Page() : QGraphicsItemGroup(){
+Page::Page() : QGraphicsScene(){
     width = 850;
     height = 1100;
 
-    setFlag(GraphicsItemFlag::ItemIsSelectable, true);
+    connect(this, SIGNAL(changed(const QList<QRectF>&)), this, SLOT(updatePortals(const QList<QRectF>&)));
 }
 
 
-QRectF Page::boundingRect() const{
-    return QRectF(0,0,width,height);
+void Page::addPortal(PagePortal *page)
+{
+    portals.append(page);
 }
 
 
-void Page::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
+void Page::removePortal(PagePortal *page)
+{
+    portals.remove(portals.indexOf(page));
+}
 
+
+void Page::drawBackground(QPainter *painter, const QRectF &rect){
     painter->setPen(QPen(QColor("white"),2));
     painter->setBrush(QBrush(QColor("white")));
     painter->drawRect(QRect(0,0,width,height));
@@ -38,12 +44,15 @@ void Page::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     painter->drawEllipse(hole_x, 0.12*height, hole_size, hole_size);
     painter->drawEllipse(hole_x, 0.5*height, hole_size, hole_size);
     painter->drawEllipse(hole_x, 0.88*height, hole_size, hole_size);
+}
 
-    if(isSelected()){
-        int thickness = 8;
-        painter->setPen(QPen(QColor(120,180,255),thickness,Qt::SolidLine,Qt::SquareCap,Qt::RoundJoin));
-        painter->setBrush(Qt::NoBrush);
-        painter->drawRect(QRect(0,0,width,height).adjusted(-thickness/2,-thickness/2,thickness/2,thickness/2));
+
+void Page::updatePortals(const QList<QRectF>& rects)
+{
+    foreach(PagePortal* portal, portals){
+        foreach(QRectF rect, rects){
+            portal->update(rect);
+        }
     }
 }
 

@@ -37,16 +37,16 @@ Pen::Pen(UI* ui) : Tool(ui)
 }
 
 
-void Pen::drawPressEvent(DrawEvent event)
+void Pen::drawPressEvent(ToolEvent event)
 {
     if(event.button() == Qt::LeftButton and stroke == nullptr){
         timer.start();
         last_point = event.position();
         true_last_point = event.position();
         stroke = new Stroke(this);
-        if(event.deviceType() == QInputDevice::DeviceType::Stylus) stroke->init(event.docPos(), event.pressure());
-        else stroke->init(event.docPos(), fmax(speed_width*width,0.1));
-        ui->getActiveDocument()->getActivePage()->addToGroup(stroke);
+        if(event.deviceType() == QInputDevice::DeviceType::Stylus) stroke->init(event.pagePos(), event.pressure());
+        else stroke->init(event.pagePos(), fmax(speed_width*width,0.1));
+        ui->getActivePage()->addItem(stroke);
     } else {
         drawReleaseEvent(event);
     }
@@ -55,7 +55,7 @@ void Pen::drawPressEvent(DrawEvent event)
 }
 
 
-void Pen::drawMoveEvent(DrawEvent event)
+void Pen::drawMoveEvent(ToolEvent event)
 {
     float num_speed_points = 4;
     float slow_thresh = 3; //seconds per 1000 pixels
@@ -85,17 +85,17 @@ void Pen::drawMoveEvent(DrawEvent event)
         float dist = sqrt(dx*dx+dy*dy);
 
         if (event.deviceType() == QInputDevice::DeviceType::Mouse and dist >= 3){//min distance to add new point for mouse
-            if(mode == "Speed") stroke->addpoint(event.docPos(), fmax(speed_width*width,0.1));
-            else stroke->addpoint(event.docPos(), width);
+            if(mode == "Speed") stroke->addpoint(event.pagePos(), fmax(speed_width*width,0.1));
+            else stroke->addpoint(event.pagePos(), width);
             last_point = event.position();
         } else if (event.deviceType() == QInputDevice::DeviceType::Stylus and dist >= 1){//min distance to add new point for pen
-            if(mode == "Speed") stroke->addpoint(event.docPos(),fmax(speed_width*width,0.1));//speed
-            else if(mode == "Pressure") stroke->addpoint(event.docPos(),pressureToWidth(event.pressure()));//pressure
-            else if(mode == "Average") stroke->addpoint(event.docPos(),(pressureToWidth(event.pressure()) + fmax(speed_width*width,0.1))/2);//average
-            else if(mode == "Combined") stroke->addpoint(event.docPos(),fmax(event.pressure()*speed_width*width,0.1));//mult average
+            if(mode == "Speed") stroke->addpoint(event.pagePos(),fmax(speed_width*width,0.1));//speed
+            else if(mode == "Pressure") stroke->addpoint(event.pagePos(),pressureToWidth(event.pressure()));//pressure
+            else if(mode == "Average") stroke->addpoint(event.pagePos(),(pressureToWidth(event.pressure()) + fmax(speed_width*width,0.1))/2);//average
+            else if(mode == "Combined") stroke->addpoint(event.pagePos(),fmax(event.pressure()*speed_width*width,0.1));//mult average
             //else stroke->addpoint(event.docPos(), width);
             //else stroke->addpoint(event.docPos(), fmax(0.1,abs(width*event.xTilt()/60)));
-            else stroke->addpoint(event.docPos(), fmax(0.1, width*(abs(cosf(dir))*0.9+0.1)));
+            else stroke->addpoint(event.pagePos(), fmax(0.1, width*(abs(cosf(dir))*0.9+0.1)));
             last_point = event.position();
         }
         true_last_point = event.position();
@@ -103,13 +103,13 @@ void Pen::drawMoveEvent(DrawEvent event)
 }
 
 
-void Pen::drawReleaseEvent(DrawEvent event)
+void Pen::drawReleaseEvent(ToolEvent event)
 {
     if(stroke != nullptr){
         if(event.deviceType() == QInputDevice::DeviceType::Mouse){
-            stroke->finish(event.docPos(), 0.1);
+            stroke->finish(event.pagePos(), 0.1);
         } else if(event.deviceType() == QInputDevice::DeviceType::Stylus){
-            stroke->finish(event.docPos(),pressureToWidth(event.pressure()));
+            stroke->finish(event.pagePos(),pressureToWidth(event.pressure()));
         }
         stroke = nullptr;
     }

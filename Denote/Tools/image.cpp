@@ -2,6 +2,7 @@
 
 #include "Framework/toolmenu.h"
 #include "Framework/document.h"
+#include "Graphics/page.h"
 #include "Ui/ui.h"
 #include <QPainter>
 
@@ -29,7 +30,7 @@ void Image::setImage(QImage image)
     this->image = image;
     bounds = image.rect();
     prepareGeometryChange();
-    ui->getActiveDocument()->addItem(this);
+    ui->getActivePage()->addItem(this);
 }
 
 

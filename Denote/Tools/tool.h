@@ -1,7 +1,7 @@
 #ifndef TOOL_H
 #define TOOL_H
 
-#include "Framework/drawevent.h"
+#include "Framework/toolevent.h"
 #include "Framework/toolpreset.h"
 #include "enums.h"
 
@@ -22,10 +22,10 @@ public:
 public:
     virtual void documentProximityEvent(QEvent *event){Q_UNUSED(event);}
     virtual void tabletProximityEvent(QEvent *event){Q_UNUSED(event);}
-    virtual void drawPressEvent(DrawEvent event){Q_UNUSED(event);}
-    virtual void drawMoveEvent(DrawEvent event){Q_UNUSED(event);}
-    virtual void drawReleaseEvent(DrawEvent event){Q_UNUSED(event);}
-    virtual void drawDoubleClickEvent(DrawEvent event){Q_UNUSED(event);}
+    virtual void drawPressEvent(ToolEvent event){Q_UNUSED(event);}
+    virtual void drawMoveEvent(ToolEvent event){Q_UNUSED(event);}
+    virtual void drawReleaseEvent(ToolEvent event){Q_UNUSED(event);}
+    virtual void drawDoubleClickEvent(ToolEvent event){Q_UNUSED(event);}
 
     virtual void activate() = 0;
     virtual void deactivate() = 0;

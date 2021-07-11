@@ -1,27 +1,32 @@
 #ifndef PAGE_H
 #define PAGE_H
 
-#include "Graphics/pagebackground.h"
-#include "Tools/enums.h"
+//QGraphicsScene that holds strokes on each page
 
-#include <QGraphicsItemGroup>
-#include <QPainter>
+#include <QGraphicsScene>
 
+class PagePortal;
 enum BackgroundType { Lines, LinesMargin, Engineering, Graph, Staves, Custom };
 
-class Page : public QGraphicsItemGroup{
+class Page : public QGraphicsScene
+{
+    Q_OBJECT
 public:
     Page();
 
+public:
     int getWidth(){ return width; }
     int getHeight(){ return height; }
-    QSize getSize(){ return QSize(width,height);}
+    QRectF getBounds(){ return QRectF(0,0,width,height);}
+    void addPortal(PagePortal* page);
+    void removePortal(PagePortal* page);
     void setBackgroundType(BackgroundType t){ page_type = t; }
 
 protected:
-    QRectF boundingRect() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    int type() const override {return TypePage;}
+    void drawBackground(QPainter *painter, const QRectF &rect) override;
+
+private slots:
+    void updatePortals(const QList<QRectF>& rects);
 
 private:
     void paintLines(QPainter *painter);
@@ -33,8 +38,8 @@ private:
 
 private:
     int width, height = 0;
-    PageBackground background;
     BackgroundType page_type = Engineering;
+    QList<PagePortal*> portals;
 
 };
 
