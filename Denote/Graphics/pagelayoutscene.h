@@ -5,10 +5,13 @@
 //All tools are only added to the active scene
 
 #include <QGraphicsScene>
+#include <QGraphicsView>
 
 class Document;
 class Page;
 class PagePortal;
+
+enum LayoutType {SingleColumn, FitToView};
 
 class PageLayoutScene : public QGraphicsScene
 {
@@ -20,16 +23,16 @@ public:
     void addPortal(Page* page);
     void removePortal(Page* page);
     QList<PagePortal*> getPortals(){return portals;}
-    void setAutoLayout(bool b);
+    void setLayoutType(LayoutType type){layout_type = type;}
 
 private:
     QGraphicsView* viewport;
     Document* doc;
     QList<PagePortal*> portals;
+    LayoutType layout_type = SingleColumn;
 
-    const int y_padding = 30;
-
-    bool auto_layout = false;
+    const int page_padding = 20;
+    const int view_padding = 100;
 };
 
 #endif // PAGELAYOUTSCENE_H

@@ -4,22 +4,15 @@
 
 
 Page::Page() : QGraphicsScene(){
-    width = 850;
-    height = 1100;
-
-    connect(this, SIGNAL(changed(const QList<QRectF>&)), this, SLOT(updatePortals(const QList<QRectF>&)));
+    setPageSize(850,1100);
 }
 
 
-void Page::addPortal(PagePortal *page)
+void Page::setPageSize(int width, int height)
 {
-    portals.append(page);
-}
-
-
-void Page::removePortal(PagePortal *page)
-{
-    portals.remove(portals.indexOf(page));
+    this->width = width;
+    this->height = height;
+    setSceneRect(QRect(0,0,width,height));
 }
 
 
@@ -39,20 +32,33 @@ void Page::drawBackground(QPainter *painter, const QRectF &rect){
     painter->setPen(QPen(QColor("black"),2));
     painter->setBrush(QBrush(QColor("black")));
 
-    float hole_x = 0.03*width;
-    float hole_size = 0.032*width;
+    float hole_x = 26;
+    float hole_size = 27;
+
     painter->drawEllipse(hole_x, 0.12*height, hole_size, hole_size);
     painter->drawEllipse(hole_x, 0.5*height, hole_size, hole_size);
     painter->drawEllipse(hole_x, 0.88*height, hole_size, hole_size);
+
+
 }
 
 
-void Page::updatePortals(const QList<QRectF>& rects)
+void Page::addPortal(PagePortal *portal)
+{
+    portals.append(portal);
+}
+
+
+void Page::removePortal(PagePortal *portal)
+{
+    portals.remove(portals.indexOf(portal));
+}
+
+
+void Page::updatePortals(QRectF rect)
 {
     foreach(PagePortal* portal, portals){
-        foreach(QRectF rect, rects){
-            portal->update(rect);
-        }
+        portal->update(rect);
     }
 }
 

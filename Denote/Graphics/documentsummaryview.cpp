@@ -11,6 +11,8 @@ DocumentSummaryView::DocumentSummaryView(Document* doc)
     page_layout_scene = new PageLayoutScene(this, doc);
     setScene(page_layout_scene);
 
+    page_layout_scene->updatePageLayout();
+
     doc->getUI()->setActiveLayout(page_layout_scene);
 
     setInteractive(false);
@@ -21,9 +23,6 @@ DocumentSummaryView::DocumentSummaryView(Document* doc)
     setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
 
-    setTabletTracking(true);
-    setMouseTracking(true);
-
     setBackgroundBrush(QBrush(QColor(37,37,40)));
 }
 
@@ -32,17 +31,4 @@ void DocumentSummaryView::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
     fitInView(0,0,page_layout_scene->width()+x_padding,10,Qt::AspectRatioMode::KeepAspectRatio);
-}
-
-
-void DocumentSummaryView::enterEvent(QEnterEvent *event)
-{
-    doc->getUI()->setActiveLayout(page_layout_scene);
-    doc->getUI()->getActiveTool()->documentProximityEvent(event);
-}
-
-
-void DocumentSummaryView::leaveEvent(QEvent *event)
-{
-    doc->getUI()->getActiveTool()->documentProximityEvent(event);
 }

@@ -5,14 +5,13 @@
 #include "Framework/toolmenu.h"
 #include "Graphics/pagelayoutscene.h"
 #include "Graphics/page.h"
+#include "Graphics/pageportal.h"
 
 #include <QPainter>
 
 
 Eraser::Eraser(UI* ui) : Tool(ui)
 {
-    width = 10;
-
     width_slider = new QSlider(Qt::Horizontal);
     width_slider->setValue(width);
     width_slider->setMaximum(40);
@@ -23,6 +22,8 @@ Eraser::Eraser(UI* ui) : Tool(ui)
     tool_menu->setLayout(menu_layout);
 
     connect(width_slider, &QSlider::valueChanged, this, &Eraser::updateWidth);
+
+    setWidth(10);
 }
 
 
@@ -46,11 +47,14 @@ void Eraser::drawMoveEvent(ToolEvent event)
     if(visible){
         setPos(event.layoutPos());
         if(erasing){
-            QList<QGraphicsItem*> items = ui->getActivePage()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
-            foreach(QGraphicsItem* item, items){
-                if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){
-                    ui->getActivePage()->removeItem(item);
-                    delete item;
+            QRectF page_bounds = sceneBoundingRect().translated(-ui->getActivePortal()->scenePos());
+
+            foreach(QGraphicsItem* item, ui->getActivePage()->items()){
+                if(page_bounds.intersects(item->sceneBoundingRect())){//checks intersection on page level
+                    if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){
+                        ui->getActivePage()->removeItem(item);
+                        delete item;
+                    }
                 }
             }
         }
@@ -123,10 +127,11 @@ void Eraser::setWidth(float width)
     width_slider->setValue(width);
     bounds = QRectF(-0.5*width,-0.5*width, width, width).adjusted(-2,-2,2,2);
     tool_preset->update();
+    prepareGeometryChange();
 }
 
 
 void Eraser::updateWidth(int width)
 {
-    this->width = float(width);
+    setWidth(float(width));
 }

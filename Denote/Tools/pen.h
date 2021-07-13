@@ -57,6 +57,7 @@ private:
     QString mode = "Pressure";
     float dir = 0;
     float last_dir = 0;
+    QPointF last_page_pos;
 
 private:
     QSlider *width_slider;

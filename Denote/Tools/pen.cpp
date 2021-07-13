@@ -7,6 +7,7 @@
 #include "Graphics/page.h"
 #include <QPainter>
 #include <QColorDialog>
+#include "Graphics/pageportal.h"
 
 
 Pen::Pen(UI* ui) : Tool(ui)
@@ -61,30 +62,35 @@ void Pen::drawMoveEvent(ToolEvent event)
     float slow_thresh = 3; //seconds per 1000 pixels
 
     if(true_last_point == event.position()) return;
-    if(count >= num_speed_points){
-        inverse_speed = timer.restart()/(sum_dist*num_speed_points);
-        speed_width = sqrt(fmin(inverse_speed,slow_thresh)/slow_thresh);
-        speed_width = (speed_width + last_speed_width)/2;
-        last_speed_width = speed_width;
-        count = 0;
-        sum_dist = 0;
-        dir = atan2f(last_point.y()-event.position().y(), event.position().x()-last_point.x());
-        dir = (dir + last_dir)/2;
-        last_dir = dir;
-        //if(dir < 0) dir += 6.28;
-        //qDebug() << dir;
-    } else {
-        sum_dist += fabs(event.position().x()-true_last_point.x());
-        sum_dist += fabs(event.position().y()-true_last_point.y());
-        count++;
+    if(mode == "Speed" or mode == "Average" or mode == "Combined"){
+        if(count >= num_speed_points){
+            inverse_speed = timer.restart()/(sum_dist*num_speed_points);
+            speed_width = sqrt(fmin(inverse_speed,slow_thresh)/slow_thresh);
+            speed_width = (speed_width + last_speed_width)/2;
+            last_speed_width = speed_width;
+            count = 0;
+            sum_dist = 0;
+            dir = atan2f(last_point.y()-event.position().y(), event.position().x()-last_point.x());
+            dir = (dir + last_dir)/2;
+            last_dir = dir;
+            //if(dir < 0) dir += 6.28;
+            //qDebug() << dir;
+        } else {
+            sum_dist += fabs(event.position().x()-true_last_point.x());
+            sum_dist += fabs(event.position().y()-true_last_point.y());
+            count++;
+        }
     }
 
     if(stroke != nullptr){
-        float dx = event.position().x()-last_point.x();
-        float dy = event.position().y()-last_point.y();
-        float dist = sqrt(dx*dx+dy*dy);
+        //float dx = event.position().x()-last_point.x();
+        //float dy = event.position().y()-last_point.y();
+        //float dist = sqrt(dx*dx+dy*dy);
+        //float dist = abs(dx)+abs(dy);
 
-        if (event.deviceType() == QInputDevice::DeviceType::Mouse and dist >= 3){//min distance to add new point for mouse
+        float dist = 1;
+
+        if (event.deviceType() == QInputDevice::DeviceType::Mouse and dist >= 1){//min distance to add new point for mouse
             if(mode == "Speed") stroke->addpoint(event.pagePos(), fmax(speed_width*width,0.1));
             else stroke->addpoint(event.pagePos(), width);
             last_point = event.position();
@@ -98,7 +104,11 @@ void Pen::drawMoveEvent(ToolEvent event)
             else stroke->addpoint(event.pagePos(), fmax(0.1, width*(abs(cosf(dir))*0.9+0.1)));
             last_point = event.position();
         }
+        //ui->getActivePage()->updatePortals(QRectF(event.pagePos(),last_page_pos).normalized().adjusted(-3,-3,3,3));
+        ui->getActivePortal()->update(QRectF(event.pagePos(),last_page_pos).normalized().adjusted(-3,-3,3,3));
+
         true_last_point = event.position();
+        last_page_pos = event.pagePos();
     }
 }
 
@@ -111,6 +121,7 @@ void Pen::drawReleaseEvent(ToolEvent event)
         } else if(event.deviceType() == QInputDevice::DeviceType::Stylus){
             stroke->finish(event.pagePos(),pressureToWidth(event.pressure()));
         }
+        ui->getActivePage()->updatePortals(stroke->sceneBoundingRect());
         stroke = nullptr;
     }
 }

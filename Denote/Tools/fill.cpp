@@ -7,6 +7,7 @@
 #include <QColorDialog>
 #include <QPainter>
 #include "Ui/ui.h"
+#include "Graphics/pageportal.h"
 
 
 Fill::Fill(UI* ui) : Tool(ui)
@@ -52,6 +53,9 @@ void Fill::drawMoveEvent(ToolEvent event)
             fill_stroke->addpoint(event.pagePos());
             last_point = event.position();
         }
+
+        //ui->getActivePage()->updatePortals(fill_stroke->sceneBoundingRect());
+        ui->getActivePortal()->update(fill_stroke->sceneBoundingRect());
     }
 }
 
@@ -64,7 +68,8 @@ void Fill::drawReleaseEvent(ToolEvent event)
         } else if(event.deviceType() == QInputDevice::DeviceType::Stylus){
             fill_stroke->finish(event.pagePos());
         }
-        fill_stroke = nullptr;
+        ui->getActivePage()->updatePortals(fill_stroke->sceneBoundingRect());
+        fill_stroke = nullptr;        
     }
 }
 

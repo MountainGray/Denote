@@ -1,6 +1,7 @@
 #include "document.h"
 #include "Graphics/pagelayoutscene.h"
 #include "Ui/ui.h"
+#include "Graphics/page.h"
 
 
 Document::Document(UI* ui){
@@ -17,6 +18,7 @@ void Document::addPage(Page *page){
     pages.append(page);
     foreach(PageLayoutScene* page_layout, page_layouts){
         page_layout->addPortal(page);
+        page_layout->updatePageLayout();
     }
 }
 

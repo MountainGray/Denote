@@ -44,7 +44,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     Page *page4 = new Page();
     page4->setBackgroundType(LinesMargin);
+    page4->setPageSize(1100,850);
     doc->addPage(page4);
+
+    Page *page5 = new Page();
+    page5->setBackgroundType(Engineering);
+    page5->setPageSize(1100,850);
+    doc->addPage(page5);
+
+    Page *page6 = new Page();
+    page6->setBackgroundType(Graph);
+    doc->addPage(page6);
+
+
 
     QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
 

@@ -17,16 +17,16 @@ public:
 public:
     int getWidth(){ return width; }
     int getHeight(){ return height; }
+    void setPageSize(int width, int height);
     QRectF getBounds(){ return QRectF(0,0,width,height);}
+    void setBackgroundType(BackgroundType t){ page_type = t; }
     void addPortal(PagePortal* page);
     void removePortal(PagePortal* page);
-    void setBackgroundType(BackgroundType t){ page_type = t; }
+    void updatePortals(QRectF rect);
+
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
-
-private slots:
-    void updatePortals(const QList<QRectF>& rects);
 
 private:
     void paintLines(QPainter *painter);
@@ -37,7 +37,8 @@ private:
     void paintCustom(QPainter *painter);
 
 private:
-    int width, height = 0;
+    int width = 850;
+    int height = 1100;
     BackgroundType page_type = Engineering;
     QList<PagePortal*> portals;
 

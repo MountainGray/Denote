@@ -16,6 +16,8 @@ PagePortal::~PagePortal()
 
 void PagePortal::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
     page->render(painter, page->getBounds(), page->getBounds());
 }
 

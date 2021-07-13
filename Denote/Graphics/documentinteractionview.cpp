@@ -11,7 +11,7 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
 {
     this->doc = doc;
     page_layout_scene = new PageLayoutScene(this, doc);
-    page_layout_scene->setAutoLayout(true);
+    page_layout_scene->setLayoutType(LayoutType::FitToView);
     setScene(page_layout_scene);
 
     doc->getUI()->setActiveLayout(page_layout_scene);
@@ -60,6 +60,7 @@ void DocumentInteractionView::tabletEvent(QTabletEvent *event){
         foreach(PagePortal* portal, page_layout_scene->getPortals()){
             if(portal->isUnderMouse()){
                 doc->getUI()->setActivePage(portal->getPage());
+                doc->getUI()->setActivePortal(portal);
                 page_inverse = -portal->scenePos();
             }
         }
@@ -78,6 +79,7 @@ void DocumentInteractionView::mousePressEvent(QMouseEvent *event)
         foreach(PagePortal* portal, page_layout_scene->getPortals()){
             if(portal->isUnderMouse()){
                 doc->getUI()->setActivePage(portal->getPage());
+                doc->getUI()->setActivePortal(portal);
                 page_inverse = -portal->scenePos();
             }
         }
@@ -119,10 +121,12 @@ void DocumentInteractionView::wheelEvent(QWheelEvent *event){
             else
                 rotate(-5);
         } else {//zoom
-            if (event->angleDelta().y() > 0)
+            if (event->angleDelta().y() > 0){
                 scale(1.1,1.1);
-            else
+            } else {
                 scale(1/1.1,1/1.1);
+            }
+            page_layout_scene->updatePageLayout();
         }
         event->accept();
     } else {

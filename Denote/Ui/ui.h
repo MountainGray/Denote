@@ -10,6 +10,7 @@ class ToolLibrary;
 class Document;
 class PageLayoutScene;
 class Page;
+class PagePortal;
 
 
 class UI
@@ -23,6 +24,7 @@ public:
     void setActiveDocument(Document* doc){active_document = doc;}
     void setActiveLayout(PageLayoutScene* layout){active_layout = layout;}
     void setActivePage(Page* page){active_page = page;}
+    void setActivePortal(PagePortal* portal){active_portal = portal;}
 
     Tool* getActiveTool(){return active_tool;}
     Document* getActiveDocument(){return active_document;}
@@ -30,6 +32,7 @@ public:
     ToolMenu* getToolMenu();
     QList<Tool*> getTools(){return tools;}
     Page* getActivePage(){return active_page;}
+    PagePortal* getActivePortal(){return active_portal;}
 
 private:
     ToolMenuViewer *tool_menu_viewer;
@@ -39,6 +42,7 @@ private:
     Document* active_document;
     PageLayoutScene* active_layout;
     Page* active_page;
+    PagePortal* active_portal;
 };
 
 #endif // UI_H

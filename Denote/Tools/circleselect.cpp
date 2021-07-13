@@ -6,6 +6,7 @@
 #include "Framework/toolmenu.h"
 #include "Tools/selectionbox.h"
 #include "Graphics/page.h"
+#include "Graphics/pageportal.h"
 
 #include <QPainter>
 
@@ -13,7 +14,6 @@
 CircleSelect::CircleSelect(UI* ui, SelectionBox* box) : Tool(ui)
 {
     this->box = box;
-    width = 10;
 
     width_slider = new QSlider(Qt::Horizontal);
     width_slider->setValue(width);
@@ -25,6 +25,8 @@ CircleSelect::CircleSelect(UI* ui, SelectionBox* box) : Tool(ui)
     tool_menu->setLayout(menu_layout);
 
     connect(width_slider, &QSlider::valueChanged, this, &CircleSelect::updateWidth);
+
+    setWidth(10);
 }
 
 
@@ -46,11 +48,14 @@ void CircleSelect::drawMoveEvent(ToolEvent event)
     if(visible){
         setPos(event.layoutPos());
         if(selecting){
-            QList<QGraphicsItem*> items = ui->getActivePage()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
-            foreach(QGraphicsItem* item, items){
-                if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){ //stroke or fill or image
-                    if(event.buttons() & Qt::LeftButton) item->setSelected(true);
-                    else if(event.buttons() & Qt::RightButton) item->setSelected(false);
+            QRectF page_bounds = sceneBoundingRect().translated(-ui->getActivePortal()->scenePos());
+
+            foreach(QGraphicsItem* item, ui->getActivePage()->items()){
+                if(page_bounds.intersects(item->sceneBoundingRect())){//checks intersection on page level
+                    if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){ //stroke or fill or image
+                        if(event.buttons() & Qt::LeftButton) item->setSelected(true);
+                        else if(event.buttons() & Qt::RightButton) item->setSelected(false);
+                    }
                 }
             }
         }
@@ -131,10 +136,11 @@ void CircleSelect::setWidth(float width)
     width_slider->setValue(width);
     bounds = QRectF(-0.5*width,-0.5*width, width, width).adjusted(-2,-2,2,2);
     tool_preset->update();
+    prepareGeometryChange();
 }
 
 
 void CircleSelect::updateWidth(int width)
 {
-    this->width = float(width);
+    setWidth(float(width));
 }
