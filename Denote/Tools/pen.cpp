@@ -12,7 +12,6 @@
 
 Pen::Pen(UI* ui) : Tool(ui)
 {
-    width = 4;
     color = QColor("red");
 
     width_slider = new QSlider(Qt::Horizontal);
@@ -35,6 +34,8 @@ Pen::Pen(UI* ui) : Tool(ui)
     connect(width_slider, &QSlider::valueChanged, this, &Pen::updateWidth);
     connect(color_button, &QPushButton::clicked, this, &Pen::updateColor);
     connect(mode_combo, &QComboBox::currentIndexChanged, this, &Pen::updateMode);
+
+    setWidth(4);
 }
 
 
@@ -164,7 +165,7 @@ float Pen::pressureToWidth(float pressure)
 
 void Pen::updateWidth(int width)
 {
-    this->width = float(width);
+    setWidth(float(width));
 }
 
 

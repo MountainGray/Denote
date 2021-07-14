@@ -1,10 +1,14 @@
 #include "pageportal.h"
 #include "page.h"
 
+#include <QPainter>
+
 PagePortal::PagePortal(Page* page)
 {
     this->page = page;
     page->addPortal(this);
+
+    setFlag(GraphicsItemFlag::ItemIsSelectable, true);
 }
 
 
@@ -19,6 +23,14 @@ void PagePortal::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     Q_UNUSED(option);
     Q_UNUSED(widget);
     page->render(painter, page->getBounds(), page->getBounds());
+
+    QPen pen = QPen(QColor(120,190,255),4);
+    pen.setCosmetic(true);
+    painter->setPen(pen);
+
+    if(isSelected()){
+        painter->drawRect(page->getBounds());
+    }
 }
 
 

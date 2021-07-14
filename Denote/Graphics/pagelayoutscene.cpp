@@ -13,46 +13,61 @@ PageLayoutScene::PageLayoutScene(QGraphicsView *viewport, Document *doc)
     foreach(Page* page, doc->getPages()){
         addPortal(page);
     }
+    updatePageLayout();
 }
 
 
 void PageLayoutScene::updatePageLayout()
 {
     QRectF bounds = QRectF();
-
-    int i = 0;
-    int x = 0;
-    int y = 0;
-    int max_i = portals.length();
     QTransform t = viewport->transform();
     float scale = sqrt(t.m11() * t.m11() + t.m12() * t.m12());
-    int max_x = int(float(viewport->width()) / scale);
-    if(max_x < 0) max_x = 0;
+    int max_width = int(float(viewport->width()) / scale);
+    int max_i = portals.length();
 
-    int row_height = 0;
+    int width, height, x, y = 0, i = 0;
+    QList<PagePortal*> row;
 
-    while(true){
-        portals.at(i)->setPos(x,y);
-        x += portals.at(i)->getPage()->getWidth() + page_padding;
-        row_height = std::max(row_height, portals.at(i)->getPage()->getHeight());
-        bounds = bounds.united(portals.at(i)->sceneBoundingRect());
-        i ++;
-        if(i >= max_i) break;
-        if(x + portals.at(i)->getPage()->getWidth() + view_padding > max_x or layout_type == SingleColumn){
-            x = 0;
-            y += row_height + page_padding;
-            row_height = 0;
+    while(i < max_i){
+        width = 0;
+        row.clear();
+        while(i < max_i){
+            if(width + portals.at(i)->getPage()->getWidth() < max_width or width == 0){//if can fit, add to list
+                row.append(portals.at(i));
+                if(width != 0) width += page_padding;
+                width += portals.at(i)->getPage()->getWidth();
+                i ++;
+            } else {
+                break;
+            }
+            if(layout_type == SingleColumn) break;
         }
+        x = -width/2;
+        height = 0;
+        foreach(PagePortal* portal, row){
+            portal->setPos(x,y);
+            x += portal->getPage()->getWidth();
+            x += page_padding;
+            height = std::max(height, portal->getPage()->getHeight());
+            bounds = bounds.united(portal->sceneBoundingRect());
+        }
+        y += height;
+        y += page_padding;
     }
     setSceneRect(bounds);
 }
 
 
-void PageLayoutScene::addPortal(Page *page)
+void PageLayoutScene::addPortal(Page *page, int index)
 {
     PagePortal* portal = new PagePortal(page);
     addItem(portal);
-    portals.append(portal);
+
+    if(index == -1 or index >= portals.length()){
+        portals.append(portal);
+    } else {
+        portals.insert(index,portal);
+    }
 }
 
 

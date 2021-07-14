@@ -20,7 +20,7 @@ public:
 
 public:
     void updatePageLayout();
-    void addPortal(Page* page);
+    void addPortal(Page* page, int index = -1);
     void removePortal(Page* page);
     QList<PagePortal*> getPortals(){return portals;}
     void setLayoutType(LayoutType type){layout_type = type;}

@@ -58,7 +58,11 @@ void Page::removePortal(PagePortal *portal)
 void Page::updatePortals(QRectF rect)
 {
     foreach(PagePortal* portal, portals){
-        portal->update(rect);
+        if(rect.isEmpty()){
+            portal->update();
+        } else {
+            portal->update(rect);
+        }
     }
 }
 

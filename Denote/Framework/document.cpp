@@ -13,11 +13,17 @@ Document::~Document(){
 
 }
 
+#include <QtDebug>
 
-void Document::addPage(Page *page){
-    pages.append(page);
+void Document::addPage(Page *page, int index){
+    if(index == -1 or index >= pages.length()){
+        pages.append(page);
+    } else {
+        pages.insert(index,page);
+    }
+
     foreach(PageLayoutScene* page_layout, page_layouts){
-        page_layout->addPortal(page);
+        page_layout->addPortal(page, index);
         page_layout->updatePageLayout();
     }
 }
@@ -27,6 +33,7 @@ void Document::removePage(Page *page){
     pages.remove(pages.indexOf(page));
     foreach(PageLayoutScene* page_layout, page_layouts){
         page_layout->removePortal(page);
+        page_layout->updatePageLayout();
     }
 }
 

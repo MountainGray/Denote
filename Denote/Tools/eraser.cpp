@@ -65,6 +65,7 @@ void Eraser::drawMoveEvent(ToolEvent event)
 void Eraser::drawReleaseEvent(ToolEvent event)
 {
     if(event.button() == Qt::LeftButton){
+        ui->getActivePage()->updatePortals();
         erasing = false;
     }
 }

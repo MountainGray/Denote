@@ -14,7 +14,7 @@ public:
     ~Document();
 
 public:
-    void addPage(Page* page);
+    void addPage(Page* page, int index = -1);
     void removePage(Page* page);
     QList<Page*> getPages(){return pages;}
     void addPageLayout(PageLayoutScene* page_layout);

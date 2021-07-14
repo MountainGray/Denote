@@ -17,7 +17,9 @@ public:
     PageLayoutScene* getPageLayoutScene(){return page_layout_scene;}
 
 protected:
+    void mousePressEvent(QMouseEvent *event) override;
     void resizeEvent(QResizeEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 
 private:
     Document* doc;

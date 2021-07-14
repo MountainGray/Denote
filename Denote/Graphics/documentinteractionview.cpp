@@ -168,3 +168,10 @@ void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
     }
     */
 }
+
+
+void DocumentInteractionView::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event);
+    page_layout_scene->updatePageLayout();
+}

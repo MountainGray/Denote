@@ -3,6 +3,8 @@
 #include "mainwindow.h"
 #include "page.h"
 #include "Framework/document.h"
+#include "Graphics/pagelayoutscene.h"
+#include "Graphics/pageportal.h"
 
 #include <QtOpenGLWidgets/QOpenGLWidget>
 
@@ -56,5 +58,11 @@ void DocumentSummaryFrame::addPage()
     } else {
         page->setBackgroundType(BackgroundType::Engineering);
     }
-    doc->addPage(page);
+    int index = -1;
+    foreach(PagePortal* portal, viewport->getPageLayoutScene()->getPortals()){
+        if(portal->isSelected()){
+            index = doc->getPages().indexOf(portal->getPage()) + 1;
+        }
+    }
+    doc->addPage(page, index);
 }

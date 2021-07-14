@@ -22,7 +22,7 @@ public:
     void setBackgroundType(BackgroundType t){ page_type = t; }
     void addPortal(PagePortal* page);
     void removePortal(PagePortal* page);
-    void updatePortals(QRectF rect);
+    void updatePortals(QRectF rect = QRectF());
 
 
 protected:
