@@ -5,6 +5,8 @@
 #include "Ui/ui.h"
 #include "Framework/toolevent.h"
 #include "Graphics/pageportal.h"
+#include "Framework/historymanager.h"
+#include "Graphics/page.h"
 
 
 DocumentInteractionView::DocumentInteractionView(Document* doc)
@@ -22,7 +24,7 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
     setRenderHint(QPainter::Antialiasing, true);
     setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-    centerOn(page_layout_scene->width()/2,0);
+    centerOn(0,0);
 
     setTabletTracking(true);
     setMouseTracking(true);
@@ -138,6 +140,10 @@ void DocumentInteractionView::wheelEvent(QWheelEvent *event){
 
 void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
 {
+    doc->getUI()->getHistoryManager()->keyPressEvent(event);
+    foreach(Page* page, doc->getPages()){
+        page->updatePortals();
+    }
     /*
     if(event->key() == Qt::Key_V && event->modifiers() == Qt::ControlModifier){
         QClipboard *clip = QGuiApplication::clipboard();

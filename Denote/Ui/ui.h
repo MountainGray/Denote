@@ -11,7 +11,7 @@ class Document;
 class PageLayoutScene;
 class Page;
 class PagePortal;
-
+class HistoryManager;
 
 class UI
 {
@@ -33,6 +33,7 @@ public:
     QList<Tool*> getTools(){return tools;}
     Page* getActivePage(){return active_page;}
     PagePortal* getActivePortal(){return active_portal;}
+    HistoryManager* getHistoryManager(){return manager;}
 
 private:
     ToolMenuViewer *tool_menu_viewer;
@@ -43,6 +44,7 @@ private:
     PageLayoutScene* active_layout;
     Page* active_page;
     PagePortal* active_portal;
+    HistoryManager* manager;
 };
 
 #endif // UI_H

@@ -46,9 +46,11 @@ void DocumentSummaryView::resizeEvent(QResizeEvent *event)
 
 void DocumentSummaryView::keyPressEvent(QKeyEvent *event)
 {
-    foreach(PagePortal* portal, page_layout_scene->getPortals()){
-        if(portal->isSelected()){
-            doc->removePage(portal->getPage());
+    if(event->key() == Qt::Key_Delete){
+        foreach(PagePortal* portal, page_layout_scene->getPortals()){
+            if(portal->isSelected()){
+                doc->removePage(portal->getPage());
+            }
         }
     }
 }

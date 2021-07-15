@@ -3,9 +3,10 @@
 #include <QDebug>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
+#include <QGraphicsScene>
 
 
-Stroke::Stroke(Pen* pen)
+Stroke::Stroke(Pen* pen, HistoryManager* manager) : UndoObject(manager)
 {
     color = pen->getColor();
     width = pen->getWidth();
@@ -14,7 +15,7 @@ Stroke::Stroke(Pen* pen)
 }
 
 
-Stroke::Stroke(Stroke *stroke)
+Stroke::Stroke(Stroke *stroke, HistoryManager* manager) : UndoObject(manager)
 {
     color = stroke->color;
     width = stroke->width;
@@ -74,6 +75,21 @@ QRectF Stroke::boundingRect() const{
 }
 
 
+QPainterPath Stroke::shape() const
+{
+    QPainterPath path;
+    if(points.length() > 0){
+        path.moveTo(points.first());
+    }
+    foreach(QPointF point, points){
+        path.lineTo(point);
+    }
+    QPainterPathStroker path_stroke;
+    path_stroke.setWidth(width);
+    return path_stroke.createStroke(path);
+}
+
+
 void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
@@ -127,6 +143,18 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             painter->drawLine(points.at(points.size()-2), points.last());
         }
     }
+}
+
+
+void Stroke::undo()
+{
+    hide();
+}
+
+
+void Stroke::redo()
+{
+    show();
 }
 
 

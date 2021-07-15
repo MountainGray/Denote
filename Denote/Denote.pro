@@ -10,6 +10,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Framework/historymanager.cpp \
     Framework/toolevent.cpp \
     Framework/toolmenu.cpp \
     Framework/toolmenuviewer.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
     Framework/subwindow.cpp \
     Framework/toollibrary.cpp \
     Framework/toolpreset.cpp \
+    Framework/undoobject.cpp \
     Graphics/documentinteractionframe.cpp \
     Graphics/documentinteractionview.cpp \
     Graphics/documentsummaryframe.cpp \
@@ -41,6 +43,7 @@ SOURCES += \
     tabletapplication.cpp
 
 HEADERS += \
+    Framework/historymanager.h \
     Framework/toolevent.h \
     Framework/toolmenu.h \
     Framework/toolmenuviewer.h \
@@ -48,6 +51,7 @@ HEADERS += \
     Framework//subwindow.h \
     Framework/toollibrary.h \
     Framework/toolpreset.h \
+    Framework/undoobject.h \
     Graphics/documentinteractionframe.h \
     Graphics/documentinteractionview.h \
     Graphics/documentsummaryframe.h \

@@ -28,17 +28,26 @@ DocumentSummaryFrame::DocumentSummaryFrame(MainWindow *parent, Document* doc) : 
     page_combo->setCurrentIndex(0);
 
     new_button = new QPushButton("New Page");
+    up_button = new QPushButton("Up");
+    down_button = new QPushButton("Down");
 
-    menu_layout = new QGridLayout();
-    menu_layout->addWidget(viewport,0,0);
-    menu_layout->addWidget(page_combo,1,0);
-    menu_layout->addWidget(new_button,2,0);
+    button_layout = new QGridLayout();
+    button_layout->addWidget(page_combo,0,0);
+    button_layout->addWidget(new_button,1,0);
+    button_layout->addWidget(up_button,0,1);
+    button_layout->addWidget(down_button,1,1);
 
-    menu_widget = new QWidget();
-    menu_widget->setLayout(menu_layout);
-    setWidget(menu_widget);
+    frame_layout = new QGridLayout();
+    frame_layout->addWidget(viewport,0,0);
+    frame_layout->addLayout(button_layout,1,0);
+
+    frame_widget = new QWidget();
+    frame_widget->setLayout(frame_layout);
+    setWidget(frame_widget);
 
     connect(new_button, &QPushButton::clicked, this, &DocumentSummaryFrame::addPage);
+    connect(up_button, &QPushButton::clicked, this, &DocumentSummaryFrame::raisePage);
+    connect(down_button, &QPushButton::clicked, this, &DocumentSummaryFrame::lowerPage);
 }
 
 
@@ -65,4 +74,26 @@ void DocumentSummaryFrame::addPage()
         }
     }
     doc->addPage(page, index);
+}
+
+
+void DocumentSummaryFrame::raisePage()
+{
+    foreach(PagePortal* portal, viewport->getPageLayoutScene()->getPortals()){
+        if(portal->isSelected()){
+            int index = doc->getPages().indexOf(portal->getPage()) - 1;
+            doc->movePage(portal->getPage(), index);
+        }
+    }
+}
+
+
+void DocumentSummaryFrame::lowerPage()
+{
+    foreach(PagePortal* portal, viewport->getPageLayoutScene()->getPortals()){
+        if(portal->isSelected()){
+            int index = doc->getPages().indexOf(portal->getPage()) + 1;
+            doc->movePage(portal->getPage(), index);
+        }
+    }
 }

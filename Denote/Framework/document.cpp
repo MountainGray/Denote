@@ -38,6 +38,19 @@ void Document::removePage(Page *page){
 }
 
 
+void Document::movePage(Page *page, int new_index)
+{
+    if(new_index >= 0 and new_index < pages.length()){
+        int old_index = pages.indexOf(page);
+        pages.move(old_index, new_index);
+        foreach(PageLayoutScene* page_layout, page_layouts){
+            page_layout->movePortal(old_index, new_index);
+            page_layout->updatePageLayout();
+        }
+    }
+}
+
+
 void Document::addPageLayout(PageLayoutScene *page_layout)
 {
     page_layouts.append(page_layout);

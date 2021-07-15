@@ -3,12 +3,14 @@
 #include "Framework/toolmenuviewer.h"
 #include "Framework/toolmenu.h"
 #include "Framework/toollibrary.h"
+#include "Framework/historymanager.h"
 
 
 UI::UI(ToolMenuViewer *tool_menu_viewer, ToolLibrary *tool_library)
 {
     this->tool_menu_viewer = tool_menu_viewer;
     this->tool_library = tool_library;
+    manager = new HistoryManager();
 }
 
 

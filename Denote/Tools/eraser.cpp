@@ -47,10 +47,9 @@ void Eraser::drawMoveEvent(ToolEvent event)
     if(visible){
         setPos(event.layoutPos());
         if(erasing){
-            QRectF page_bounds = sceneBoundingRect().translated(-ui->getActivePortal()->scenePos());
-
+            QPainterPath page_shape = mapToScene(shape()).translated(-ui->getActivePortal()->scenePos());
             foreach(QGraphicsItem* item, ui->getActivePage()->items()){
-                if(page_bounds.intersects(item->sceneBoundingRect())){//checks intersection on page level
+                if(page_shape.intersects(item->mapToScene(item->shape()))){//checks intersection on page level
                     if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){
                         ui->getActivePage()->removeItem(item);
                         delete item;
@@ -106,6 +105,14 @@ void Eraser::paintPreset(QPaintEvent *event)
 QRectF Eraser::boundingRect() const
 {
     return bounds;
+}
+
+
+QPainterPath Eraser::shape() const
+{
+    QPainterPath path;
+    path.addEllipse(bounds);
+    return path;
 }
 
 

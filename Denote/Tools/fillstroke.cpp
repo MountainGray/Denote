@@ -56,6 +56,18 @@ QRectF FillStroke::boundingRect() const{
 }
 
 
+QPainterPath FillStroke::shape() const
+{
+    QPainterPath path;
+    if(points.length() > 0){
+        path.moveTo(points.first());
+    }
+    foreach(QPointF point, points){
+        path.lineTo(point);
+    }
+    return path;
+}
+
 
 void FillStroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

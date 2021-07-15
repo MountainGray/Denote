@@ -18,8 +18,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public:
     UI* getUI(){return this->ui;}
-
 
 private slots:
     bool save();

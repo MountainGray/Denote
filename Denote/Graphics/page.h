@@ -27,6 +27,7 @@ public:
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
+    void drawForeground(QPainter *painter, const QRectF &rect) override;
 
 private:
     void paintLines(QPainter *painter);

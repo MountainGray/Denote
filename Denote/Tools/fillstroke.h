@@ -21,6 +21,7 @@ public:
 
 public:
     QRectF boundingRect() const override;
+    QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     int type() const override {return TypeFillStroke;}
 

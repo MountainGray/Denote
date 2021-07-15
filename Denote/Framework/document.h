@@ -16,6 +16,7 @@ public:
 public:
     void addPage(Page* page, int index = -1);
     void removePage(Page* page);
+    void movePage(Page* page, int new_index);
     QList<Page*> getPages(){return pages;}
     void addPageLayout(PageLayoutScene* page_layout);
     void removePageLayout(PageLayoutScene* page_layout);

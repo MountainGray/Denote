@@ -81,3 +81,11 @@ void PageLayoutScene::removePortal(Page *page)
         }
     }
 }
+
+
+void PageLayoutScene::movePortal(int old_index, int new_index)
+{
+    if(new_index >= 0 and new_index < portals.length()){
+        portals.move(old_index, new_index);
+    }
+}

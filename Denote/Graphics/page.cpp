@@ -28,18 +28,20 @@ void Page::drawBackground(QPainter *painter, const QRectF &rect){
     else if(page_type == Staves) paintStaves(painter);
     else if(page_type == Custom) paintEngineering(painter);
     else paintEngineering(painter);
+}
 
-    painter->setPen(QPen(QColor("black"),2));
-    painter->setBrush(QBrush(QColor("black")));
 
+void Page::drawForeground(QPainter *painter, const QRectF &rect)
+{
     float hole_x = 26;
     float hole_size = 27;
+
+    painter->setPen(QPen(QColor(37,37,40),2));
+    painter->setBrush(QBrush(QColor(37,37,40)));
 
     painter->drawEllipse(hole_x, 0.12*height, hole_size, hole_size);
     painter->drawEllipse(hole_x, 0.5*height, hole_size, hole_size);
     painter->drawEllipse(hole_x, 0.88*height, hole_size, hole_size);
-
-
 }
 
 

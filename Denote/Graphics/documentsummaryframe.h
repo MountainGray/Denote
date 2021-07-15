@@ -20,14 +20,19 @@ public:
 
 private slots:
     void addPage();
+    void raisePage();
+    void lowerPage();
 
 private:
     Document* doc;
     DocumentSummaryView* viewport;
     QComboBox* page_combo;
-    QGridLayout* menu_layout;
-    QWidget* menu_widget;
+    QGridLayout* frame_layout;
+    QGridLayout* button_layout;
+    QWidget* frame_widget;
     QPushButton* new_button;
+    QPushButton* up_button;
+    QPushButton* down_button;
 };
 
 #endif // DOCUMENTSUMMARYFRAME_H
