@@ -141,9 +141,6 @@ void DocumentInteractionView::wheelEvent(QWheelEvent *event){
 void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
 {
     doc->getUI()->getHistoryManager()->keyPressEvent(event);
-    foreach(Page* page, doc->getPages()){
-        page->updatePortals();
-    }
     /*
     if(event->key() == Qt::Key_V && event->modifiers() == Qt::ControlModifier){
         QClipboard *clip = QGuiApplication::clipboard();

@@ -1,9 +1,11 @@
 #ifndef UNDOOBJECT_H
 #define UNDOOBJECT_H
 
+#include <QListWidgetItem>
+
 class HistoryManager;
 
-class UndoObject
+class UndoObject : public QListWidgetItem
 {
 public:
     UndoObject(HistoryManager* manager);

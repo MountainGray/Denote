@@ -8,6 +8,7 @@
 
 Stroke::Stroke(Pen* pen, HistoryManager* manager) : UndoObject(manager)
 {
+    setText("Added Pen Stroke");
     color = pen->getColor();
     width = pen->getWidth();
     painter_pen = QPen(color, width, Qt::SolidLine, Qt::RoundCap);
@@ -17,6 +18,7 @@ Stroke::Stroke(Pen* pen, HistoryManager* manager) : UndoObject(manager)
 
 Stroke::Stroke(Stroke *stroke, HistoryManager* manager) : UndoObject(manager)
 {
+    setText("Added Pen Stroke");
     color = stroke->color;
     width = stroke->width;
     points = stroke->points;
@@ -105,10 +107,10 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
     for(int o = 0; o < 2; o++){
         if(o == 0){
-            if(isSelected()) painter_pen.setColor(color.darker(250));
+            if(QGraphicsItem::isSelected()) painter_pen.setColor(color.darker(250));
             else painter_pen.setColor(color);
         } else {
-            if(isSelected()) painter_pen.setColor(color);
+            if(QGraphicsItem::isSelected()) painter_pen.setColor(color);
             else return;
         }
 
@@ -129,7 +131,7 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
                 line = QLineF(last_x, last_y, new_x, new_y);
 
-                if(isSelected() and o == 0) painter_pen.setWidthF(new_p+2);
+                if(QGraphicsItem::isSelected() and o == 0) painter_pen.setWidthF(new_p+2);
                 else painter_pen.setWidthF(new_p);
 
                 painter->setPen(painter_pen);
@@ -148,12 +150,14 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
 void Stroke::undo()
 {
+    setText("Removed Pen Stroke");
     hide();
 }
 
 
 void Stroke::redo()
 {
+    setText("Added Pen Stroke");
     show();
 }
 

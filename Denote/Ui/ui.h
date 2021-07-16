@@ -16,7 +16,7 @@ class HistoryManager;
 class UI
 {
 public:
-    UI(ToolMenuViewer *tool_menu_viewer, ToolLibrary *tool_library);
+    UI(ToolMenuViewer *tool_menu_viewer, ToolLibrary *tool_library, HistoryManager* manager);
 
 public:
     void addTool(Tool* tool);

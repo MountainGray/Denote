@@ -13,6 +13,7 @@
 #include "Tools/selectionbox.h"
 #include "Tools/circleselect.h"
 #include "Tools/lassoselect.h"
+#include "Framework/historymanager.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -25,7 +26,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     ToolMenuViewer *tool_menu_viewer = new ToolMenuViewer(this);
     subWindows.append(tool_menu_viewer);
 
-    ui = new UI(tool_menu_viewer, tool_library);
+    HistoryManager* history_manager = new HistoryManager(this);
+    subWindows.append(history_manager);
+
+    ui = new UI(tool_menu_viewer, tool_library, history_manager);
 
     Document *doc = new Document(ui);
     ui->setActiveDocument(doc);
@@ -67,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     DocumentSummaryFrame *summary_frame = new DocumentSummaryFrame(this, doc);
     subWindows.append(summary_frame);
 
+
     for(int i = 0; i < 5; i ++){
         Pen *pen = new Pen(ui);
         QColor color;
@@ -92,8 +97,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     addDockWidget(Qt::BottomDockWidgetArea, summary_frame);
     addDockWidget(Qt::BottomDockWidgetArea, interaction_frame);
     addDockWidget(Qt::BottomDockWidgetArea, tool_menu_viewer);
+    addDockWidget(Qt::BottomDockWidgetArea, history_manager);
 
-    //resizeDocks(subWindows, {2000, 120, 1000, 100}, Qt::Orientation::Horizontal);
+    //resizeDocks(subWindows, {2000, 120, 1000, 100, 100}, Qt::Orientation::Horizontal);
 
     QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents);
 }

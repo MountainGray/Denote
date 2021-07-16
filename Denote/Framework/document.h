@@ -21,6 +21,7 @@ public:
     void addPageLayout(PageLayoutScene* page_layout);
     void removePageLayout(PageLayoutScene* page_layout);
     UI* getUI(){return ui;}
+    void updateAll();
 
 private:
     QList<Page*> pages;

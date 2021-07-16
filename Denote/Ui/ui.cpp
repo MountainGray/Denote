@@ -6,11 +6,11 @@
 #include "Framework/historymanager.h"
 
 
-UI::UI(ToolMenuViewer *tool_menu_viewer, ToolLibrary *tool_library)
+UI::UI(ToolMenuViewer *tool_menu_viewer, ToolLibrary *tool_library, HistoryManager* manager)
 {
     this->tool_menu_viewer = tool_menu_viewer;
     this->tool_library = tool_library;
-    manager = new HistoryManager();
+    this->manager = manager;
 }
 
 

@@ -50,9 +50,9 @@ void Eraser::drawMoveEvent(ToolEvent event)
             QPainterPath page_shape = mapToScene(shape()).translated(-ui->getActivePortal()->scenePos());
             foreach(QGraphicsItem* item, ui->getActivePage()->items()){
                 if(page_shape.intersects(item->mapToScene(item->shape()))){//checks intersection on page level
-                    if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){
-                        ui->getActivePage()->removeItem(item);
-                        delete item;
+                    if(item->isVisible() and (item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage)){
+                        item->hide();
+                        erased.append(item);
                     }
                 }
             }
@@ -64,7 +64,11 @@ void Eraser::drawMoveEvent(ToolEvent event)
 void Eraser::drawReleaseEvent(ToolEvent event)
 {
     if(event.button() == Qt::LeftButton){
-        ui->getActivePage()->updatePortals();
+        if(not erased.isEmpty()){
+            new EraserUndo(ui->getHistoryManager(), erased);
+            ui->getActivePage()->updatePortals();
+            erased.clear();
+        }
         erasing = false;
     }
 }
@@ -142,4 +146,35 @@ void Eraser::setWidth(float width)
 void Eraser::updateWidth(int width)
 {
     setWidth(float(width));
+}
+
+
+
+
+
+
+
+
+EraserUndo::EraserUndo(HistoryManager* manager, QList<QGraphicsItem *> erased) : UndoObject(manager)
+{
+    this->erased = erased;
+    setText("Erased Strokes");
+}
+
+
+void EraserUndo::undo()
+{
+    foreach(QGraphicsItem* item, erased){
+        item->show();
+    }
+    setText("Re-added Strokes");
+}
+
+
+void EraserUndo::redo()
+{
+    foreach(QGraphicsItem* item, erased){
+        item->hide();
+    }
+    setText("Erased Strokes");
 }

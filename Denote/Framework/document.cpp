@@ -62,3 +62,11 @@ void Document::removePageLayout(PageLayoutScene *page_layout)
     page_layouts.remove(page_layouts.indexOf(page_layout));
 }
 
+
+void Document::updateAll()
+{
+    foreach(Page* page, pages){
+        page->updatePortals();
+    }
+}
+
