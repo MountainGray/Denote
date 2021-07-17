@@ -3,16 +3,34 @@
 #include "pageportal.h"
 #include "page.h"
 #include "Graphics/documentsummaryview.h"
+#include "Ui/ui.h"
 
 
 PageLayoutScene::PageLayoutScene(QGraphicsView *viewport, Document *doc)
 {
     this->viewport = viewport;
     this->doc = doc;
-    doc->addPageLayout(this);
+
+    doc->getUI()->addLayout(this);
+
+    int i = 0;
     foreach(Page* page, doc->getPages()){
-        addPortal(page);
+        new PagePortal(page, this, i);
+        i ++;
     }
+
+    updatePageLayout();
+}
+
+
+PageLayoutScene::~PageLayoutScene()
+{
+    doc->getUI()->removeLayout(this);
+
+    foreach(PagePortal* portal, portals){
+        delete portal;
+    }
+
     updatePageLayout();
 }
 
@@ -55,37 +73,4 @@ void PageLayoutScene::updatePageLayout()
         y += page_padding;
     }
     setSceneRect(bounds);
-}
-
-
-void PageLayoutScene::addPortal(Page *page, int index)
-{
-    PagePortal* portal = new PagePortal(page);
-    addItem(portal);
-
-    if(index == -1 or index >= portals.length()){
-        portals.append(portal);
-    } else {
-        portals.insert(index,portal);
-    }
-}
-
-
-void PageLayoutScene::removePortal(Page *page)
-{
-    foreach(PagePortal* portal, portals){
-        if(portal->getPage() == page){
-            removeItem(portal);
-            portals.remove(portals.indexOf(portal));
-            delete portal;
-        }
-    }
-}
-
-
-void PageLayoutScene::movePortal(int old_index, int new_index)
-{
-    if(new_index >= 0 and new_index < portals.length()){
-        portals.move(old_index, new_index);
-    }
 }

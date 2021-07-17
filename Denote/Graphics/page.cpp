@@ -45,18 +45,6 @@ void Page::drawForeground(QPainter *painter, const QRectF &rect)
 }
 
 
-void Page::addPortal(PagePortal *portal)
-{
-    portals.append(portal);
-}
-
-
-void Page::removePortal(PagePortal *portal)
-{
-    portals.remove(portals.indexOf(portal));
-}
-
-
 void Page::updatePortals(QRectF rect)
 {
     foreach(PagePortal* portal, portals){

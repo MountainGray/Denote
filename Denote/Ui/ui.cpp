@@ -22,6 +22,18 @@ void UI::addTool(Tool *tool)
 }
 
 
+void UI::addLayout(PageLayoutScene *layout)
+{
+    page_layouts.append(layout);
+}
+
+
+void UI::removeLayout(PageLayoutScene *layout)
+{
+    page_layouts.removeAll(layout);
+}
+
+
 void UI::setActiveTool(Tool *tool){
     if(active_tool != nullptr){
         active_tool->deactivate();

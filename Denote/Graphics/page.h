@@ -6,11 +6,13 @@
 #include <QGraphicsScene>
 
 class PagePortal;
+
 enum BackgroundType { Lines, LinesMargin, Engineering, Graph, Staves, Custom };
 
 class Page : public QGraphicsScene
 {
     Q_OBJECT
+    friend PagePortal;
 public:
     Page();
 
@@ -20,9 +22,8 @@ public:
     void setPageSize(int width, int height);
     QRectF getBounds(){ return QRectF(0,0,width,height);}
     void setBackgroundType(BackgroundType t){ page_type = t; }
-    void addPortal(PagePortal* page);
-    void removePortal(PagePortal* page);
     void updatePortals(QRectF rect = QRectF());
+    QList<PagePortal*> getPortals(){return portals;}
 
 
 protected:
@@ -42,7 +43,6 @@ private:
     int height = 1100;
     BackgroundType page_type = Engineering;
     QList<PagePortal*> portals;
-
 };
 
 #endif // PAGE_H

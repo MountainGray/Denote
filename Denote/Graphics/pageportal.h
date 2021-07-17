@@ -6,11 +6,12 @@
 #include <QGraphicsItem>
 
 class Page;
+class PageLayoutScene;
 
 class PagePortal : public QGraphicsItem
 {
 public:
-    PagePortal(Page* page);
+    PagePortal(Page* page, PageLayoutScene* page_layout, int index);
     ~PagePortal();
 
 public:
@@ -22,6 +23,7 @@ protected:
 
 private:
     Page* page;
+    PageLayoutScene* page_layout;
 };
 
 #endif // PAGEPORTAL_H

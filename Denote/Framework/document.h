@@ -5,7 +5,6 @@
 
 class Page;
 class UI;
-class PageLayoutScene;
 
 class Document
 {
@@ -17,15 +16,12 @@ public:
     void addPage(Page* page, int index = -1);
     void removePage(Page* page);
     void movePage(Page* page, int new_index);
-    QList<Page*> getPages(){return pages;}
-    void addPageLayout(PageLayoutScene* page_layout);
-    void removePageLayout(PageLayoutScene* page_layout);
+    QList<Page*> getPages(){return pages;}    
     UI* getUI(){return ui;}
     void updateAll();
 
 private:
     QList<Page*> pages;
-    QList<PageLayoutScene*> page_layouts;
     UI* ui;
 };
 

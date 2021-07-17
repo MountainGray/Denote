@@ -6,8 +6,8 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include "Framework/document.h"
 
-class Document;
 class Page;
 class PagePortal;
 
@@ -15,16 +15,18 @@ enum LayoutType {SingleColumn, FitToView};
 
 class PageLayoutScene : public QGraphicsScene
 {
+    friend PagePortal;
 public:
     PageLayoutScene(QGraphicsView* viewport, Document* doc);
+    ~PageLayoutScene();
 
 public:
-    void updatePageLayout();
-    void addPortal(Page* page, int index = -1);
-    void removePortal(Page* page);
-    void movePortal(int old_index, int new_index);
-    QList<PagePortal*> getPortals(){return portals;}
+    void updatePageLayout();    
     void setLayoutType(LayoutType type){layout_type = type;}
+    QList<PagePortal*> getPortals(){return portals;}
+
+private:
+    friend void Document::movePage(Page* page, int new_index);
 
 private:
     QGraphicsView* viewport;

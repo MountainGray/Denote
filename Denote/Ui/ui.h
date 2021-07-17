@@ -20,11 +20,14 @@ public:
 
 public:
     void addTool(Tool* tool);
+    void addLayout(PageLayoutScene* layout);
+    void removeLayout(PageLayoutScene* layout);
     void setActiveTool(Tool *tool);
     void setActiveDocument(Document* doc){active_document = doc;}
     void setActiveLayout(PageLayoutScene* layout){active_layout = layout;}
     void setActivePage(Page* page){active_page = page;}
     void setActivePortal(PagePortal* portal){active_portal = portal;}
+
 
     Tool* getActiveTool(){return active_tool;}
     Document* getActiveDocument(){return active_document;}
@@ -34,11 +37,13 @@ public:
     Page* getActivePage(){return active_page;}
     PagePortal* getActivePortal(){return active_portal;}
     HistoryManager* getHistoryManager(){return manager;}
+    QList<PageLayoutScene*> getLayouts(){return page_layouts;}
 
 private:
     ToolMenuViewer *tool_menu_viewer;
     ToolLibrary *tool_library;
     QList<Tool*> tools;
+    QList<PageLayoutScene*> page_layouts;
     Tool *active_tool = nullptr;
     Document* active_document;
     PageLayoutScene* active_layout;

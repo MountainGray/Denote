@@ -1,20 +1,28 @@
 #include "pageportal.h"
 #include "page.h"
+#include "pagelayoutscene.h"
 
 #include <QPainter>
 
-PagePortal::PagePortal(Page* page)
+PagePortal::PagePortal(Page* page, PageLayoutScene* page_layout, int index)
 {
     this->page = page;
-    page->addPortal(this);
+    this->page_layout = page_layout;
 
+    page->portals.append(this);
+    page_layout->portals.insert(index, this);
+
+    page_layout->addItem(this);
     setFlag(GraphicsItemFlag::ItemIsSelectable, true);
 }
 
 
 PagePortal::~PagePortal()
 {
-    page->removePortal(this);
+    page->portals.removeAll(this);
+    page_layout->portals.removeAll(this);
+
+    page_layout->removeItem(this);
 }
 
 
@@ -38,15 +46,5 @@ QRectF PagePortal::boundingRect() const
 {
     return page->getBounds();
 }
-
-/*
-
-if(isSelected()){
-    int thickness = 8;
-    painter->setPen(QPen(QColor(120,180,255),thickness,Qt::SolidLine,Qt::SquareCap,Qt::RoundJoin));
-    painter->setBrush(Qt::NoBrush);
-    painter->drawRect(QRect(0,0,width,height).adjusted(-thickness/2,-thickness/2,thickness/2,thickness/2));
-}
-*/
 
 
