@@ -3,7 +3,7 @@
 
 #include "Framework/toolevent.h"
 #include "Framework/toolpreset.h"
-#include "enums.h"
+#include "Framework/pageitem.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>

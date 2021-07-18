@@ -3,7 +3,7 @@
 #include "Framework/toolmenuviewer.h"
 #include "Framework/toolmenu.h"
 #include "Framework/toollibrary.h"
-#include "Framework/historymanager.h"
+#include "Framework/History/historymanager.h"
 
 
 UI::UI(ToolMenuViewer *tool_menu_viewer, ToolLibrary *tool_library, HistoryManager* manager)

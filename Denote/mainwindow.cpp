@@ -13,7 +13,7 @@
 #include "Tools/selectionbox.h"
 #include "Tools/circleselect.h"
 #include "Tools/lassoselect.h"
-#include "Framework/historymanager.h"
+#include "Framework/History/historymanager.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {

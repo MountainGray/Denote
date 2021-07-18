@@ -6,6 +6,7 @@
 #include "Graphics/pagelayoutscene.h"
 #include "Graphics/page.h"
 #include "Graphics/pageportal.h"
+#include "Framework/History/undodeletion.h"
 
 #include <QPainter>
 
@@ -49,10 +50,11 @@ void Eraser::drawMoveEvent(ToolEvent event)
         if(erasing){
             QPainterPath page_shape = mapToScene(shape()).translated(-ui->getActivePortal()->scenePos());
             foreach(QGraphicsItem* item, ui->getActivePage()->items()){
-                if(page_shape.intersects(item->mapToScene(item->shape()))){//checks intersection on page level
-                    if(item->isVisible() and (item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage)){
-                        item->hide();
-                        erased.append(item);
+                PageItem* page_item = static_cast<PageItem*>(item);
+                if(page_item != nullptr){
+                    if(page_item->isPresent() and page_shape.intersects(page_item->mapToScene(page_item->shape()))){
+                        page_item->removeItem();
+                        erased.append(page_item);
                     }
                 }
             }
@@ -65,7 +67,8 @@ void Eraser::drawReleaseEvent(ToolEvent event)
 {
     if(event.button() == Qt::LeftButton){
         if(not erased.isEmpty()){
-            new EraserUndo(ui->getHistoryManager(), erased);
+            QString text = (erased.length() == 1) ? "Erase Item" : "Erase Items";
+            new UndoDeletion(ui->getHistoryManager(), erased, text);
             ui->getActivePage()->updatePortals();
             erased.clear();
         }
@@ -146,35 +149,4 @@ void Eraser::setWidth(float width)
 void Eraser::updateWidth(int width)
 {
     setWidth(float(width));
-}
-
-
-
-
-
-
-
-
-EraserUndo::EraserUndo(HistoryManager* manager, QList<QGraphicsItem *> erased) : UndoObject(manager)
-{
-    this->erased = erased;
-    setText("Erased Strokes");
-}
-
-
-void EraserUndo::undo()
-{
-    foreach(QGraphicsItem* item, erased){
-        item->show();
-    }
-    setText("Re-added Strokes");
-}
-
-
-void EraserUndo::redo()
-{
-    foreach(QGraphicsItem* item, erased){
-        item->hide();
-    }
-    setText("Erased Strokes");
 }

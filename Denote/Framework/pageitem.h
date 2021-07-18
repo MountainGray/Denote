@@ -1,11 +1,12 @@
-#ifndef ENUMS_H
-#define ENUMS_H
+#ifndef PAGEITEM_H
+#define PAGEITEM_H
 
 #include <QGraphicsItem>
+#include "Framework/History/undocreation.h"
 
 const int UserType = QGraphicsItem::UserType;
 
-enum graphics {
+enum ItemType {
     TypePage = UserType+1,
     TypePenStroke = UserType+2,
     TypeFillStroke = UserType+3,
@@ -16,4 +17,18 @@ enum graphics {
     TypeImage = UserType+8
 };
 
-#endif // ENUMS_H
+class PageItem : public QGraphicsItem
+{
+public:
+    PageItem();
+
+public:
+    bool isPresent(){return present;}
+    void removeItem();
+    void recoverItem();
+
+private:
+    bool present = true;
+};
+
+#endif // PAGEITEM_H

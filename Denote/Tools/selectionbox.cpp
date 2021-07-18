@@ -16,9 +16,9 @@ SelectionBox::SelectionBox(UI* ui) : Tool(ui)
 void SelectionBox::drawPressEvent(ToolEvent event)
 {
 
-    if(event.button() == Qt::LeftButton and contains(mapFromScene(event.layoutPos()))){
+    if(event.button() == Qt::LeftButton and contains(mapFromScene(event.pagePos()))){
         moving = true;
-        first_point_diff = event.layoutPos()-pos();
+        first_point_diff = event.pagePos()-pos();
     } else {
         ui->getActivePage()->clearSelection();
         deactivate();
@@ -29,7 +29,8 @@ void SelectionBox::drawPressEvent(ToolEvent event)
 void SelectionBox::drawMoveEvent(ToolEvent event)
 {
     if(moving){
-        setPos(event.layoutPos()-first_point_diff);
+        setPos(event.pagePos()-first_point_diff);
+        ui->getActivePage()->updatePortals(this->sceneBoundingRect());
     }
 }
 
@@ -42,13 +43,16 @@ void SelectionBox::drawReleaseEvent(ToolEvent event)
 
 void SelectionBox::activate()
 {
-    if(not ui->getActiveLayout()->selectedItems().isEmpty()){
-        visible = true;
-        ui->getActiveLayout()->addItem(this);
-        foreach(QGraphicsItem *item, ui->getActivePage()->selectedItems()){
-            if(item->type() != TypePage or true){
-                addToGroup(item);
+    if(ui->getActivePage() != nullptr){
+        if(not ui->getActivePage()->selectedItems().isEmpty()){
+            visible = true;
+            ui->getActivePage()->addItem(this);
+            foreach(QGraphicsItem *item, ui->getActivePage()->selectedItems()){
+                if(item->type() != TypePage or true){
+                    addToGroup(item);
+                }
             }
+            ui->getActivePage()->updatePortals(this->sceneBoundingRect());
         }
     }
 }
@@ -56,13 +60,18 @@ void SelectionBox::activate()
 
 void SelectionBox::deactivate()
 {
+
     visible = false;
     foreach(QGraphicsItem *item, childItems()){
         removeFromGroup(item);
-        //needs to return to original group;
     }
-    ui->getActiveLayout()->removeItem(this);
+    if(scene() != nullptr){
+        QRectF bounds = sceneBoundingRect();
+        scene()->removeItem(this);
+        ui->getActivePage()->updatePortals(bounds);
+    }
     setPos(0,0);
+
 }
 
 

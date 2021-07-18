@@ -41,15 +41,15 @@ public:
 
 private:
     ToolMenuViewer *tool_menu_viewer;
-    ToolLibrary *tool_library;
+    ToolLibrary* tool_library = nullptr;
     QList<Tool*> tools;
     QList<PageLayoutScene*> page_layouts;
-    Tool *active_tool = nullptr;
-    Document* active_document;
-    PageLayoutScene* active_layout;
-    Page* active_page;
-    PagePortal* active_portal;
-    HistoryManager* manager;
+    Tool* active_tool = nullptr;
+    Document* active_document = nullptr;
+    PageLayoutScene* active_layout = nullptr;
+    Page* active_page = nullptr;
+    PagePortal* active_portal = nullptr;
+    HistoryManager* manager = nullptr;
 };
 
 #endif // UI_H

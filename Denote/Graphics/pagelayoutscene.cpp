@@ -73,4 +73,24 @@ void PageLayoutScene::updatePageLayout()
         y += page_padding;
     }
     setSceneRect(bounds);
+    if(focused_portal != nullptr){
+        if(focused_portal->sceneBoundingRect() != last_focused_portal_bounds){
+            viewport->ensureVisible(focused_portal);
+        }
+        last_focused_portal_bounds = focused_portal->sceneBoundingRect();
+    }
+}
+
+
+void PageLayoutScene::setLayoutType(LayoutType type)
+{
+    layout_type = type;
+    updatePageLayout();
+}
+
+
+void PageLayoutScene::setFocusedPortal(PagePortal *portal)
+{
+    focused_portal = portal;
+    last_focused_portal_bounds = focused_portal->sceneBoundingRect();
 }

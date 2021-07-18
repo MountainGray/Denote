@@ -5,7 +5,7 @@
 #include "Ui/ui.h"
 #include "Framework/toolevent.h"
 #include "Graphics/pageportal.h"
-#include "Framework/historymanager.h"
+#include "Framework/History/historymanager.h"
 #include "Graphics/page.h"
 
 
@@ -61,6 +61,7 @@ void DocumentInteractionView::tabletEvent(QTabletEvent *event){
     if(event->type() == QEvent::TabletPress){
         foreach(PagePortal* portal, page_layout_scene->getPortals()){
             if(portal->isUnderMouse()){
+                page_layout_scene->setFocusedPortal(portal);
                 doc->getUI()->setActivePage(portal->getPage());
                 doc->getUI()->setActivePortal(portal);
                 page_inverse = -portal->scenePos();
@@ -80,6 +81,7 @@ void DocumentInteractionView::mousePressEvent(QMouseEvent *event)
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
         foreach(PagePortal* portal, page_layout_scene->getPortals()){
             if(portal->isUnderMouse()){
+                page_layout_scene->setFocusedPortal(portal);
                 doc->getUI()->setActivePage(portal->getPage());
                 doc->getUI()->setActivePortal(portal);
                 page_inverse = -portal->scenePos();

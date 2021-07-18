@@ -22,7 +22,9 @@ public:
 
 public:
     void updatePageLayout();    
-    void setLayoutType(LayoutType type){layout_type = type;}
+    void setLayoutType(LayoutType type);
+    void setFocusedPortal(PagePortal* portal);
+
     QList<PagePortal*> getPortals(){return portals;}
 
 private:
@@ -32,7 +34,9 @@ private:
     QGraphicsView* viewport;
     Document* doc;
     QList<PagePortal*> portals;
+    PagePortal* focused_portal = nullptr;
     LayoutType layout_type = SingleColumn;
+    QRectF last_focused_portal_bounds;
 
     const int page_padding = 20;
     const int view_padding = 100;

@@ -1,7 +1,7 @@
 #ifndef HISTORYMANAGER_H
 #define HISTORYMANAGER_H
 
-#include "subwindow.h"
+#include "Framework/subwindow.h"
 #include "mainwindow.h"
 #include <QListWidget>
 
@@ -32,7 +32,7 @@ private:
     QBrush light = QBrush(QColor("white"));
 };
 
-#include "Framework/undoobject.h"
+#include "Framework/History/undoobject.h"
 
 class HistoryStart : public UndoObject
 {

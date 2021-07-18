@@ -1,8 +1,9 @@
 #include "historymanager.h"
-#include "Framework/undoobject.h"
+#include "Framework/History/undoobject.h"
 #include <QKeyEvent>
 #include "Ui/ui.h"
 #include "Framework/document.h"
+
 
 HistoryManager::HistoryManager(MainWindow* parent) : SubWindow(parent)
 {

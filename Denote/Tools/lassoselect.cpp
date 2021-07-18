@@ -6,8 +6,10 @@
 #include "Tools/selectionbox.h"
 #include "Graphics/page.h"
 #include "Graphics/pagelayoutscene.h"
+#include "Graphics/pageportal.h"
 
 #include <QPainter>
+
 
 LassoSelect::LassoSelect(UI* ui, SelectionBox* box) : Tool(ui)
 {
@@ -35,13 +37,17 @@ void LassoSelect::drawMoveEvent(ToolEvent event)
         if(selecting){
             lasso << event.layoutPos();
             bounds = lasso.boundingRect();
-            update(bounds);
+            prepareGeometryChange();
 
-            QList<QGraphicsItem*> items = ui->getActivePage()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
-            foreach(QGraphicsItem* item, items){
-                if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){ //stroke or fill or image
-                    if(event.buttons() & Qt::LeftButton) item->setSelected(true);
-                    else if(event.buttons() & Qt::RightButton) item->setSelected(false);
+
+            QPainterPath page_shape = mapToScene(shape()).translated(-ui->getActivePortal()->scenePos());
+            foreach(QGraphicsItem* item, ui->getActivePage()->items()){
+                PageItem* page_item = static_cast<PageItem*>(item);
+                if(page_item != nullptr){
+                    if(page_item->isPresent() and page_shape.contains(page_item->mapToScene(page_item->shape()))){
+                        if(event.buttons() & Qt::LeftButton) page_item->setSelected(true);
+                        else if(event.buttons() & Qt::RightButton) page_item->setSelected(false);
+                    }
                 }
             }
         }
@@ -54,6 +60,7 @@ void LassoSelect::drawReleaseEvent(ToolEvent event)
     Q_UNUSED(event);
     selecting = false;
     lasso.clear();
+    prepareGeometryChange();
 }
 
 

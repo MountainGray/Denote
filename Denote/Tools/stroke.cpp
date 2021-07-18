@@ -6,9 +6,8 @@
 #include <QGraphicsScene>
 
 
-Stroke::Stroke(Pen* pen, HistoryManager* manager) : UndoObject(manager)
+Stroke::Stroke(Pen* pen)
 {
-    setText("Added Pen Stroke");
     color = pen->getColor();
     width = pen->getWidth();
     painter_pen = QPen(color, width, Qt::SolidLine, Qt::RoundCap);
@@ -16,9 +15,8 @@ Stroke::Stroke(Pen* pen, HistoryManager* manager) : UndoObject(manager)
 }
 
 
-Stroke::Stroke(Stroke *stroke, HistoryManager* manager) : UndoObject(manager)
+Stroke::Stroke(Stroke *stroke)
 {
-    setText("Added Pen Stroke");
     color = stroke->color;
     width = stroke->width;
     points = stroke->points;
@@ -145,20 +143,6 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             painter->drawLine(points.at(points.size()-2), points.last());
         }
     }
-}
-
-
-void Stroke::undo()
-{
-    setText("Removed Pen Stroke");
-    hide();
-}
-
-
-void Stroke::redo()
-{
-    setText("Added Pen Stroke");
-    show();
 }
 
 

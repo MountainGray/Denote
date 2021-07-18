@@ -2,12 +2,11 @@
 #define IMAGE_H
 
 #include "Tools/tool.h"
-
-#include <QGraphicsItem>
+#include "Framework/pageitem.h"
 
 class UI;
 
-class Image : public QGraphicsItem, public Tool
+class Image : public PageItem, public Tool
 {
 public:
     Image(UI* ui);

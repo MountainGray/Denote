@@ -45,7 +45,10 @@ void Pen::drawPressEvent(ToolEvent event)
         timer.start();
         last_point = event.position();
         true_last_point = event.position();
-        stroke = new Stroke(this, ui->getHistoryManager());
+
+        stroke = new Stroke(this);
+        new UndoCreation(ui->getHistoryManager(), stroke, "Pen Stroke");
+
         if(event.deviceType() == QInputDevice::DeviceType::Stylus) stroke->init(event.pagePos(), event.pressure());
         else stroke->init(event.pagePos(), fmax(speed_width*width,0.1));
         ui->getActivePage()->addItem(stroke);

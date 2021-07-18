@@ -6,7 +6,6 @@
 #include <QGraphicsItem>
 #include <QSlider>
 #include <QGridLayout>
-#include "Framework/undoobject.h"
 
 class UI;
 
@@ -43,27 +42,12 @@ private:
     QRectF bounds;
     bool visible = false;
     bool erasing = false;
-    QList<QGraphicsItem*> erased;
+    QList<PageItem*> erased;
 
 private:
     QSlider *width_slider;
     QGridLayout *menu_layout;
 
 };
-
-
-class EraserUndo : public UndoObject
-{
-public:
-    EraserUndo(HistoryManager* manager, QList<QGraphicsItem*> erased);
-
-public:
-    void undo() override;
-    void redo() override;
-
-private:
-    QList<QGraphicsItem*> erased;
-};
-
 
 #endif // ERASER_H

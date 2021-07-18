@@ -48,13 +48,13 @@ void CircleSelect::drawMoveEvent(ToolEvent event)
     if(visible){
         setPos(event.layoutPos());
         if(selecting){
-            QRectF page_bounds = sceneBoundingRect().translated(-ui->getActivePortal()->scenePos());
-
+            QPainterPath page_shape = mapToScene(shape()).translated(-ui->getActivePortal()->scenePos());
             foreach(QGraphicsItem* item, ui->getActivePage()->items()){
-                if(page_bounds.intersects(item->sceneBoundingRect())){//checks intersection on page level
-                    if(item->type() == TypePenStroke or item->type() == TypeFillStroke or item->type() == TypeImage){ //stroke or fill or image
-                        if(event.buttons() & Qt::LeftButton) item->setSelected(true);
-                        else if(event.buttons() & Qt::RightButton) item->setSelected(false);
+                PageItem* page_item = static_cast<PageItem*>(item);
+                if(page_item != nullptr){
+                    if(page_item->isPresent() and page_shape.intersects(page_item->mapToScene(page_item->shape()))){
+                        if(event.buttons() & Qt::LeftButton) page_item->setSelected(true);
+                        else if(event.buttons() & Qt::RightButton) page_item->setSelected(false);
                     }
                 }
             }

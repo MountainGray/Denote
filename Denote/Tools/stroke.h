@@ -2,19 +2,17 @@
 #define STROKE_H
 
 #include "pressurepoint.h"
-#include "Framework/undoobject.h"
-#include "enums.h"
+#include "Framework/pageitem.h"
 
 #include <QPainter>
-#include <QGraphicsItem>
 
 class Pen;
 
-class Stroke : public QGraphicsItem, public UndoObject
+class Stroke : public PageItem
 {
 public:
-    Stroke(Pen *pen, HistoryManager* manager);
-    Stroke(Stroke *stroke, HistoryManager* manager);
+    Stroke(Pen *pen);
+    Stroke(Stroke *stroke);
 
 public:
     void init(QPointF pos, float pressure);
@@ -26,10 +24,6 @@ public:
     QPainterPath shape() const override;
     void paint(QPainter *ogpainter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     int type() const override {return TypePenStroke;}
-
-public:
-    void undo() override;
-    void redo() override;
 
 protected:
     void updateBounds(PressurePoint point);

@@ -1,15 +1,14 @@
 #ifndef FILLSTROKE_H
 #define FILLSTROKE_H
 
+#include "Framework/pageitem.h"
 #include "pressurepoint.h"
-#include "enums.h"
 
 #include <QPainter>
-#include <QGraphicsItem>
 
 class Fill;
 
-class FillStroke : public QGraphicsItem
+class FillStroke : public PageItem
 {
 public:
     FillStroke(Fill *fill);

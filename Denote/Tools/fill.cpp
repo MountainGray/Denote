@@ -29,7 +29,10 @@ void Fill::drawPressEvent(ToolEvent event)
 {
     if(event.button() == Qt::LeftButton and fill_stroke == nullptr){
         last_point = event.position();
+
         fill_stroke = new FillStroke(this);
+        new UndoCreation(ui->getHistoryManager(), fill_stroke, "Fill Stroke");
+
         if(event.deviceType() == QInputDevice::DeviceType::Stylus) fill_stroke->init(event.pagePos());
         else fill_stroke->init(event.pagePos());
         ui->getActivePage()->addItem(fill_stroke);
