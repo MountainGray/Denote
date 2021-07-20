@@ -76,7 +76,7 @@ void LassoSelect::drawDoubleClickEvent(ToolEvent event)
 
 void LassoSelect::activate()
 {
-    if(not added){
+    if(not added and ui->getActiveLayout() != nullptr){
         ui->getActiveLayout()->addItem(this);
         added = true;
     }
@@ -85,7 +85,7 @@ void LassoSelect::activate()
 
 void LassoSelect::deactivate()
 {
-    if(added){
+    if(added and ui->getActiveLayout() != nullptr){
         ui->getActiveLayout()->removeItem(this);
         added = false;
     }

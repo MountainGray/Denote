@@ -11,7 +11,7 @@ PageLayoutScene::PageLayoutScene(QGraphicsView *viewport, Document *doc)
     this->viewport = viewport;
     this->doc = doc;
 
-    doc->getUI()->addLayout(this);
+    doc->addLayout(this);
 
     int i = 0;
     foreach(Page* page, doc->getPages()){
@@ -25,7 +25,7 @@ PageLayoutScene::PageLayoutScene(QGraphicsView *viewport, Document *doc)
 
 PageLayoutScene::~PageLayoutScene()
 {
-    doc->getUI()->removeLayout(this);
+    doc->removeLayout(this);
 
     foreach(PagePortal* portal, portals){
         delete portal;

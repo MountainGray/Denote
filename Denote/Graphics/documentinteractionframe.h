@@ -4,6 +4,8 @@
 //general frame to hold interactive viewport and future widgets (tabbed doc mode)
 
 #include "Framework/subwindow.h"
+#include <QLabel>
+#include <QTabWidget>
 
 class Document;
 class DocumentInteractionView;
@@ -13,14 +15,20 @@ class DocumentInteractionFrame : public SubWindow
 {
     Q_OBJECT
 public:
-    DocumentInteractionFrame(MainWindow* parent, Document* doc);
+    DocumentInteractionFrame(MainWindow* parent, Document* doc = nullptr);
+    ~DocumentInteractionFrame();
 
 public:
     void setScale(float scale);
+    void addDocument(Document* doc);
+    void setDocument(Document* doc);
+
+private slots:
+    void resetGL();
 
 private:
-    Document* doc;
-    DocumentInteractionView* viewport;
+    QLabel* empty_widget;
+    QTabWidget* tab_widget;
 
 };
 

@@ -7,6 +7,9 @@
 #include "Graphics/pageportal.h"
 #include "Framework/History/historymanager.h"
 #include "Graphics/page.h"
+#include "Graphics/documentsummaryview.h"
+
+#include <QtOpenGLWidgets/QOpenGLWidget>
 
 
 DocumentInteractionView::DocumentInteractionView(Document* doc)
@@ -16,6 +19,8 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
     page_layout_scene->setLayoutType(LayoutType::FitToView);
     setScene(page_layout_scene);
 
+    summary_view = new DocumentSummaryView(doc);
+
     doc->getUI()->setActiveLayout(page_layout_scene);
 
     setDragMode(QGraphicsView::NoDrag);
@@ -23,6 +28,8 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
 
     setRenderHint(QPainter::Antialiasing, true);
     setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+    resetGL();
 
     centerOn(0,0);
 
@@ -34,10 +41,33 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
 }
 
 
+DocumentInteractionView::~DocumentInteractionView()
+{
+    delete page_layout_scene;
+}
+
+
 void DocumentInteractionView::setScale(float view_scale)
 {
     float new_scale = view_scale / transform().m11();
     scale(new_scale, new_scale);
+}
+
+
+void DocumentInteractionView::resetGL()
+{
+    QOpenGLWidget* gl = new QOpenGLWidget();
+    QSurfaceFormat format;
+    format.setSamples(6);
+    gl->setFormat(format);
+    setViewport(gl);
+    //should need to exist. Antialiasing missing when popping in/out subwindow.
+}
+
+
+void DocumentInteractionView::setAsSummary()
+{
+    doc->getUI()->getMain()->setSummary(summary_view);
 }
 
 
@@ -68,6 +98,7 @@ void DocumentInteractionView::tabletEvent(QTabletEvent *event){
             }
         }
         doc->getUI()->getActiveTool()->drawPressEvent(ToolEvent(event, this));
+        setAsSummary();
     } else if(event->type() == QEvent::TabletMove){
         doc->getUI()->getActiveTool()->drawMoveEvent(ToolEvent(event, this));
     } else if(event->type() == QEvent::TabletRelease){
@@ -89,6 +120,7 @@ void DocumentInteractionView::mousePressEvent(QMouseEvent *event)
         }
         doc->getUI()->getActiveTool()->drawPressEvent(ToolEvent(event, this));
     }
+    setAsSummary();
 }
 
 

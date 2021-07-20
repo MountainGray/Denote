@@ -8,18 +8,24 @@
 
 class Document;
 class PageLayoutScene;
+class DocumentSummaryView;
 
 class DocumentInteractionView : public QGraphicsView
 {
     Q_OBJECT
 public:
     DocumentInteractionView(Document* doc);
+    ~DocumentInteractionView();
 
 public:
     void setScale(float new_scale);
     PageLayoutScene* getPageLayoutScene(){return page_layout_scene;}
     QTransform getViewInverse(){return view_inverse;}
     QPointF getPageInverse(){return page_inverse;}
+    Document* getDoc(){return doc;}
+    void resetGL();
+    DocumentSummaryView* getSummary(){return summary_view;}
+    void setAsSummary();
 
 protected:
     void enterEvent(QEnterEvent *event) override;
@@ -39,6 +45,7 @@ private:
     QTransform view_inverse;
     QPointF page_inverse;
     PageLayoutScene* page_layout_scene;
+    DocumentSummaryView* summary_view;
 };
 
 #endif // DOCUMENTINTERACTIONVIEW_H

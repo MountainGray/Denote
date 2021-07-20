@@ -37,6 +37,7 @@ void SelectionBox::drawMoveEvent(ToolEvent event)
 
 void SelectionBox::drawReleaseEvent(ToolEvent event)
 {
+    Q_UNUSED(event);
     moving = false;
 }
 

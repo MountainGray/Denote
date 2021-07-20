@@ -39,6 +39,7 @@ void CircleSelect::documentProximityEvent(QEvent *event)
 
 void CircleSelect::drawPressEvent(ToolEvent event)
 {
+    Q_UNUSED(event);
     selecting = true;
 }
 
@@ -65,6 +66,7 @@ void CircleSelect::drawMoveEvent(ToolEvent event)
 
 void CircleSelect::drawReleaseEvent(ToolEvent event)
 {
+    Q_UNUSED(event);
     selecting = false;
 }
 
@@ -81,7 +83,7 @@ void CircleSelect::drawDoubleClickEvent(ToolEvent event)
 
 void CircleSelect::activate()
 {
-    if(not visible){
+    if(not visible and ui->getActiveLayout() != nullptr){
         ui->getActiveLayout()->addItem(this);
         visible = true;
     }
@@ -90,7 +92,7 @@ void CircleSelect::activate()
 
 void CircleSelect::deactivate()
 {
-    if(visible){
+    if(visible and ui->getActiveLayout() != nullptr){
         ui->getActiveLayout()->removeItem(this);
         visible = false;
     }

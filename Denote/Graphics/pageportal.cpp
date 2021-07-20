@@ -21,8 +21,10 @@ PagePortal::~PagePortal()
 {
     page->portals.removeAll(this);
     page_layout->portals.removeAll(this);
-
     page_layout->removeItem(this);
+    if(page_layout->focused_portal == this){
+        page_layout->focused_portal = nullptr;
+    }
 }
 
 

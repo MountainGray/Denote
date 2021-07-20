@@ -15,7 +15,7 @@ Eraser::Eraser(UI* ui) : Tool(ui)
 {
     width_slider = new QSlider(Qt::Horizontal);
     width_slider->setValue(width);
-    width_slider->setMaximum(40);
+    width_slider->setMaximum(200);
 
     menu_layout = new QGridLayout();
     menu_layout->addWidget(width_slider,0,0);
@@ -24,7 +24,7 @@ Eraser::Eraser(UI* ui) : Tool(ui)
 
     connect(width_slider, &QSlider::valueChanged, this, &Eraser::updateWidth);
 
-    setWidth(10);
+    setWidth(30);
 }
 
 
@@ -79,7 +79,7 @@ void Eraser::drawReleaseEvent(ToolEvent event)
 
 void Eraser::activate()
 {
-    if(not visible){
+    if(not visible and ui->getActiveLayout() != nullptr){
         ui->getActiveLayout()->addItem(this);
         visible = true;
     }
@@ -88,7 +88,7 @@ void Eraser::activate()
 
 void Eraser::deactivate()
 {
-    if(visible){
+    if(visible and ui->getActiveLayout() != nullptr){
         ui->getActiveLayout()->removeItem(this);
         visible = false;
     }

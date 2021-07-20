@@ -12,16 +12,15 @@ class PageLayoutScene;
 class Page;
 class PagePortal;
 class HistoryManager;
+class MainWindow;
 
 class UI
 {
 public:
-    UI(ToolMenuViewer *tool_menu_viewer, ToolLibrary *tool_library, HistoryManager* manager);
+    UI(MainWindow* main_window);
 
 public:
     void addTool(Tool* tool);
-    void addLayout(PageLayoutScene* layout);
-    void removeLayout(PageLayoutScene* layout);
     void setActiveTool(Tool *tool);
     void setActiveDocument(Document* doc){active_document = doc;}
     void setActiveLayout(PageLayoutScene* layout){active_layout = layout;}
@@ -36,20 +35,22 @@ public:
     QList<Tool*> getTools(){return tools;}
     Page* getActivePage(){return active_page;}
     PagePortal* getActivePortal(){return active_portal;}
-    HistoryManager* getHistoryManager(){return manager;}
-    QList<PageLayoutScene*> getLayouts(){return page_layouts;}
+    HistoryManager* getHistoryManager(){return history_manager;}
+    MainWindow* getMain(){return main_window;}
 
 private:
+    MainWindow* main_window;
     ToolMenuViewer *tool_menu_viewer;
-    ToolLibrary* tool_library = nullptr;
+    HistoryManager* history_manager;
+    ToolLibrary* tool_library;
+
     QList<Tool*> tools;
-    QList<PageLayoutScene*> page_layouts;
     Tool* active_tool = nullptr;
     Document* active_document = nullptr;
     PageLayoutScene* active_layout = nullptr;
     Page* active_page = nullptr;
     PagePortal* active_portal = nullptr;
-    HistoryManager* manager = nullptr;
+
 };
 
 #endif // UI_H

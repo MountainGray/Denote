@@ -17,6 +17,8 @@ void Page::setPageSize(int width, int height)
 
 
 void Page::drawBackground(QPainter *painter, const QRectF &rect){
+    Q_UNUSED(rect);
+
     painter->setPen(QPen(QColor("white"),2));
     painter->setBrush(QBrush(QColor("white")));
     painter->drawRect(QRect(0,0,width,height));
@@ -33,6 +35,8 @@ void Page::drawBackground(QPainter *painter, const QRectF &rect){
 
 void Page::drawForeground(QPainter *painter, const QRectF &rect)
 {
+    Q_UNUSED(rect);
+
     float hole_x = 26;
     float hole_size = 27;
 
