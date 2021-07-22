@@ -9,6 +9,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QSpinBox>
 
 class MainWindow;
 class DocumentSummaryView;
@@ -31,14 +32,19 @@ private slots:
 
 private:
     DocumentSummaryView* viewport = nullptr;
-    QComboBox* page_combo;
+
     QGridLayout* frame_layout;
-    QGridLayout* button_layout;
+    QLabel* empty_widget;
     QWidget* frame_widget;
+    QGridLayout* button_layout;
+
+    QComboBox* page_combo;
     QPushButton* new_button;
     QPushButton* up_button;
     QPushButton* down_button;
-    QLabel* empty_widget;
+    QSpinBox* page_width;
+    QSpinBox* page_height;
+
 };
 
 #endif // DOCUMENTSUMMARYFRAME_H

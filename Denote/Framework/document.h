@@ -6,6 +6,8 @@
 class PageLayoutScene;
 class Page;
 class UI;
+class HistoryManager;
+class DocumentSummaryView;
 
 class Document
 {
@@ -24,12 +26,18 @@ public:
     QList<Page*> getPages(){return pages;}
 
     UI* getUI(){return ui;}
-    void updateAll();
+    HistoryManager* getHistoryManager(){return history_manager;}
+    DocumentSummaryView* getSummaryView(){return summary_view;}
+    void updateAll(QRectF update_area);
+
+    void focusDoc();
 
 private:
     QList<Page*> pages;
     UI* ui;
     QList<PageLayoutScene*> layouts;
+    HistoryManager* history_manager;
+    DocumentSummaryView* summary_view;
 };
 
 #endif // DOCUMENT_H

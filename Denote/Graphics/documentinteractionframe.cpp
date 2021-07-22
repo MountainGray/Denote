@@ -18,6 +18,7 @@ DocumentInteractionFrame::DocumentInteractionFrame(MainWindow* parent, Document*
     addDocument(doc);
 
     connect(this, &QDockWidget::topLevelChanged, this, &DocumentInteractionFrame::resetGL);
+    connect(tab_widget, &QTabWidget::currentChanged, this, &DocumentInteractionFrame::focusCurrentDoc);
 }
 
 
@@ -43,6 +44,7 @@ void DocumentInteractionFrame::addDocument(Document *doc)
         DocumentInteractionView* new_viewport = new DocumentInteractionView(doc);
         tab_widget->addTab(new_viewport, QString("New Document %1").arg(tab_widget->count()));
         setWidget(tab_widget);
+        doc->focusDoc();
     }
 }
 
@@ -53,6 +55,7 @@ void DocumentInteractionFrame::setDocument(Document *doc)
         DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tab_widget->widget(i));
         if(view != nullptr and view->getDoc() == doc){
             tab_widget->setCurrentIndex(i);
+            doc->focusDoc();
             break;
         }
     }
@@ -66,5 +69,14 @@ void DocumentInteractionFrame::resetGL()
         if(view != nullptr){
             view->resetGL();
         }
+    }
+}
+
+
+void DocumentInteractionFrame::focusCurrentDoc()
+{
+    DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tab_widget->currentWidget());
+    if(view != nullptr){
+        view->getDoc()->focusDoc();
     }
 }

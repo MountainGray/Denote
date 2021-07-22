@@ -13,6 +13,7 @@ public:
     ~UndoCreation();
     void undo() override;
     void redo() override;
+    QRectF updateArea() override;
 
 private:
     QList<PageItem*> created;

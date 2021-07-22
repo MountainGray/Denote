@@ -3,10 +3,18 @@
 #include "Ui/ui.h"
 #include "Graphics/page.h"
 #include "Graphics/pageportal.h"
+#include "Framework/History/historymanager.h"
+#include "Framework/History/historymanagerviewer.h"
+#include "Graphics/documentsummaryview.h"
+#include "Graphics/documentsummaryframe.h"
 
 
 Document::Document(UI* ui){
     this->ui = ui;
+
+    history_manager = new HistoryManager(this);
+    summary_view = new DocumentSummaryView(this);
+
     ui->setActiveDocument(this);
 }
 
@@ -58,10 +66,18 @@ void Document::movePage(Page *page, int new_index)
 }
 
 
-void Document::updateAll()
+void Document::updateAll(QRectF update_area)
 {
     foreach(Page* page, pages){
-        page->updatePortals();
+        page->updatePortals(update_area);
     }
+}
+
+
+void Document::focusDoc()
+{
+    ui->setActiveDocument(this);
+    ui->getHistoryManagerViewer()->setHistoryManager(history_manager);
+    ui->getSummaryFrame()->setView(summary_view);
 }
 

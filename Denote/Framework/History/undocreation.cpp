@@ -38,3 +38,13 @@ void UndoCreation::redo()
         item->recoverItem();
     }
 }
+
+
+QRectF UndoCreation::updateArea()
+{
+    QRectF area;
+    foreach(PageItem* item, created){
+        area = area.united(item->boundingRect());
+    }
+    return area;
+}

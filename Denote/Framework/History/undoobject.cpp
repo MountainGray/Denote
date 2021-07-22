@@ -11,3 +11,9 @@ UndoObject::~UndoObject()
 {
 
 }
+
+
+QRectF UndoObject::updateArea()
+{
+    return QRectF();
+}

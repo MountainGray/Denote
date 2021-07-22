@@ -12,6 +12,7 @@ public:
     ~UndoDeletion();
     void undo() override;
     void redo() override;
+    QRectF updateArea() override;
 
 private:
     QList<PageItem*> deleted;

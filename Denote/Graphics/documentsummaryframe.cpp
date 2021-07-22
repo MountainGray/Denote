@@ -18,22 +18,31 @@ DocumentSummaryFrame::DocumentSummaryFrame(MainWindow *parent) : SubWindow(paren
     new_button = new QPushButton("New Page");
     up_button = new QPushButton("Up");
     down_button = new QPushButton("Down");
+    page_width = new QSpinBox();
+    page_height = new QSpinBox();
+    page_width->setMaximum(10000);
+    page_height->setMaximum(10000);
+    page_width->setValue(850);
+    page_height->setValue(1100);
 
     button_layout = new QGridLayout();
     button_layout->addWidget(page_combo,0,0);
     button_layout->addWidget(new_button,1,0);
     button_layout->addWidget(up_button,0,1);
     button_layout->addWidget(down_button,1,1);
-
-    frame_layout = new QGridLayout();
+    button_layout->addWidget(page_width,2,0);
+    button_layout->addWidget(page_height,2,1);
 
     frame_widget = new QWidget();
+    setWidget(frame_widget);
+
+    frame_layout = new QGridLayout();
     frame_widget->setLayout(frame_layout);
 
     empty_widget = new QLabel();
     empty_widget->setAlignment(Qt::AlignCenter);
     empty_widget->setText("No Documents are Open");
-    setWidget(empty_widget);
+    frame_layout->addWidget(empty_widget,0,0);
 
     connect(new_button, &QPushButton::clicked, this, &DocumentSummaryFrame::addPage);
     connect(up_button, &QPushButton::clicked, this, &DocumentSummaryFrame::raisePage);
@@ -48,18 +57,21 @@ DocumentSummaryFrame::~DocumentSummaryFrame()
 }
 
 
-void DocumentSummaryFrame::setView(DocumentSummaryView* view)
+void DocumentSummaryFrame::setView(DocumentSummaryView* new_viewport)
 {
-    if(frame_layout->isEmpty()){
-        frame_layout->addWidget(view,0,0);
+    if(new_viewport == nullptr) return;
+
+    if(frame_layout->count() == 1){//empty
+        delete empty_widget;
+        frame_layout->addWidget(new_viewport,0,0);
         frame_layout->addLayout(button_layout,1,0);
-        setWidget(frame_widget);
     } else {
         frame_layout->removeWidget(viewport);
-        frame_layout->addWidget(view,0,0);
+        viewport->setVisible(false);
+        frame_layout->addWidget(new_viewport,0,0);
+        new_viewport->setVisible(true);
     }
-    viewport = view;
-    viewport->getPageLayoutScene()->updatePageLayout();
+    viewport = new_viewport;
 }
 
 
@@ -80,6 +92,7 @@ void DocumentSummaryFrame::addPage()
         } else {
             page->setBackgroundType(BackgroundType::Engineering);
         }
+        page->setPageSize(page_width->value(),page_height->value());
         int index = -1;
         foreach(PagePortal* portal, viewport->getPageLayoutScene()->getPortals()){
             if(portal->isSelected()){

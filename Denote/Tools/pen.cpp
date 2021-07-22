@@ -15,8 +15,11 @@ Pen::Pen(UI* ui) : Tool(ui)
     color = QColor("red");
 
     width_slider = new QSlider(Qt::Horizontal);
+    width_slider->setSingleStep(1);
+    width_slider->setPageStep(1);
     width_slider->setValue(width);
     width_slider->setMaximum(40);
+
 
     color_button = new QPushButton("Select Color");
 
@@ -35,7 +38,7 @@ Pen::Pen(UI* ui) : Tool(ui)
     connect(color_button, &QPushButton::clicked, this, &Pen::updateColor);
     connect(mode_combo, &QComboBox::currentIndexChanged, this, &Pen::updateMode);
 
-    setWidth(4);
+    setWidth(3);
 }
 
 
@@ -47,7 +50,7 @@ void Pen::drawPressEvent(ToolEvent event)
         true_last_point = event.position();
 
         stroke = new Stroke(this);
-        new UndoCreation(ui->getHistoryManager(), stroke, "Pen Stroke");
+        new UndoCreation(ui->getActiveDocument()->getHistoryManager(), stroke, "Pen Stroke");
 
         if(event.deviceType() == QInputDevice::DeviceType::Stylus) stroke->init(event.pagePos(), event.pressure());
         else stroke->init(event.pagePos(), fmax(speed_width*width,0.1));
@@ -148,7 +151,7 @@ void Pen::paintPreset(QPaintEvent *event)
 void Pen::setWidth(float width)
 {
     this->width = width;
-    width_slider->setValue(width);
+    width_slider->setValue(width*3);
     tool_preset->update();
 }
 
@@ -168,7 +171,7 @@ float Pen::pressureToWidth(float pressure)
 
 void Pen::updateWidth(int width)
 {
-    setWidth(float(width));
+    setWidth(float(width)/3);
 }
 
 

@@ -1,46 +1,30 @@
 #include "historymanager.h"
 #include "Framework/History/undoobject.h"
-#include <QKeyEvent>
 #include "Ui/ui.h"
 #include "Framework/document.h"
 
 
-HistoryManager::HistoryManager(MainWindow* parent) : SubWindow(parent)
+HistoryManager::HistoryManager(Document* doc)
 {
-    this->parent = parent;
-    history = new QListWidget();
+    this->doc = doc;
     UndoObject* start = new HistoryStart(this);
     start->setText("Document Creation");
-    history->addItem(start);
-    setWidget(history);
-    connect(history, &QListWidget::itemPressed, this, &HistoryManager::setHistory);
+    addItem(start);
+    connect(this, &QListWidget::itemPressed, this, &HistoryManager::setHistory);
 }
 
 
 void HistoryManager::addObject(UndoObject *object)
 {
     foreach(UndoObject* old, undone_stack){
-        history->removeItemWidget(old);
+        removeItemWidget(old);
         delete old;
     }
     undone_stack.clear();
-    history->addItem(object);
+    addItem(object);
     object->setBackground(light);
     object->setSelected(true);
     active_stack.append(object);
-}
-
-
-void HistoryManager::keyPressEvent(QKeyEvent *event)
-{
-    if(event->key() & Qt::Key_Z and event->modifiers() & Qt::KeyboardModifier::ControlModifier){
-        if(event->modifiers() & Qt::KeyboardModifier::ShiftModifier){
-            redo();
-        } else{
-            undo();
-        }
-        parent->getUI()->getActiveDocument()->updateAll();
-    }
 }
 
 
@@ -52,6 +36,7 @@ void HistoryManager::undo()
         object->setBackground(dark);
         undone_stack.append(object);
         if(not active_stack.isEmpty()) active_stack.last()->setSelected(true);
+        doc->updateAll(object->updateArea());
     }
 }
 
@@ -64,6 +49,7 @@ void HistoryManager::redo()
         object->setBackground(light);
         active_stack.append(object);
         object->setSelected(true);
+        doc->updateAll(object->updateArea());
     }
 }
 
@@ -71,7 +57,7 @@ void HistoryManager::redo()
 void HistoryManager::setHistory(QListWidgetItem* item)
 {
     int old_index = active_stack.length()-1;
-    int new_index = history->row(item);
+    int new_index = row(item);
     int undos = old_index-new_index;
 
     if(undos > 0){
@@ -79,8 +65,6 @@ void HistoryManager::setHistory(QListWidgetItem* item)
     } else if(undos < 0) {
         for(int i = 0; i < -undos; i++) redo();
     } else return;
-
-    parent->getUI()->getActiveDocument()->updateAll();
 
     //terribly inefficient ?
 }

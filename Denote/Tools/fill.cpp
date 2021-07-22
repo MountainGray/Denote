@@ -31,7 +31,7 @@ void Fill::drawPressEvent(ToolEvent event)
         last_point = event.position();
 
         fill_stroke = new FillStroke(this);
-        new UndoCreation(ui->getHistoryManager(), fill_stroke, "Fill Stroke");
+        new UndoCreation(ui->getActiveDocument()->getHistoryManager(), fill_stroke, "Fill Stroke");
 
         if(event.deviceType() == QInputDevice::DeviceType::Stylus) fill_stroke->init(event.pagePos());
         else fill_stroke->init(event.pagePos());

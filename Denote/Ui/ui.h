@@ -11,8 +11,9 @@ class Document;
 class PageLayoutScene;
 class Page;
 class PagePortal;
-class HistoryManager;
+class HistoryManagerViewer;
 class MainWindow;
+class DocumentSummaryFrame;
 
 class UI
 {
@@ -27,7 +28,6 @@ public:
     void setActivePage(Page* page){active_page = page;}
     void setActivePortal(PagePortal* portal){active_portal = portal;}
 
-
     Tool* getActiveTool(){return active_tool;}
     Document* getActiveDocument(){return active_document;}
     PageLayoutScene* getActiveLayout(){return active_layout;}
@@ -35,13 +35,15 @@ public:
     QList<Tool*> getTools(){return tools;}
     Page* getActivePage(){return active_page;}
     PagePortal* getActivePortal(){return active_portal;}
-    HistoryManager* getHistoryManager(){return history_manager;}
+    HistoryManagerViewer* getHistoryManagerViewer(){return history_manager_viewer;}
+    DocumentSummaryFrame* getSummaryFrame(){return summary_frame;}
     MainWindow* getMain(){return main_window;}
 
 private:
     MainWindow* main_window;
-    ToolMenuViewer *tool_menu_viewer;
-    HistoryManager* history_manager;
+    ToolMenuViewer* tool_menu_viewer;
+    HistoryManagerViewer* history_manager_viewer;
+    DocumentSummaryFrame* summary_frame;
     ToolLibrary* tool_library;
 
     QList<Tool*> tools;

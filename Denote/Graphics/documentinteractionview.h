@@ -25,7 +25,7 @@ public:
     Document* getDoc(){return doc;}
     void resetGL();
     DocumentSummaryView* getSummary(){return summary_view;}
-    void setAsSummary();
+    void focusDoc();
 
 protected:
     void enterEvent(QEnterEvent *event) override;

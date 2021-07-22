@@ -25,11 +25,11 @@ public:
 
 private slots:
     void resetGL();
+    void focusCurrentDoc();
 
 private:
     QLabel* empty_widget;
     QTabWidget* tab_widget;
-
 };
 
 #endif // DOCUMENTINTERACTIONFRAME_H

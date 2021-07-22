@@ -3,7 +3,9 @@
 #include "Framework/toolmenuviewer.h"
 #include "Framework/toolmenu.h"
 #include "Framework/toollibrary.h"
-#include "Framework/History/historymanager.h"
+#include "Framework/History/historymanagerviewer.h"
+#include "mainwindow.h"
+#include "Graphics/documentsummaryframe.h"
 
 #include "Tools/pen.h"
 #include "Tools/fill.h"
@@ -18,12 +20,16 @@ UI::UI(MainWindow* main_window)
     this->main_window = main_window;
 
     tool_library = new ToolLibrary(main_window);
+    summary_frame = new DocumentSummaryFrame(main_window);
     tool_menu_viewer = new ToolMenuViewer(main_window);
-    history_manager = new HistoryManager(main_window);
+    history_manager_viewer = new HistoryManagerViewer(main_window);
+
 
     main_window->addSubWindow(tool_library, Qt::TopDockWidgetArea);
+    main_window->addSubWindow(summary_frame, Qt::BottomDockWidgetArea);
     main_window->addSubWindow(tool_menu_viewer, Qt::BottomDockWidgetArea);
-    main_window->addSubWindow(history_manager, Qt::BottomDockWidgetArea);
+    main_window->addSubWindow(history_manager_viewer, Qt::BottomDockWidgetArea);
+
 
     for(int i = 0; i < 5; i ++){
         Pen *pen = new Pen(this);
@@ -64,6 +70,10 @@ void UI::setActiveTool(Tool *tool){
     tool_library->setActiveTool(tool);
     tool_menu_viewer->setWidget(tool->getToolMenu());
     tool->activate();
+
+    foreach(Tool* tool, tools){
+        tool->toolPreset()->update();
+    }
 }
 
 

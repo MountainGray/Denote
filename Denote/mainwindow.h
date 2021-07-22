@@ -9,8 +9,6 @@
 
 class Document;
 class DocumentInteractionFrame;
-class DocumentSummaryFrame;
-class DocumentSummaryView;
 class UI;
 
 class MainWindow : public QMainWindow
@@ -24,7 +22,6 @@ public:
 public:
     UI* getUI(){return this->ui;}
     void addSubWindow(QDockWidget* widget, Qt::DockWidgetArea area = Qt::DockWidgetArea::BottomDockWidgetArea);
-    void setSummary(DocumentSummaryView* summary_view);
 
 private slots:
     void newDocument();
@@ -38,6 +35,5 @@ private:
     QList<QDockWidget *> subWindows;
     UI* ui;
     QList<DocumentInteractionFrame*> views;
-    DocumentSummaryFrame* summary_frame;
 };
 #endif // MAINWINDOW_H

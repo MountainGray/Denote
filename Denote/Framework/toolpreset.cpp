@@ -2,6 +2,7 @@
 
 #include "Tools/tool.h"
 #include "Ui/ui.h"
+#include <QPainter>
 
 ToolPreset::ToolPreset(Tool* tool)
 {
@@ -14,6 +15,13 @@ ToolPreset::ToolPreset(Tool* tool)
 void ToolPreset::paintEvent(QPaintEvent *event)
 {
     tool->paintPreset(event);
+
+    if(tool->getUI()->getActiveTool() == tool){
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        painter.setPen(QPen(QColor(50,150,255), 3));
+        painter.drawRect(QRectF(0,0,60,60));
+    }
 }
 
 

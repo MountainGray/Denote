@@ -68,7 +68,7 @@ void Eraser::drawReleaseEvent(ToolEvent event)
     if(event.button() == Qt::LeftButton){
         if(not erased.isEmpty()){
             QString text = (erased.length() == 1) ? "Erase Item" : "Erase Items";
-            new UndoDeletion(ui->getHistoryManager(), erased, text);
+            new UndoDeletion(ui->getActiveDocument()->getHistoryManager(), erased, text);
             ui->getActivePage()->updatePortals();
             erased.clear();
         }

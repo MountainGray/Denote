@@ -8,8 +8,13 @@
 #include "Framework/History/historymanager.h"
 #include "Graphics/page.h"
 #include "Graphics/documentsummaryview.h"
+#include "mainwindow.h"
+#include "Framework/History/historymanagerviewer.h"
 
 #include <QtOpenGLWidgets/QOpenGLWidget>
+#include "Tools/image.h"
+
+#include <QClipboard>
 
 
 DocumentInteractionView::DocumentInteractionView(Document* doc)
@@ -36,7 +41,6 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
     setTabletTracking(true);
     setMouseTracking(true);
 
-    //setBackgroundBrush(QBrush(QColor("black")));
     setBackgroundBrush(QBrush(QColor(37,37,40)));
 }
 
@@ -65,9 +69,9 @@ void DocumentInteractionView::resetGL()
 }
 
 
-void DocumentInteractionView::setAsSummary()
+void DocumentInteractionView::focusDoc()
 {
-    doc->getUI()->getMain()->setSummary(summary_view);
+    if(doc->getUI()->getActiveDocument() != doc) doc->focusDoc();
 }
 
 
@@ -98,7 +102,7 @@ void DocumentInteractionView::tabletEvent(QTabletEvent *event){
             }
         }
         doc->getUI()->getActiveTool()->drawPressEvent(ToolEvent(event, this));
-        setAsSummary();
+        focusDoc();
     } else if(event->type() == QEvent::TabletMove){
         doc->getUI()->getActiveTool()->drawMoveEvent(ToolEvent(event, this));
     } else if(event->type() == QEvent::TabletRelease){
@@ -120,7 +124,7 @@ void DocumentInteractionView::mousePressEvent(QMouseEvent *event)
         }
         doc->getUI()->getActiveTool()->drawPressEvent(ToolEvent(event, this));
     }
-    setAsSummary();
+    focusDoc();
 }
 
 
@@ -174,8 +178,9 @@ void DocumentInteractionView::wheelEvent(QWheelEvent *event){
 
 void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
 {
-    doc->getUI()->getHistoryManager()->keyPressEvent(event);
-    /*
+    doc->getUI()->getHistoryManagerViewer()->keyPressEvent(event);
+    doc->getUI()->getHistoryManagerViewer()->setHistoryManager(doc->getHistoryManager());
+
     if(event->key() == Qt::Key_V && event->modifiers() == Qt::ControlModifier){
         QClipboard *clip = QGuiApplication::clipboard();
         QImage image = clip->image(QClipboard::Clipboard);
@@ -183,6 +188,8 @@ void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
             Image *new_image = new Image(doc->getUI());
             new_image->setImage(image);
         }
+    }
+    /*
     } else if(event->key() == Qt::Key_Delete){
         foreach(QGraphicsItem *item, doc->selectedItems()){
             doc->removeItem(item);

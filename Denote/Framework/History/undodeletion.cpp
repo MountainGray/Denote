@@ -35,3 +35,13 @@ void UndoDeletion::redo()
         item->removeItem();
     }
 }
+
+
+QRectF UndoDeletion::updateArea()
+{
+    QRectF area;
+    foreach(PageItem* item, deleted){
+        area = area.united(item->boundingRect());
+    }
+    return area;
+}

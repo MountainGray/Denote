@@ -11,6 +11,7 @@ CONFIG += c++11
 
 SOURCES += \
     Framework/History/historymanager.cpp \
+    Framework/History/historymanagerviewer.cpp \
     Framework/History/undocreation.cpp \
     Framework/History/undodeletion.cpp \
     Framework/History/undoobject.cpp \
@@ -47,6 +48,7 @@ SOURCES += \
 
 HEADERS += \
     Framework/History/historymanager.h \
+    Framework/History/historymanagerviewer.h \
     Framework/History/undocreation.h \
     Framework/History/undodeletion.h \
     Framework/History/undoobject.h \

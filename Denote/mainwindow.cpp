@@ -16,10 +16,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     ui = new UI(this);
 
     addView();
-
-    summary_frame = new DocumentSummaryFrame(this);
-    addSubWindow(summary_frame, Qt::BottomDockWidgetArea);
-
     newDocument();
 }
 
@@ -33,12 +29,6 @@ void MainWindow::addSubWindow(QDockWidget *widget, Qt::DockWidgetArea area)
 {
     addDockWidget(area, widget);
     subWindows.append(widget);
-}
-
-
-void MainWindow::setSummary(DocumentSummaryView *summary_view)
-{
-    summary_frame->setView(summary_view);
 }
 
 
