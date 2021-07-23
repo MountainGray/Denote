@@ -25,10 +25,10 @@ public:
     void paint(QPainter *ogpainter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     int type() const override {return TypePenStroke;}
 
-protected:
+private:
     void updateBounds(PressurePoint point);
 
-protected:
+private:
     QVector<PressurePoint> points;
     QPen painter_pen;
     QRectF bounds;

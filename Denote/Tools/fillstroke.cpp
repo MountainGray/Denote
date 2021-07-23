@@ -9,7 +9,6 @@ FillStroke::FillStroke(Fill* fill)
     color = fill->getColor();
     painter_pen = QPen(color,3,Qt::SolidLine, Qt::RoundCap);
     painter_brush = QBrush(color);
-    setFlag(GraphicsItemFlag::ItemIsSelectable, true);
 }
 
 

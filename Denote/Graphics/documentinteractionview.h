@@ -8,7 +8,6 @@
 
 class Document;
 class PageLayoutScene;
-class DocumentSummaryView;
 
 class DocumentInteractionView : public QGraphicsView
 {
@@ -24,7 +23,6 @@ public:
     QPointF getPageInverse(){return page_inverse;}
     Document* getDoc(){return doc;}
     void resetGL();
-    DocumentSummaryView* getSummary(){return summary_view;}
     void focusDoc();
 
 protected:
@@ -45,7 +43,6 @@ private:
     QTransform view_inverse;
     QPointF page_inverse;
     PageLayoutScene* page_layout_scene;
-    DocumentSummaryView* summary_view;
 };
 
 #endif // DOCUMENTINTERACTIONVIEW_H

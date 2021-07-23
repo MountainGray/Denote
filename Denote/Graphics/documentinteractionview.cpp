@@ -7,7 +7,6 @@
 #include "Graphics/pageportal.h"
 #include "Framework/History/historymanager.h"
 #include "Graphics/page.h"
-#include "Graphics/documentsummaryview.h"
 #include "mainwindow.h"
 #include "Framework/History/historymanagerviewer.h"
 
@@ -23,8 +22,6 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
     page_layout_scene = new PageLayoutScene(this, doc);
     page_layout_scene->setLayoutType(LayoutType::FitToView);
     setScene(page_layout_scene);
-
-    summary_view = new DocumentSummaryView(doc);
 
     doc->getUI()->setActiveLayout(page_layout_scene);
 

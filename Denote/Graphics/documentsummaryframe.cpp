@@ -9,7 +9,7 @@
 
 DocumentSummaryFrame::DocumentSummaryFrame(MainWindow *parent) : SubWindow(parent)
 {
-    setMinimumSize(50,150);
+    setMinimumSize(40,150);
 
     page_combo = new QComboBox();
     page_combo->addItems({"Engineering", "Graph", "Lines", "LinesMargin", "Staves"});
@@ -26,12 +26,13 @@ DocumentSummaryFrame::DocumentSummaryFrame(MainWindow *parent) : SubWindow(paren
     page_height->setValue(1100);
 
     button_layout = new QGridLayout();
-    button_layout->addWidget(page_combo,0,0);
-    button_layout->addWidget(new_button,1,0);
-    button_layout->addWidget(up_button,0,1);
-    button_layout->addWidget(down_button,1,1);
-    button_layout->addWidget(page_width,2,0);
-    button_layout->addWidget(page_height,2,1);
+
+    button_layout->addWidget(up_button,0,0);
+    button_layout->addWidget(down_button,1,0);
+    button_layout->addWidget(page_combo,2,0);
+    button_layout->addWidget(page_width,3,0);
+    button_layout->addWidget(page_height,4,0);
+    button_layout->addWidget(new_button,5,0);
 
     frame_widget = new QWidget();
     setWidget(frame_widget);

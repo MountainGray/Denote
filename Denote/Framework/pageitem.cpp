@@ -3,7 +3,7 @@
 
 PageItem::PageItem()
 {
-
+    setFlag(GraphicsItemFlag::ItemIsSelectable, true);
 }
 
 

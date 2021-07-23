@@ -13,6 +13,7 @@
 #include "Tools/selectionbox.h"
 #include "Tools/circleselect.h"
 #include "Tools/lassoselect.h"
+#include "Tools/highlighter.h"
 
 
 UI::UI(MainWindow* main_window)
@@ -51,6 +52,7 @@ UI::UI(MainWindow* main_window)
     addTool(box);
     addTool(new CircleSelect(this, box));
     addTool(new LassoSelect(this, box));
+    addTool(new Highlighter(this));
 }
 
 

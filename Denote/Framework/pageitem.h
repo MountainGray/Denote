@@ -14,7 +14,8 @@ enum ItemType {
     TypeSelectionBox = UserType+5,
     TypeCircleSelect = UserType+6,
     TypeLassoSelect = UserType+7,
-    TypeImage = UserType+8
+    TypeImage = UserType+8,
+    TypeRectangle = UserType+9
 };
 
 class PageItem : public QGraphicsItem

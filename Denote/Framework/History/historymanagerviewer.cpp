@@ -7,6 +7,7 @@
 HistoryManagerViewer::HistoryManagerViewer(MainWindow* parent) : SubWindow(parent)
 {
     this->parent = parent;
+    setMinimumSize(50,50);
 }
 
 

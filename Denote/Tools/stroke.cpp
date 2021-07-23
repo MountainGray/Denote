@@ -11,7 +11,6 @@ Stroke::Stroke(Pen* pen)
     color = pen->getColor();
     width = pen->getWidth();
     painter_pen = QPen(color, width, Qt::SolidLine, Qt::RoundCap);
-    setFlag(GraphicsItemFlag::ItemIsSelectable, true);
 }
 
 

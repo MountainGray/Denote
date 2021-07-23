@@ -9,7 +9,7 @@
 
 Image::Image(UI* ui) : Tool(ui) //really shouldn't be a tool
 {
-    setFlag(ItemIsSelectable, true);
+
 }
 
 

@@ -29,7 +29,7 @@ public:
     void paintPreset(QPaintEvent *event) override;
 
 public:
-    void setWidth(float width);
+    void setWidth(float new_width);
     void setColor(QColor color);
     void setMode(QString mode){this->mode = mode;}
     float getWidth(){return width;}
@@ -38,12 +38,12 @@ public:
     float pressureToWidth(float pressure);
 
 private slots:
-    void updateWidth(int width);
+    void updateWidth(int new_width);
     void updateColor();
     void updateMode();
 
 private:
-    QColor color = Qt::black;
+    QColor color;
     QPointF last_point;
     QPointF true_last_point;
     Stroke *stroke = nullptr;
@@ -58,6 +58,9 @@ private:
     float dir = 0;
     float last_dir = 0;
     QPointF last_page_pos;
+    bool adjusting_width = false;
+    QPointF width_point;
+    float pause_width;
 
 private:
     QSlider *width_slider;
