@@ -8,18 +8,19 @@
 #include <QGridLayout>
 
 class UI;
+class SelectionBox;
 
 class CircleSelect : public Tool, public QGraphicsItem, public QObject
 {
 public:
-    CircleSelect(UI* ui);
+    CircleSelect(UI* ui, SelectionBox* box);
 
 public:
     void documentProximityEvent(QEvent* event) override;
-    void drawPressEvent(DrawEvent event) override;
-    void drawMoveEvent(DrawEvent event) override;
-    void drawReleaseEvent(DrawEvent event) override;
-    void drawDoubleClickEvent(DrawEvent event) override;
+    void drawPressEvent(ToolEvent event) override;
+    void drawMoveEvent(ToolEvent event) override;
+    void drawReleaseEvent(ToolEvent event) override;
+    void drawDoubleClickEvent(ToolEvent event) override;
 
     void activate() override;
     void deactivate() override;
@@ -29,7 +30,7 @@ public:
 public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    int type() const override {return UserType + 2;}
+    int type() const override {return TypeLassoSelect;}
 
 public:
     void setWidth(float width);
@@ -47,6 +48,7 @@ private:
 private:
     QSlider *width_slider;
     QGridLayout *menu_layout;
+    SelectionBox* box;
 };
 
 #endif // CIRCLESELECT_H

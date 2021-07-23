@@ -2,15 +2,18 @@
 
 #include "Ui/ui.h"
 #include "Framework/document.h"
-#include "Framework/documentgraphics.h"
+#include "Graphics/pagelayoutscene.h"
 #include "Framework/toolmenu.h"
+#include "Tools/selectionbox.h"
+#include "Graphics/page.h"
+#include "Graphics/pageportal.h"
 
 #include <QPainter>
 
 
-CircleSelect::CircleSelect(UI* ui) : Tool(ui)
+CircleSelect::CircleSelect(UI* ui, SelectionBox* box) : Tool(ui)
 {
-    width = 10;
+    this->box = box;
 
     width_slider = new QSlider(Qt::Horizontal);
     width_slider->setValue(width);
@@ -22,6 +25,8 @@ CircleSelect::CircleSelect(UI* ui) : Tool(ui)
     tool_menu->setLayout(menu_layout);
 
     connect(width_slider, &QSlider::valueChanged, this, &CircleSelect::updateWidth);
+
+    setWidth(10);
 }
 
 
@@ -32,22 +37,26 @@ void CircleSelect::documentProximityEvent(QEvent *event)
 }
 
 
-void CircleSelect::drawPressEvent(DrawEvent event)
+void CircleSelect::drawPressEvent(ToolEvent event)
 {
+    Q_UNUSED(event);
     selecting = true;
 }
 
 
-void CircleSelect::drawMoveEvent(DrawEvent event)
+void CircleSelect::drawMoveEvent(ToolEvent event)
 {
     if(visible){
-        setPos(event.docPos());
+        setPos(event.layoutPos());
         if(selecting){
-            QList<QGraphicsItem*> items = ui->getActiveDocument()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
-            foreach(QGraphicsItem* item, items){
-                if(item->type() == UserType + 1 or item->type() == UserType + 4 or item->type() == UserType + 5){ //stroke or fill or image
-                    if(event.buttons() & Qt::LeftButton) item->setSelected(true);
-                    else if(event.buttons() & Qt::RightButton) item->setSelected(false);
+            QPainterPath page_shape = mapToScene(shape()).translated(-ui->getActivePortal()->scenePos());
+            foreach(QGraphicsItem* item, ui->getActivePage()->items()){
+                PageItem* page_item = static_cast<PageItem*>(item);
+                if(page_item != nullptr){
+                    if(page_item->isPresent() and page_shape.intersects(page_item->mapToScene(page_item->shape()))){
+                        if(event.buttons() & Qt::LeftButton) page_item->setSelected(true);
+                        else if(event.buttons() & Qt::RightButton) page_item->setSelected(false);
+                    }
                 }
             }
         }
@@ -55,24 +64,27 @@ void CircleSelect::drawMoveEvent(DrawEvent event)
 }
 
 
-void CircleSelect::drawReleaseEvent(DrawEvent event)
+void CircleSelect::drawReleaseEvent(ToolEvent event)
 {
+    Q_UNUSED(event);
     selecting = false;
 }
 
 
-void CircleSelect::drawDoubleClickEvent(DrawEvent event)
+void CircleSelect::drawDoubleClickEvent(ToolEvent event)
 {
     if(event.button() == Qt::RightButton){
-        ui->getActiveDocument()->clearSelection();
+        ui->getActivePage()->clearSelection();
+    } else if(event.button() == Qt::LeftButton){
+        ui->setActiveTool(box);
     }
 }
 
 
 void CircleSelect::activate()
 {
-    if(not visible){
-        ui->getActiveDocument()->addItem(this);
+    if(not visible and ui->getActiveLayout() != nullptr){
+        ui->getActiveLayout()->addItem(this);
         visible = true;
     }
 }
@@ -80,8 +92,8 @@ void CircleSelect::activate()
 
 void CircleSelect::deactivate()
 {
-    if(visible){
-        ui->getActiveDocument()->removeItem(this);
+    if(visible and ui->getActiveLayout() != nullptr){
+        ui->getActiveLayout()->removeItem(this);
         visible = false;
     }
 }
@@ -97,7 +109,7 @@ void CircleSelect::paintPreset(QPaintEvent *event)
     painter.drawRect(QRectF(0,0,60,60));
     painter.setBrush(QBrush(QColor("Blue")));
     painter.drawEllipse(QPointF(30,30),width/2,width/2);
-    painter.drawText(QPointF(2,12),"CircleSelect");
+    painter.drawText(QPointF(2,12),"Circle Select");
 }
 
 
@@ -110,10 +122,10 @@ QRectF CircleSelect::boundingRect() const
 void CircleSelect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
+    Q_UNUSED(widget);
 
-    if(widget->parentWidget() != ui->getActiveView()) return;
-
-    QPen pen = QPen(QColor(0,0,255,55), 1, Qt::SolidLine, Qt::RoundCap);
+    QPen pen = QPen(QColor(0,0,255,55), 2, Qt::SolidLine, Qt::RoundCap);
+    pen.setCosmetic(true);
     painter->setPen(pen);
     painter->setBrush(Qt::NoBrush);
     painter->drawEllipse(QPointF(0,0),0.5*width,0.5*width);
@@ -126,10 +138,11 @@ void CircleSelect::setWidth(float width)
     width_slider->setValue(width);
     bounds = QRectF(-0.5*width,-0.5*width, width, width).adjusted(-2,-2,2,2);
     tool_preset->update();
+    prepareGeometryChange();
 }
 
 
 void CircleSelect::updateWidth(int width)
 {
-    this->width = float(width);
+    setWidth(float(width));
 }

@@ -2,16 +2,17 @@
 #define STROKE_H
 
 #include "pressurepoint.h"
+#include "Framework/pageitem.h"
 
 #include <QPainter>
-#include <QGraphicsItem>
 
 class Pen;
 
-class Stroke : public QGraphicsItem
+class Stroke : public PageItem
 {
 public:
     Stroke(Pen *pen);
+    Stroke(Stroke *stroke);
 
 public:
     void init(QPointF pos, float pressure);
@@ -20,8 +21,9 @@ public:
 
 public:
     QRectF boundingRect() const override;
+    QPainterPath shape() const override;
     void paint(QPainter *ogpainter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    int type() const override {return UserType + 1;}
+    int type() const override {return TypePenStroke;}
 
 protected:
     void updateBounds(PressurePoint point);

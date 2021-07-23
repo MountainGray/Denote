@@ -2,19 +2,20 @@
 
 #include "Ui/ui.h"
 #include "Framework/document.h"
-#include "Framework/documentgraphics.h"
 #include "Framework/toolmenu.h"
+#include "Graphics/pagelayoutscene.h"
+#include "Graphics/page.h"
+#include "Graphics/pageportal.h"
+#include "Framework/History/undodeletion.h"
 
 #include <QPainter>
 
 
 Eraser::Eraser(UI* ui) : Tool(ui)
 {
-    width = 10;
-
     width_slider = new QSlider(Qt::Horizontal);
     width_slider->setValue(width);
-    width_slider->setMaximum(40);
+    width_slider->setMaximum(200);
 
     menu_layout = new QGridLayout();
     menu_layout->addWidget(width_slider,0,0);
@@ -22,6 +23,8 @@ Eraser::Eraser(UI* ui) : Tool(ui)
     tool_menu->setLayout(menu_layout);
 
     connect(width_slider, &QSlider::valueChanged, this, &Eraser::updateWidth);
+
+    setWidth(30);
 }
 
 
@@ -32,7 +35,7 @@ void Eraser::documentProximityEvent(QEvent *event)
 }
 
 
-void Eraser::drawPressEvent(DrawEvent event)
+void Eraser::drawPressEvent(ToolEvent event)
 {
     if(event.button() == Qt::LeftButton){
         erasing = true;
@@ -40,16 +43,19 @@ void Eraser::drawPressEvent(DrawEvent event)
 }
 
 
-void Eraser::drawMoveEvent(DrawEvent event)
+void Eraser::drawMoveEvent(ToolEvent event)
 {
     if(visible){
-        setPos(event.docPos());
+        setPos(event.layoutPos());
         if(erasing){
-            QList<QGraphicsItem*> items = ui->getActiveDocument()->collidingItems(this,Qt::ItemSelectionMode::IntersectsItemBoundingRect);
-            foreach(QGraphicsItem* item, items){
-                if(item->type() == UserType + 1 or item->type() == UserType + 4 or item->type() == UserType + 5){ //stroke or fill
-                    ui->getActiveDocument()->removeItem(item);
-                    delete item;
+            QPainterPath page_shape = mapToScene(shape()).translated(-ui->getActivePortal()->scenePos());
+            foreach(QGraphicsItem* item, ui->getActivePage()->items()){
+                PageItem* page_item = static_cast<PageItem*>(item);
+                if(page_item != nullptr){
+                    if(page_item->isPresent() and page_shape.intersects(page_item->mapToScene(page_item->shape()))){
+                        page_item->removeItem();
+                        erased.append(page_item);
+                    }
                 }
             }
         }
@@ -57,9 +63,15 @@ void Eraser::drawMoveEvent(DrawEvent event)
 }
 
 
-void Eraser::drawReleaseEvent(DrawEvent event)
+void Eraser::drawReleaseEvent(ToolEvent event)
 {
     if(event.button() == Qt::LeftButton){
+        if(not erased.isEmpty()){
+            QString text = (erased.length() == 1) ? "Erase Item" : "Erase Items";
+            new UndoDeletion(ui->getActiveDocument()->getHistoryManager(), erased, text);
+            ui->getActivePage()->updatePortals();
+            erased.clear();
+        }
         erasing = false;
     }
 }
@@ -67,8 +79,8 @@ void Eraser::drawReleaseEvent(DrawEvent event)
 
 void Eraser::activate()
 {
-    if(not visible){
-        ui->getActiveDocument()->addItem(this);
+    if(not visible and ui->getActiveLayout() != nullptr){
+        ui->getActiveLayout()->addItem(this);
         visible = true;
     }
 }
@@ -76,8 +88,8 @@ void Eraser::activate()
 
 void Eraser::deactivate()
 {
-    if(visible){
-        ui->getActiveDocument()->removeItem(this);
+    if(visible and ui->getActiveLayout() != nullptr){
+        ui->getActiveLayout()->removeItem(this);
         visible = false;
     }
 }
@@ -103,13 +115,21 @@ QRectF Eraser::boundingRect() const
 }
 
 
+QPainterPath Eraser::shape() const
+{
+    QPainterPath path;
+    path.addEllipse(bounds);
+    return path;
+}
+
+
 void Eraser::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
+    Q_UNUSED(widget);
 
-    if(widget->parentWidget() != ui->getActiveView()) return;
-
-    QPen pen = QPen(QColor(0,0,0,55), 1, Qt::SolidLine, Qt::RoundCap);
+    QPen pen = QPen(QColor(0,0,0,55), 2, Qt::SolidLine, Qt::RoundCap);
+    pen.setCosmetic(true);
     painter->setPen(pen);
     painter->setBrush(Qt::NoBrush);
     painter->drawEllipse(QPointF(0,0),0.5*width,0.5*width);
@@ -122,10 +142,11 @@ void Eraser::setWidth(float width)
     width_slider->setValue(width);
     bounds = QRectF(-0.5*width,-0.5*width, width, width).adjusted(-2,-2,2,2);
     tool_preset->update();
+    prepareGeometryChange();
 }
 
 
 void Eraser::updateWidth(int width)
 {
-    this->width = float(width);
+    setWidth(float(width));
 }

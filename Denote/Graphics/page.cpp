@@ -1,20 +1,23 @@
 #include "Graphics/page.h"
+#include "pageportal.h"
+#include <QPainter>
 
 
-Page::Page() : QGraphicsItem(){
-    width = 850;
-    height = 1100;
+Page::Page() : QGraphicsScene(){
+    setPageSize(850,1100);
 }
 
 
-QRectF Page::boundingRect() const{
-    return QRectF(0,0,width,height);
+void Page::setPageSize(int width, int height)
+{
+    this->width = width;
+    this->height = height;
+    setSceneRect(QRect(0,0,width,height));
 }
 
 
-void Page::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
+void Page::drawBackground(QPainter *painter, const QRectF &rect){
+    Q_UNUSED(rect);
 
     painter->setPen(QPen(QColor("white"),2));
     painter->setBrush(QBrush(QColor("white")));
@@ -27,15 +30,34 @@ void Page::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     else if(page_type == Staves) paintStaves(painter);
     else if(page_type == Custom) paintEngineering(painter);
     else paintEngineering(painter);
+}
 
-    painter->setPen(QPen(QColor("black"),2));
-    painter->setBrush(QBrush(QColor("black")));
 
-    float hole_x = 0.03*width;
-    float hole_size = 0.032*width;
+void Page::drawForeground(QPainter *painter, const QRectF &rect)
+{
+    Q_UNUSED(rect);
+
+    float hole_x = 26;
+    float hole_size = 27;
+
+    painter->setPen(QPen(QColor(37,37,40),2));
+    painter->setBrush(QBrush(QColor(37,37,40)));
+
     painter->drawEllipse(hole_x, 0.12*height, hole_size, hole_size);
     painter->drawEllipse(hole_x, 0.5*height, hole_size, hole_size);
     painter->drawEllipse(hole_x, 0.88*height, hole_size, hole_size);
+}
+
+
+void Page::updatePortals(QRectF rect)
+{
+    foreach(PagePortal* portal, portals){
+        if(rect.isEmpty()){
+            portal->update();
+        } else {
+            portal->update(rect);
+        }
+    }
 }
 
 

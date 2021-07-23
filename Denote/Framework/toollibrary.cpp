@@ -6,6 +6,7 @@
 ToolLibrary::ToolLibrary(QMainWindow *parent) : SubWindow(parent)
 {
     setMinimumSize(200,100);
+    setSizePolicy(QSizePolicy::Policy::Maximum, QSizePolicy::Policy::Minimum);
 
     library = new QWidget();
     setWidget(library);

@@ -18,6 +18,7 @@ SubWindow::SubWindow(QMainWindow *parent) : QDockWidget(parent){
     titlebar = new QWidget();
     titlebar->setLayout(layout);
     setTitleBarWidget(titlebar);*/
+
 }
 
 
@@ -27,6 +28,7 @@ SubWindow::~SubWindow(){
 
 
 void SubWindow::changeEvent(QEvent *event){
+    return;
     if (event->type() == QEvent::WindowStateChange){
         if(isMinimized()){
             hide();

@@ -1,23 +1,24 @@
-#ifndef ERASER_H
-#define ERASER_H
+#ifndef LASSOSELECT_H
+#define LASSOSELECT_H
 
 #include "tool.h"
 
 #include <QGraphicsItem>
-#include <QSlider>
-#include <QGridLayout>
 
 class UI;
+class SelectionBox;
 
-class Eraser : public Tool, public QGraphicsItem, public QObject{
+class LassoSelect : public Tool, public QGraphicsItem, public QObject
+{
 public:
-    Eraser(UI* ui);
+    LassoSelect(UI* ui, SelectionBox* box);
 
 public:
     void documentProximityEvent(QEvent* event) override;
     void drawPressEvent(ToolEvent event) override;
     void drawMoveEvent(ToolEvent event) override;
     void drawReleaseEvent(ToolEvent event) override;
+    void drawDoubleClickEvent(ToolEvent event) override;
 
     void activate() override;
     void deactivate() override;
@@ -26,28 +27,17 @@ public:
 
 public:
     QRectF boundingRect() const override;
-    QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    int type() const override {return TypeEraser;}
-
-public:
-    void setWidth(float width);
-    float getWidth(){return width;}
-
-private slots:
-    void updateWidth(int width);
+    int type() const override {return TypeLassoSelect;}
 
 private:
-    float width;
+    QPolygonF lasso;
+    bool selecting = false;
+    bool added = false;
     QRectF bounds;
-    bool visible = false;
-    bool erasing = false;
-    QList<PageItem*> erased;
 
 private:
-    QSlider *width_slider;
-    QGridLayout *menu_layout;
-
+    SelectionBox* box;
 };
 
-#endif // ERASER_H
+#endif // LASSOSELECT_H

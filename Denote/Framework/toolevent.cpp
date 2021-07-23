@@ -1,7 +1,8 @@
-#include "drawevent.h"
-#include "documentgraphics.h"
+#include "toolevent.h"
+#include "Graphics/documentinteractionview.h"
 
-DrawEvent::DrawEvent(QMouseEvent *event, DocumentGraphics* view) :
+
+ToolEvent::ToolEvent(QMouseEvent *event, DocumentInteractionView* view) :
     QTabletEvent(event->type(),
                  event->pointingDevice(),
                  QPointF(float(event->position().x()), float(event->position().y())),
@@ -16,11 +17,13 @@ DrawEvent::DrawEvent(QMouseEvent *event, DocumentGraphics* view) :
                  event->button(),
                  event->buttons())
 {
-    doc_position = view->getInverse().map(event->position());
+    layout_position = view->getViewInverse().map(event->position());
+    page_position = layout_position + view->getPageInverse();
 }
 
 
-DrawEvent::DrawEvent(QTabletEvent *event, DocumentGraphics* view) : QTabletEvent(*event)
+ToolEvent::ToolEvent(QTabletEvent *event, DocumentInteractionView* view) : QTabletEvent(*event)
 {
-    doc_position = view->getInverse().map(event->position());
+    layout_position = view->getViewInverse().map(event->position());
+    page_position = layout_position + view->getPageInverse();
 }

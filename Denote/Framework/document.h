@@ -1,35 +1,43 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-#include "Framework/documentview.h"
-#include "Ui/ui.h"
-
 #include <QGraphicsScene>
 
-
+class PageLayoutScene;
 class Page;
 class UI;
+class HistoryManager;
+class DocumentSummaryView;
 
-class Document : public QGraphicsScene{
+class Document
+{
 public:
-    Document(UI* ui, QObject* parent = 0);
+    Document(UI* ui);
     ~Document();
 
-    void addPage(Page* page);
-    bool removePage(int i);
-    UI* getUI(){return ui;}
-
 public:
-    void removeItems(QList<QGraphicsItem*> items);
+    void addLayout(PageLayoutScene* layout){layouts.append(layout);}
+    void removeLayout(PageLayoutScene* layout){layouts.removeAll(layout);}
+    QList<PageLayoutScene*> getLayouts(){return layouts;}
 
-protected:
-    void drawBackground(QPainter *painter, const QRectF &rect) override;
+    void addPage(Page* page, int index = -1);
+    void removePage(Page* page);
+    void movePage(Page* page, int new_index);
+    QList<Page*> getPages(){return pages;}
+
+    UI* getUI(){return ui;}
+    HistoryManager* getHistoryManager(){return history_manager;}
+    DocumentSummaryView* getSummaryView(){return summary_view;}
+    void updateAll(QRectF update_area);
+
+    void focusDoc();
 
 private:
-    QPixmap background;
-    DocumentView* activeView;
     QList<Page*> pages;
     UI* ui;
+    QList<PageLayoutScene*> layouts;
+    HistoryManager* history_manager;
+    DocumentSummaryView* summary_view;
 };
 
 #endif // DOCUMENT_H

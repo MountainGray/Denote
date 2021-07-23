@@ -2,11 +2,11 @@
 #define IMAGE_H
 
 #include "Tools/tool.h"
-#include <QGraphicsItem>
+#include "Framework/pageitem.h"
 
 class UI;
 
-class Image : public QGraphicsItem, public Tool
+class Image : public PageItem, public Tool
 {
 public:
     Image(UI* ui);
@@ -21,7 +21,7 @@ public:
 public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    int type() const override {return UserType + 5;}
+    int type() const override {return TypeImage;}
 
 private:
     QRectF bounds;

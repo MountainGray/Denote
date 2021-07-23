@@ -6,4 +6,6 @@ ToolMenuViewer::ToolMenuViewer(QMainWindow *parent) : SubWindow(parent)
     setMinimumSize(200,200);
     tool_menu = new ToolMenu();
     setWidget(tool_menu);
+
+    setSizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Maximum);
 }

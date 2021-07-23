@@ -19,9 +19,9 @@ public:
     Pen(UI* ui);
 
 public:
-    void drawPressEvent(DrawEvent event) override;
-    void drawMoveEvent(DrawEvent event) override;
-    void drawReleaseEvent(DrawEvent event) override;
+    void drawPressEvent(ToolEvent event) override;
+    void drawMoveEvent(ToolEvent event) override;
+    void drawReleaseEvent(ToolEvent event) override;
 
     void activate() override{};
     void deactivate() override{};
@@ -57,6 +57,7 @@ private:
     QString mode = "Pressure";
     float dir = 0;
     float last_dir = 0;
+    QPointF last_page_pos;
 
 private:
     QSlider *width_slider;

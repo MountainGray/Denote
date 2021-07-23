@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
+#include <QGraphicsScene>
 
 
 Stroke::Stroke(Pen* pen)
@@ -11,6 +12,21 @@ Stroke::Stroke(Pen* pen)
     width = pen->getWidth();
     painter_pen = QPen(color, width, Qt::SolidLine, Qt::RoundCap);
     setFlag(GraphicsItemFlag::ItemIsSelectable, true);
+}
+
+
+Stroke::Stroke(Stroke *stroke)
+{
+    color = stroke->color;
+    width = stroke->width;
+    points = stroke->points;
+    bounds = stroke->bounds;
+    painter_pen = stroke->painter_pen;
+    setFlag(GraphicsItemFlag::ItemIsSelectable, true);
+    setTransform(stroke->transform());
+    setPos(stroke->pos());
+    setRotation(stroke->rotation());
+    setScale(stroke->scale());
 }
 
 
@@ -59,6 +75,21 @@ QRectF Stroke::boundingRect() const{
 }
 
 
+QPainterPath Stroke::shape() const
+{
+    QPainterPath path;
+    if(points.length() > 0){
+        path.moveTo(points.first());
+    }
+    foreach(QPointF point, points){
+        path.lineTo(point);
+    }
+    QPainterPathStroker path_stroke;
+    path_stroke.setWidth(width);
+    return path_stroke.createStroke(path);
+}
+
+
 void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
@@ -70,40 +101,47 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     float t, last_x, last_y, new_x, new_y, new_p;
     QLineF line;
 
-    for(int i = 0; i < points.size()-2; i += 2){
-        p0 = points.at(i);
-        p1 = points.at(i+1);
-        p2 = points.at(i+2);
+    //QColor(((i%4)+1)*80,(i%4)*21,(i%4)*127); //false color
 
-        last_x = p0.x();
-        last_y = p0.y();
-
-        if(isSelected()){
-            //QColor(((i%4)+1)*80,(i%4)*21,(i%4)*127); //false color
-            painter_pen.setColor(color.darker());
+    for(int o = 0; o < 2; o++){
+        if(o == 0){
+            if(QGraphicsItem::isSelected()) painter_pen.setColor(color.darker(250));
+            else painter_pen.setColor(color);
         } else {
-            painter_pen.setColor(color);
+            if(QGraphicsItem::isSelected()) painter_pen.setColor(color);
+            else return;
         }
 
-        for(int j = 1; j <= line_res; j++){//5 segments
-            t = j/float(line_res);
+        for(int i = 0; i < points.size()-2; i += 2){
+            p0 = points.at(i);
+            p1 = points.at(i+1);
+            p2 = points.at(i+2);
 
-            new_x = (1-t)*(1-t)*p0.x()+2*(1-t)*t*p1.x()+t*t*p2.x();
-            new_y = (1-t)*(1-t)*p0.y()+2*(1-t)*t*p1.y()+t*t*p2.y();
-            new_p = (1-t)*(1-t)*p0.p()+2*(1-t)*t*p1.p()+t*t*p2.p();
+            last_x = p0.x();
+            last_y = p0.y();
 
-            line = QLineF(last_x, last_y, new_x, new_y);
+            for(int j = 1; j <= line_res; j++){//5 segments
+                t = j/float(line_res);
 
-            painter_pen.setWidthF(new_p);
-            painter->setPen(painter_pen);
-            painter->drawLine(line);
+                new_x = (1-t)*(1-t)*p0.x()+2*(1-t)*t*p1.x()+t*t*p2.x();
+                new_y = (1-t)*(1-t)*p0.y()+2*(1-t)*t*p1.y()+t*t*p2.y();
+                new_p = (1-t)*(1-t)*p0.p()+2*(1-t)*t*p1.p()+t*t*p2.p();
 
-            last_x = new_x;
-            last_y = new_y;
+                line = QLineF(last_x, last_y, new_x, new_y);
+
+                if(QGraphicsItem::isSelected() and o == 0) painter_pen.setWidthF(new_p+2);
+                else painter_pen.setWidthF(new_p);
+
+                painter->setPen(painter_pen);
+                painter->drawLine(line);
+
+                last_x = new_x;
+                last_y = new_y;
+            }
         }
-    }
-    if(points.size() > 2 and points.size()%2 == 0){
-        painter->drawLine(points.at(points.size()-2), points.last());
+        if(points.size() > 2 and points.size()%2 == 0){
+            painter->drawLine(points.at(points.size()-2), points.last());
+        }
     }
 }
 

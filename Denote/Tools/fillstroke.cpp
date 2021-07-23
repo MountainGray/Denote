@@ -56,6 +56,18 @@ QRectF FillStroke::boundingRect() const{
 }
 
 
+QPainterPath FillStroke::shape() const
+{
+    QPainterPath path;
+    if(points.length() > 0){
+        path.moveTo(points.first());
+    }
+    foreach(QPointF point, points){
+        path.lineTo(point);
+    }
+    return path;
+}
+
 
 void FillStroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -77,7 +89,7 @@ void FillStroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         p2 = points.at(i+2);
 
 
-        if(isSelected()){
+        if(QGraphicsItem::isSelected()){
             //QColor(((i%4)+1)*80,(i%4)*21,(i%4)*127)// false color
             painter_pen.setColor(color.darker());
             painter->setPen(painter_pen);
