@@ -31,6 +31,7 @@ public:
     void updateAll(QRectF update_area);
 
     void focusDoc();
+    void print();
 
 private:
     QList<Page*> pages;

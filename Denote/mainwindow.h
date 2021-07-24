@@ -29,6 +29,7 @@ private slots:
     void open();
     void about();
     void addView();
+    void print();
 
 private:
     void createMenus();

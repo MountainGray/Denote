@@ -81,3 +81,56 @@ void Document::focusDoc()
     ui->getSummaryFrame()->setView(summary_view);
 }
 
+
+#if defined(QT_PRINTSUPPORT_LIB)
+#include <QtPrintSupport/qtprintsupportglobal.h>
+#include <QPrinter>
+#endif
+
+#include <QFileDialog>
+#include <QDesktopServices>
+
+void Document::print()
+{
+#if defined(QT_PRINTSUPPORT_LIB)
+
+    QString file_name = QFileDialog::getSaveFileName(this->getUI()->getMain(),QObject::tr("Save as PDF"),"",QObject::tr("PDF Files (*.pdf)"));
+    if(file_name.isNull()) return;
+
+    QPrinter printer;
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(file_name);
+    printer.setFullPage(true);
+
+    QPainter painter;
+
+    for(int i = 0; i < pages.length(); i++){
+        Page* page = pages.at(i);
+        printer.setPageSize(QPageSize(page->getPageSize(),QPageSize::Point,"",QPageSize::SizeMatchPolicy::ExactMatch));
+        if(i == 0){
+            painter.begin(&printer);
+        } else {
+            printer.newPage();
+        }
+
+        /*
+        float xscale = printer.pageRect(QPrinter::Point).width()/qreal(page->getWidth());
+        float yscale = printer.pageRect(QPrinter::Point).height()/qreal(page->getHeight());
+        float scale = qMin(xscale, yscale);
+
+        painter.translate(printer.paperRect(QPrinter::Point).x() + printer.pageRect(QPrinter::Point).width()/2,
+                          printer.paperRect(QPrinter::Point).y() + printer.pageRect(QPrinter::Point).height()/2);
+        painter.scale(scale, scale);
+        painter.translate(-printer.pageRect(QPrinter::Point).width()/2,
+                          -printer.pageRect(QPrinter::Point).height()/2);
+        */
+
+        page->render(&painter);
+    }
+
+    painter.end();
+    QDesktopServices::openUrl(QUrl::fromLocalFile(file_name));
+
+#endif
+}
+

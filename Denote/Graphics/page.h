@@ -21,6 +21,7 @@ public:
     int getHeight(){ return height; }
     void setPageSize(int width, int height);
     QRectF getBounds(){ return QRectF(0,0,width,height);}
+    QSizeF getPageSize(){return QSizeF(width,height);}
     void setBackgroundType(BackgroundType t){ page_type = t; }
     void updatePortals(QRectF rect = QRectF());
     QList<PagePortal*> getPortals(){return portals;}

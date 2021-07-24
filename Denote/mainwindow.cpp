@@ -39,6 +39,7 @@ void MainWindow::newDocument()
     for(int i = 0; i < 3; i++){
         Page* new_page = new Page();
         new_page->setBackgroundType(Engineering);
+        new_page->setPageSize(850+200*i,1100-200*i);
         doc->addPage(new_page);
     }
 
@@ -74,12 +75,19 @@ void MainWindow::addView()
 }
 
 
+void MainWindow::print()
+{
+    ui->getActiveDocument()->print();
+}
+
+
 void MainWindow::createMenus(){
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(tr("&New..."), this, &MainWindow::newDocument, QKeySequence::New);
     fileMenu->addAction(tr("&Open..."), this, &MainWindow::open, QKeySequence::Open);
     fileMenu->addAction(tr("&Save As..."), this, &MainWindow::save, QKeySequence::SaveAs);
     fileMenu->addAction(tr("E&xit"), this, &MainWindow::close, QKeySequence::Quit);
+    fileMenu->addAction(tr("&Print"), this, &MainWindow::print, QKeySequence::Print);
 
     QMenu* helpMenu = menuBar()->addMenu("&Help");
     helpMenu->addAction(tr("A&bout"), this, &MainWindow::about);
