@@ -5,6 +5,7 @@
 #include "Framework/subwindow.h"
 #include "Ui/ui.h"
 #include "Graphics/page.h"
+#include "Framework/pageitem.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -81,6 +82,22 @@ void MainWindow::print()
 }
 
 
+void MainWindow::invertView()
+{
+    foreach(Page* page, ui->getActiveDocument()->getPages()){
+        foreach(QGraphicsItem* item, page->items()){
+            PageItem* page_item = static_cast<PageItem*>(item);
+            if(page_item != nullptr){
+                page_item->invertBrightness();
+            }
+        }
+        page->invertBrightness();
+        page->update();
+        page->updatePortals();
+    }
+}
+
+
 void MainWindow::createMenus(){
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(tr("&New..."), this, &MainWindow::newDocument, QKeySequence::New);
@@ -95,4 +112,5 @@ void MainWindow::createMenus(){
 
     QMenu* view = menuBar()->addMenu("&View");
     view->addAction(tr("Add V&iew"), this, &MainWindow::addView);
+    view->addAction("Invert Brightness", this, &MainWindow::invertView);
 }

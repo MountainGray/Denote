@@ -146,6 +146,12 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 }
 
 
+void Stroke::invertBrightness()
+{
+    color.invertBrightness();
+}
+
+
 void Stroke::updateBounds(PressurePoint point)
 {
     float padding = width;

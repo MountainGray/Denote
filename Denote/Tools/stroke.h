@@ -24,6 +24,7 @@ public:
     QPainterPath shape() const override;
     void paint(QPainter *ogpainter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     int type() const override {return TypePenStroke;}
+    void invertBrightness() override;
 
 protected:
     void updateBounds(PressurePoint point);
@@ -32,7 +33,7 @@ protected:
     QVector<PressurePoint> points;
     QPen painter_pen;
     QRectF bounds;
-    QColor color;
+    IColor color;
     float width;
 };
 

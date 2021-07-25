@@ -16,6 +16,7 @@ SOURCES += \
     Framework/History/undocreation.cpp \
     Framework/History/undodeletion.cpp \
     Framework/History/undoobject.cpp \
+    Framework/icolor.cpp \
     Framework/pageitem.cpp \
     Framework/toolevent.cpp \
     Framework/toolmenu.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     Framework/History/undocreation.h \
     Framework/History/undodeletion.h \
     Framework/History/undoobject.h \
+    Framework/icolor.h \
     Framework/pageitem.h \
     Framework/toolevent.h \
     Framework/toolmenu.h \

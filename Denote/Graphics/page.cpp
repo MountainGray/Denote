@@ -19,8 +19,8 @@ void Page::setPageSize(int width, int height)
 void Page::drawBackground(QPainter *painter, const QRectF &rect){
     Q_UNUSED(rect);
 
-    painter->setPen(QPen(QColor("white"),2));
-    painter->setBrush(QBrush(QColor("white")));
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(QBrush(white_page));
     painter->drawRect(QRect(0,0,width,height));
 
     if(page_type == Lines) paintLines(painter);
@@ -40,7 +40,7 @@ void Page::drawForeground(QPainter *painter, const QRectF &rect)
     float hole_x = 26;
     float hole_size = 27;
 
-    painter->setPen(QPen(QColor(37,37,40),2));
+    painter->setPen(Qt::NoPen);
     painter->setBrush(QBrush(QColor(37,37,40)));
 
     painter->drawEllipse(hole_x, 0.12*height, hole_size, hole_size);
@@ -61,8 +61,20 @@ void Page::updatePortals(QRectF rect)
 }
 
 
+void Page::invertBrightness()
+{
+    blue_line.invertBrightness();
+    red_line.invertBrightness();
+    border_green_line.invertBrightness();
+    major_green_line.invertBrightness();
+    minor_green_line.invertBrightness();
+    alpha_black.invertBrightness();
+    white_page.invertBrightness();
+}
+
+
 void Page::paintLines(QPainter *painter){
-    painter->setPen(QPen(QColor(43,167,255,150),2));
+    painter->setPen(QPen(blue_line,2));
     for(int line = height/10; line < 20*height/21; line += height/40){
         painter->drawLine(QLineF(0,line,width,line));
     }
@@ -71,7 +83,7 @@ void Page::paintLines(QPainter *painter){
 
 void Page::paintLinesMargin(QPainter *painter){
     paintLines(painter);
-    painter->setPen(QPen(QColor(255,50,43,150),2));
+    painter->setPen(QPen(red_line,2));
     painter->drawLine(QLineF(width/8,0,width/8,height));
 }
 
@@ -91,14 +103,14 @@ void Page::paintEngineering(QPainter *painter){
     float top = v_excess/2;
     float bottom = height-v_excess/2;
 
-    painter->setPen(QPen(QColor(56,171,87,255),2));
+    painter->setPen(QPen(border_green_line,2));
     painter->drawLine(QLineF(left,top,left,bottom));//left margin
     painter->drawLine(QLineF(right,top,right,bottom));//right margin
     painter->drawLine(QLineF(0,top,width,top));//top margin
     painter->drawLine(QLineF(width*6/17,0,width*6/17, top));//title left
     painter->drawLine(QLineF(width*11/17,0,width*11/17, top));//title right
 
-    painter->setPen(QPen(QColor(56,171,87,100),2));
+    painter->setPen(QPen(major_green_line,2));
     for(int i = 0; i <= v_majors; i ++){//major horizontal lines
         painter->drawLine(QLineF(left,top+i*major_size,right,top+i*major_size));
     }
@@ -106,7 +118,7 @@ void Page::paintEngineering(QPainter *painter){
         painter->drawLine(QLineF(left+i*major_size,top,left+i*major_size,bottom));
     }
 
-    painter->setPen(QPen(QColor(56,171,87,100),1));
+    painter->setPen(QPen(minor_green_line,1));
     for(int i = 0; i < v_majors*major_minor; i ++){//minor horizontal lines
         if(i%major_minor) painter->drawLine(QLineF(left,top+i*minor_size,right,top+i*minor_size));
     }
@@ -119,7 +131,7 @@ void Page::paintEngineering(QPainter *painter){
 void Page::paintGraph(QPainter *painter){
     int grid_size = 20;
 
-    painter->setPen(QPen(QColor(0,0,0,125),1));
+    painter->setPen(QPen(alpha_black,1));
 
     for(int i = 0; i < width; i += grid_size){//vertical lines
         painter->drawLine(QLineF(i,0,i,height));
@@ -134,7 +146,7 @@ void Page::paintStaves(QPainter *painter){
     int line_spacing = 12;
     int stave_spacing = 40;
 
-    painter->setPen(QPen(QColor(0,0,0,125),1));
+    painter->setPen(QPen(alpha_black,1));
 
     for(int i = 2*stave_spacing; i < height-5*line_spacing-stave_spacing; i+= 5*line_spacing+stave_spacing){
         for(int j = 0; j < 5; j++){

@@ -107,27 +107,10 @@ void Document::print()
     for(int i = 0; i < pages.length(); i++){
         Page* page = pages.at(i);
         printer.setPageSize(QPageSize(page->getPageSize(),QPageSize::Point,"",QPageSize::SizeMatchPolicy::ExactMatch));
-        if(i == 0){
-            painter.begin(&printer);
-        } else {
-            printer.newPage();
-        }
-
-        /*
-        float xscale = printer.pageRect(QPrinter::Point).width()/qreal(page->getWidth());
-        float yscale = printer.pageRect(QPrinter::Point).height()/qreal(page->getHeight());
-        float scale = qMin(xscale, yscale);
-
-        painter.translate(printer.paperRect(QPrinter::Point).x() + printer.pageRect(QPrinter::Point).width()/2,
-                          printer.paperRect(QPrinter::Point).y() + printer.pageRect(QPrinter::Point).height()/2);
-        painter.scale(scale, scale);
-        painter.translate(-printer.pageRect(QPrinter::Point).width()/2,
-                          -printer.pageRect(QPrinter::Point).height()/2);
-        */
-
+        if(i == 0) painter.begin(&printer);
+        else printer.newPage();
         page->render(&painter);
     }
-
     painter.end();
     QDesktopServices::openUrl(QUrl::fromLocalFile(file_name));
 

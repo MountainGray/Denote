@@ -30,6 +30,7 @@ private slots:
     void about();
     void addView();
     void print();
+    void invertView();
 
 private:
     void createMenus();

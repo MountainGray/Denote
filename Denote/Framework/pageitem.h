@@ -3,6 +3,7 @@
 
 #include <QGraphicsItem>
 #include "Framework/History/undocreation.h"
+#include "Framework/icolor.h"
 
 const int UserType = QGraphicsItem::UserType;
 
@@ -26,6 +27,7 @@ public:
     bool isPresent(){return present;}
     void removeItem();
     void recoverItem();
+    virtual void invertBrightness(){};
 
 private:
     bool present = true;
