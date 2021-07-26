@@ -50,10 +50,10 @@ void PageLayoutScene::updatePageLayout()
         width = 0;
         row.clear();
         while(i < max_i){
-            if(width + portals.at(i)->getPage()->getWidth() < max_width or width == 0){//if can fit, add to list
+            if(width + portals.at(i)->getWidth() < max_width or width == 0){//if can fit, add to list
                 row.append(portals.at(i));
                 if(width != 0) width += page_padding;
-                width += portals.at(i)->getPage()->getWidth();
+                width += portals.at(i)->getWidth();
                 i ++;
             } else {
                 break;
@@ -64,9 +64,9 @@ void PageLayoutScene::updatePageLayout()
         height = 0;
         foreach(PagePortal* portal, row){
             portal->setPos(x,y);
-            x += portal->getPage()->getWidth();
+            x += portal->getWidth();
             x += page_padding;
-            height = std::max(height, portal->getPage()->getHeight());
+            height = std::max(height, portal->getHeight());
             bounds = bounds.united(portal->sceneBoundingRect());
         }
         y += height;

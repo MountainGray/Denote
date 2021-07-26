@@ -2,6 +2,7 @@
 #define UI_H
 
 #include <QList>
+#include "Framework/icolor.h"
 
 class Tool;
 class ToolMenu;
@@ -27,6 +28,8 @@ public:
     void setActiveLayout(PageLayoutScene* layout){active_layout = layout;}
     void setActivePage(Page* page){active_page = page;}
     void setActivePortal(PagePortal* portal){active_portal = portal;}
+    void setDisplayMode(IColor::DisplayMode mode);
+    void setPageHoles(bool holes);
 
     Tool* getActiveTool(){return active_tool;}
     Document* getActiveDocument(){return active_document;}
@@ -38,6 +41,8 @@ public:
     HistoryManagerViewer* getHistoryManagerViewer(){return history_manager_viewer;}
     DocumentSummaryFrame* getSummaryFrame(){return summary_frame;}
     MainWindow* getMain(){return main_window;}
+    IColor::DisplayMode getDisplayMode(){return display_mode;}
+    bool getPageHoles(){return page_holes;}
 
 private:
     MainWindow* main_window;
@@ -52,7 +57,9 @@ private:
     PageLayoutScene* active_layout = nullptr;
     Page* active_page = nullptr;
     PagePortal* active_portal = nullptr;
+    IColor::DisplayMode display_mode = IColor::Normal;
 
+    bool page_holes = true;
 };
 
 #endif // UI_H

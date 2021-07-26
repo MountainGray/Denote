@@ -31,6 +31,7 @@ public:
     virtual void deactivate() = 0;
 
     virtual void paintPreset(QPaintEvent *event) = 0;
+    virtual void setDisplayMode(IColor::DisplayMode){};
 
 public:
     ToolMenu* getToolMenu(){return tool_menu;}

@@ -20,7 +20,7 @@ DocumentSummaryView::DocumentSummaryView(Document* doc)
     setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
 
-    setBackgroundBrush(QBrush(QColor(37,37,40)));
+    setBackgroundBrush(QBrush(QColor(20,23,23)));
 
     this->doc = doc;
     page_layout_scene = new PageLayoutScene(this,doc);

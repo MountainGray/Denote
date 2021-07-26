@@ -24,7 +24,7 @@ public:
     QPainterPath shape() const override;
     void paint(QPainter *ogpainter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     int type() const override {return TypePenStroke;}
-    void invertBrightness() override;
+    void setDisplayMode(IColor::DisplayMode display_mode) override;
 
 protected:
     void updateBounds(PressurePoint point);

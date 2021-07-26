@@ -142,9 +142,16 @@ void Pen::paintPreset(QPaintEvent *event)
     painter.setBrush(QBrush(QColor("white")));
     painter.setPen(QPen(QColor("black")));
     painter.drawRect(QRectF(0,0,60,60));
-    painter.setBrush(QBrush(color));
+    painter.setBrush(QBrush(color.active()));
     painter.drawEllipse(QPointF(30,30),width/2,width/2);
     painter.drawText(QPointF(2,12),"Pen");
+}
+
+
+void Pen::setDisplayMode(IColor::DisplayMode mode)
+{
+    color.setDisplayMode(mode);
+    tool_preset->update();
 }
 
 
@@ -177,7 +184,7 @@ void Pen::updateWidth(int width)
 
 void Pen::updateColor()
 {
-    color = QColorDialog::getColor(color);
+    color = IColor(QColorDialog::getColor(color.active()),ui->getDisplayMode());
 }
 
 

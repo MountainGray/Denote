@@ -13,6 +13,8 @@
 #include "Tools/selectionbox.h"
 #include "Tools/circleselect.h"
 #include "Tools/lassoselect.h"
+#include "Graphics/page.h"
+#include "Framework/document.h"
 
 
 UI::UI(MainWindow* main_window)
@@ -77,9 +79,42 @@ void UI::setActiveTool(Tool *tool){
 }
 
 
+void UI::setPageHoles(bool holes)
+{
+    foreach(Page* page, getActiveDocument()->getPages()){
+        page->setPageHoles(holes);
+        page->update();
+        page->updatePortals();
+    }
+
+    this->page_holes = holes;
+}
+
+
 ToolMenu *UI::getToolMenu()
 {
     return tool_menu_viewer->getMenu();
+}
+
+
+void UI::setDisplayMode(IColor::DisplayMode mode)
+{
+    foreach(Page* page, getActiveDocument()->getPages()){
+        foreach(QGraphicsItem* item, page->items()){
+            PageItem* page_item = static_cast<PageItem*>(item);
+            if(page_item != nullptr){
+                page_item->setDisplayMode(mode);
+            }
+        }
+        page->setDisplayMode(mode);
+        page->update();
+        page->updatePortals();
+    }
+    foreach(Tool* tool, getTools()){
+        tool->setDisplayMode(mode);
+    }
+
+    display_mode = mode;
 }
 
 

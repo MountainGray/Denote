@@ -6,6 +6,7 @@
 #include "Ui/ui.h"
 #include "Graphics/page.h"
 #include "Framework/pageitem.h"
+#include "Tools/tool.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -78,23 +79,28 @@ void MainWindow::addView()
 
 void MainWindow::print()
 {
+    IColor::DisplayMode mode = ui->getDisplayMode();
+    bool holes = ui->getPageHoles();
+    ui->setDisplayMode(IColor::DisplayMode::Normal);
+    ui->setPageHoles(false);
+
     ui->getActiveDocument()->print();
+
+    ui->setDisplayMode(mode);
+    ui->setPageHoles(holes);
 }
 
 
 void MainWindow::invertView()
 {
-    foreach(Page* page, ui->getActiveDocument()->getPages()){
-        foreach(QGraphicsItem* item, page->items()){
-            PageItem* page_item = static_cast<PageItem*>(item);
-            if(page_item != nullptr){
-                page_item->invertBrightness();
-            }
-        }
-        page->invertBrightness();
-        page->update();
-        page->updatePortals();
-    }
+    IColor::DisplayMode new_mode = ui->getDisplayMode() == IColor::Inverted ? IColor::Normal : IColor::Inverted;
+    ui->setDisplayMode(new_mode);
+}
+
+
+void MainWindow::toggleHoles()
+{
+    ui->setPageHoles(!ui->getPageHoles());
 }
 
 
@@ -112,5 +118,6 @@ void MainWindow::createMenus(){
 
     QMenu* view = menuBar()->addMenu("&View");
     view->addAction(tr("Add V&iew"), this, &MainWindow::addView);
-    view->addAction("Invert Brightness", this, &MainWindow::invertView);
+    view->addAction("Invert View", this, &MainWindow::invertView, QKeySequence("Ctrl+I"));
+    view->addAction("Toggle Hole Punches", this, &MainWindow::toggleHoles);
 }

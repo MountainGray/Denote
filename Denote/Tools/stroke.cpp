@@ -10,14 +10,14 @@ Stroke::Stroke(Pen* pen)
 {
     color = pen->getColor();
     width = pen->getWidth();
-    painter_pen = QPen(color, width, Qt::SolidLine, Qt::RoundCap);
+    painter_pen = QPen(color.active(), width, Qt::SolidLine, Qt::RoundCap);
     setFlag(GraphicsItemFlag::ItemIsSelectable, true);
 }
 
 
 Stroke::Stroke(Stroke *stroke)
 {
-    color = stroke->color;
+    color = IColor(stroke->color);
     width = stroke->width;
     points = stroke->points;
     bounds = stroke->bounds;
@@ -105,10 +105,10 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
     for(int o = 0; o < 2; o++){
         if(o == 0){
-            if(QGraphicsItem::isSelected()) painter_pen.setColor(color.darker(250));
-            else painter_pen.setColor(color);
+            if(QGraphicsItem::isSelected()) painter_pen.setColor(color.active().darker(250));
+            else painter_pen.setColor(color.active());
         } else {
-            if(QGraphicsItem::isSelected()) painter_pen.setColor(color);
+            if(QGraphicsItem::isSelected()) painter_pen.setColor(color.active());
             else return;
         }
 
@@ -146,9 +146,9 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 }
 
 
-void Stroke::invertBrightness()
+void Stroke::setDisplayMode(IColor::DisplayMode display_mode)
 {
-    color.invertBrightness();
+    color.setDisplayMode(display_mode);
 }
 
 

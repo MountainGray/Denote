@@ -3,15 +3,24 @@
 
 #include <QColor>
 
-class IColor : public QColor
+class IColor
 {
-public:
-    IColor();
-    IColor(QColor q);
-    IColor(int r, int g, int b, int a = 255);
 
 public:
-    void invertBrightness();
+    enum DisplayMode{Normal, Inverted};
+
+    IColor(QColor color = QColor(), DisplayMode mode = Normal);
+
+public:
+    QColor colornormal(){return normal_color;}
+    QColor active(){return active_color;}
+    QColor inverted();
+    void setDisplayMode(DisplayMode mode);
+
+private:
+    QColor normal_color;
+    QColor active_color;
+    DisplayMode display_mode;
 };
 
 #endif // ICOLOR_H

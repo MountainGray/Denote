@@ -31,6 +31,7 @@ private slots:
     void addView();
     void print();
     void invertView();
+    void toggleHoles();
 
 private:
     void createMenus();

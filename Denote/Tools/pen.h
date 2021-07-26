@@ -27,13 +27,14 @@ public:
     void deactivate() override{};
 
     void paintPreset(QPaintEvent *event) override;
+    void setDisplayMode(IColor::DisplayMode mode) override;
 
 public:
     void setWidth(float width);
     void setColor(QColor color);
     void setMode(QString mode){this->mode = mode;}
     float getWidth(){return width;}
-    QColor getColor(){ return color;}
+    IColor getColor(){ return color;}
 
     float pressureToWidth(float pressure);
 
@@ -43,7 +44,7 @@ private slots:
     void updateMode();
 
 private:
-    QColor color = Qt::black;
+    IColor color;
     QPointF last_point;
     QPointF true_last_point;
     Stroke *stroke = nullptr;

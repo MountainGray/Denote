@@ -1,24 +1,29 @@
 #include "icolor.h"
 
 
-IColor::IColor(){
-
+IColor::IColor(QColor color, DisplayMode mode){
+    normal_color = color;
+    setDisplayMode(mode);
+    if(mode != Normal){
+        normal_color = active_color;
+        setDisplayMode(mode);
+    }
 }
 
 
-IColor::IColor(QColor q) : QColor(q)
+QColor IColor::inverted()
 {
-
+    QColor i = normal_color;
+    i.setHsl(i.hslHue(),i.hslSaturation(),255-i.lightness(),i.alpha());
+    return i;
 }
 
 
-IColor::IColor(int r, int g, int b, int a) : QColor(r,g,b,a)
+void IColor::setDisplayMode(DisplayMode mode)
 {
+    if(mode == Normal) active_color = normal_color;
+    else if(mode == Inverted) active_color = inverted();
+    else active_color = normal_color;
 
-}
-
-
-void IColor::invertBrightness()
-{
-    setHslF(hueF(),saturationF(),1.0-lightnessF(),alphaF());
+    display_mode = mode;
 }

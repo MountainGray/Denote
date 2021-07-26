@@ -27,7 +27,7 @@ public:
     bool isPresent(){return present;}
     void removeItem();
     void recoverItem();
-    virtual void invertBrightness(){};
+    virtual void setDisplayMode(IColor::DisplayMode){};
 
 private:
     bool present = true;

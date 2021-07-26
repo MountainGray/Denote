@@ -16,6 +16,8 @@ public:
 
 public:
     Page* getPage(){return page;}
+    int getWidth();
+    int getHeight();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
@@ -24,6 +26,7 @@ protected:
 private:
     Page* page;
     PageLayoutScene* page_layout;
+    const int shadow = 8;
 };
 
 #endif // PAGEPORTAL_H

@@ -41,7 +41,7 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
     setTabletTracking(true);
     setMouseTracking(true);
 
-    setBackgroundBrush(QBrush(QColor(37,37,40)));
+    setBackgroundBrush(QBrush(QColor(20,23,23)));
 }
 
 

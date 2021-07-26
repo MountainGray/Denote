@@ -25,6 +25,7 @@ Document::~Document(){
 
 
 void Document::addPage(Page *page, int index){
+    page->setDisplayMode(ui->getDisplayMode());
     if(index == -1 or index > pages.length()) index = pages.length();
 
     //add the page to the documents data
