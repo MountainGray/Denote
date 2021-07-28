@@ -24,6 +24,15 @@ Document::~Document(){
 }
 
 
+void Document::updateAllLayouts()
+{
+    foreach(PageLayoutScene* page_layout, layouts){
+        page_layout->updatePageLayout();
+    }
+    getUI()->getSummaryFrame()->getView()->getPageLayoutScene()->updatePageLayout();
+}
+
+
 void Document::addPage(Page *page, int index){
     if(index == -1 or index > pages.length()) index = pages.length();
 
@@ -47,9 +56,7 @@ void Document::removePage(Page *page){
     foreach(PagePortal* portal, page->getPortals()){
         delete portal;
     }
-    foreach(PageLayoutScene* page_layout, layouts){
-        page_layout->updatePageLayout();
-    }
+    updateAllLayouts();
 }
 
 
@@ -71,6 +78,7 @@ void Document::updateAll(QRectF update_area)
     foreach(Page* page, pages){
         page->updatePortals(update_area);
     }
+    updateAllLayouts();
 }
 
 

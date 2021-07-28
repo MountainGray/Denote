@@ -19,6 +19,7 @@ public:
     void addLayout(PageLayoutScene* layout){layouts.append(layout);}
     void removeLayout(PageLayoutScene* layout){layouts.removeAll(layout);}
     QList<PageLayoutScene*> getLayouts(){return layouts;}
+    void updateAllLayouts();
 
     void addPage(Page* page, int index = -1);
     void removePage(Page* page);

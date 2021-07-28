@@ -23,6 +23,7 @@ public:
 
 public:
     void setView(DocumentSummaryView* view);
+    DocumentSummaryView* getView(){return viewport;}
 
 private slots:
     void addPage();

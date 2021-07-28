@@ -5,6 +5,7 @@
 #include "Framework/subwindow.h"
 #include "Ui/ui.h"
 #include "Graphics/page.h"
+#include "Graphics/dynamicpage.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -36,7 +37,11 @@ void MainWindow::newDocument()
 {
     Document *doc = new Document(ui);
 
-    for(int i = 0; i < 3; i++){
+    DynamicPage* new_page = new DynamicPage();
+    new_page->setBackgroundType(LinesMargin);
+    doc->addPage(new_page);
+
+    for(int i = 0; i < 2; i++){
         Page* new_page = new Page();
         new_page->setBackgroundType(Engineering);
         doc->addPage(new_page);

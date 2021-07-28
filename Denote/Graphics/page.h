@@ -24,13 +24,14 @@ public:
     void setBackgroundType(BackgroundType t){ page_type = t; }
     void updatePortals(QRectF rect = QRectF());
     QList<PagePortal*> getPortals(){return portals;}
+    virtual void updateHeight(int){}
 
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
     void drawForeground(QPainter *painter, const QRectF &rect) override;
 
-private:
+protected:
     void paintLines(QPainter *painter);
     void paintLinesMargin(QPainter *painter);
     void paintEngineering(QPainter *painter);
@@ -38,7 +39,7 @@ private:
     void paintStaves(QPainter *painter);
     void paintCustom(QPainter *painter);
 
-private:
+protected:
     int width = 850;
     int height = 1100;
     BackgroundType page_type = Engineering;

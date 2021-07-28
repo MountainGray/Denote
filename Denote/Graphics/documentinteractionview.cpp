@@ -188,6 +188,16 @@ void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
             Image *new_image = new Image(doc->getUI());
             new_image->setImage(image);
         }
+    } else if (event->key() == Qt::Key_Up){
+        foreach(Page* page, doc->getPages()){
+            page->updateHeight(page->getHeight()+10);
+            doc->updateAllLayouts();
+        }
+    } else if (event->key() == Qt::Key_Down){
+        foreach(Page* page, doc->getPages()){
+            page->updateHeight(page->getHeight()-10);
+            doc->updateAllLayouts();
+        }
     }
     /*
     } else if(event->key() == Qt::Key_Delete){

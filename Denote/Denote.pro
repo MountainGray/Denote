@@ -27,6 +27,7 @@ SOURCES += \
     Graphics/documentinteractionview.cpp \
     Graphics/documentsummaryframe.cpp \
     Graphics/documentsummaryview.cpp \
+    Graphics/dynamicpage.cpp \
     Graphics/pagelayoutscene.cpp \
     Graphics/pageportal.cpp \
     Tools/circleselect.cpp \
@@ -63,6 +64,7 @@ HEADERS += \
     Graphics/documentinteractionview.h \
     Graphics/documentsummaryframe.h \
     Graphics/documentsummaryview.h \
+    Graphics/dynamicpage.h \
     Graphics/pagelayoutscene.h \
     Graphics/pageportal.h \
     Tools/circleselect.h \

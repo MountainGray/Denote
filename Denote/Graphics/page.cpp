@@ -63,7 +63,15 @@ void Page::updatePortals(QRectF rect)
 
 void Page::paintLines(QPainter *painter){
     painter->setPen(QPen(QColor(43,167,255,150),2));
+    /*
     for(int line = height/10; line < 20*height/21; line += height/40){
+        painter->drawLine(QLineF(0,line,width,line));
+    }
+    */
+    const int spacing = 28;
+    const int margin = 40;
+
+    for(int line = margin; line < height-margin; line += spacing){
         painter->drawLine(QLineF(0,line,width,line));
     }
 }
