@@ -12,16 +12,19 @@ class Page;
 class PagePortal;
 
 enum LayoutType {SingleColumn, FitToView};
+enum ViewType {Summary, Interaction};
 
 class PageLayoutScene : public QGraphicsScene
 {
     friend PagePortal;
 public:
-    PageLayoutScene(QGraphicsView* viewport, Document* doc);
+    PageLayoutScene(Document* doc, QGraphicsView* viewport, ViewType view_type);
     ~PageLayoutScene();
 
 public:
-    void updatePageLayout();    
+    QGraphicsView* getView(){return viewport;}
+    ViewType getViewType(){return view_type;}
+    void updatePageLayout(bool force_endless_update = false);
     void setLayoutType(LayoutType type);
     void setFocusedPortal(PagePortal* portal);
 
@@ -32,6 +35,7 @@ private:
 
 private:
     QGraphicsView* viewport;
+    ViewType view_type;
     Document* doc;
     QList<PagePortal*> portals;
     PagePortal* focused_portal = nullptr;

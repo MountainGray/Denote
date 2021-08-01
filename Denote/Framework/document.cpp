@@ -9,13 +9,15 @@
 #include "Graphics/documentsummaryframe.h"
 
 
-Document::Document(UI* ui){
+Document::Document(UI* ui, bool endless){
     this->ui = ui;
+    this->endless = endless;
 
     history_manager = new HistoryManager(this);
     summary_view = new DocumentSummaryView(this);
 
     ui->setActiveDocument(this);
+    focusDoc();
 }
 
 
@@ -29,11 +31,12 @@ void Document::updateAllLayouts()
     foreach(PageLayoutScene* page_layout, layouts){
         page_layout->updatePageLayout();
     }
-    getUI()->getSummaryFrame()->getView()->getPageLayoutScene()->updatePageLayout();
 }
 
 
 void Document::addPage(Page *page, int index){
+    convertToPages();
+
     if(index == -1 or index > pages.length()) index = pages.length();
 
     //add the page to the documents data
@@ -42,7 +45,7 @@ void Document::addPage(Page *page, int index){
     //create a page_portal between the page_layout and page
     foreach(PageLayoutScene* page_layout, layouts){
         new PagePortal(page, page_layout, index);
-        page_layout->updatePageLayout();
+        page_layout->updatePageLayout(true);
     }
 }
 
@@ -57,6 +60,8 @@ void Document::removePage(Page *page){
         delete portal;
     }
     updateAllLayouts();
+
+    delete page;
 }
 
 
@@ -87,5 +92,89 @@ void Document::focusDoc()
     ui->setActiveDocument(this);
     ui->getHistoryManagerViewer()->setHistoryManager(history_manager);
     ui->getSummaryFrame()->setView(summary_view);
+}
+
+
+void Document::convertToEndless()
+{
+    if(endless or pages.isEmpty()) return;
+
+    Page* new_page = new Page();
+    new_page->setBackgroundType(LinesMargin);
+
+    int y_offset = 0;
+
+    foreach(Page* page, pages){
+        foreach(QGraphicsItem* item, page->items()){
+            new_page->addItem(item);
+            item->moveBy(0,y_offset);
+        }
+        y_offset += page->getHeight();
+        removePage(page);
+    }
+
+    endless = true;
+    addPage(new_page);
+    new_page->findLowestObject();
+    updateEndlessLength();
+}
+
+
+void Document::convertToPages()
+{
+    if(!endless or pages.length() != 1) return;
+    endless = false;
+
+    const int new_height = 1100;
+
+    Page* first_page = pages.at(0);
+    int y_offset = 0;
+
+    while(y_offset < first_page->getBounds().bottom()){
+        Page* new_page = new Page();
+        new_page->setBackgroundType(Engineering);
+        new_page->setPageSize(850,new_height);
+        addPage(new_page);
+
+        foreach(QGraphicsItem* item, first_page->items(QRect(0,y_offset,first_page->getWidth(),new_height))){
+            new_page->addItem(item);
+            item->moveBy(0,-y_offset);
+        }
+
+        y_offset += new_height;
+    }
+
+    removePage(first_page);
+    updateAllLayouts();
+}
+
+
+void Document::updateEndlessLength()
+{
+    if(!endless or pages.length() != 1) return;
+
+    int lowest = 0;
+    Page* page = pages.at(0);
+
+    foreach(PageLayoutScene* layout, layouts){
+        if(layout->getViewType() == Interaction){
+            int view_bottom = layout->getView()->mapToScene(layout->getView()->rect()).boundingRect().bottom();
+            if(view_bottom > lowest) lowest = view_bottom;
+        }
+    }
+    if(page->getLowestPoint() > lowest) lowest = page->getLowestPoint();
+
+    const int change_length = 1100;
+    int full_length = (std::ceil(lowest/change_length)+1)*change_length;
+
+    if(page->getHeight() != full_length){
+        page->setPageSize(page->getWidth(),full_length);
+        QRectF bounds = page->getBounds();
+        bounds.moveRight(page->getWidth()/2);
+
+        foreach(PageLayoutScene* layout, layouts){
+            layout->setSceneRect(bounds);
+        }
+    }
 }
 

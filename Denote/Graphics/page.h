@@ -24,14 +24,17 @@ public:
     void setBackgroundType(BackgroundType t){ page_type = t; }
     void updatePortals(QRectF rect = QRectF());
     QList<PagePortal*> getPortals(){return portals;}
-    virtual void updateHeight(int){}
+    void findLowestObject();
+    void updateLowestObject(QGraphicsItem* potential_lowest);
+    QGraphicsItem* getLowestObject(){return lowest_object;}
+    int getLowestPoint();
 
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
     void drawForeground(QPainter *painter, const QRectF &rect) override;
 
-protected:
+private:
     void paintLines(QPainter *painter);
     void paintLinesMargin(QPainter *painter);
     void paintEngineering(QPainter *painter);
@@ -39,11 +42,12 @@ protected:
     void paintStaves(QPainter *painter);
     void paintCustom(QPainter *painter);
 
-protected:
+private:
     int width = 850;
     int height = 1100;
     BackgroundType page_type = Engineering;
     QList<PagePortal*> portals;
+    QGraphicsItem* lowest_object = nullptr;
 };
 
 #endif // PAGE_H

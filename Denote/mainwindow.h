@@ -29,6 +29,8 @@ private slots:
     void open();
     void about();
     void addView();
+    void convertToEndless();
+    void convertToPages();
 
 private:
     void createMenus();

@@ -12,7 +12,7 @@ class DocumentSummaryView;
 class Document
 {
 public:
-    Document(UI* ui);
+    Document(UI* ui, bool endless = false);
     ~Document();
 
 public:
@@ -33,12 +33,19 @@ public:
 
     void focusDoc();
 
+    void convertToEndless();
+    void convertToPages();
+
+    void updateEndlessLength();
+    bool isEndless(){return endless;}
+
 private:
     QList<Page*> pages;
     UI* ui;
     QList<PageLayoutScene*> layouts;
     HistoryManager* history_manager;
     DocumentSummaryView* summary_view;
+    bool endless;
 };
 
 #endif // DOCUMENT_H

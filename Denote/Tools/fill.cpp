@@ -72,6 +72,7 @@ void Fill::drawReleaseEvent(ToolEvent event)
             fill_stroke->finish(event.pagePos());
         }
         ui->getActivePage()->updatePortals(fill_stroke->sceneBoundingRect());
+        ui->getActivePage()->updateLowestObject(fill_stroke);
         fill_stroke = nullptr;        
     }
 }

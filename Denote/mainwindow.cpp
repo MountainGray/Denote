@@ -5,7 +5,6 @@
 #include "Framework/subwindow.h"
 #include "Ui/ui.h"
 #include "Graphics/page.h"
-#include "Graphics/dynamicpage.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -35,21 +34,18 @@ void MainWindow::addSubWindow(QDockWidget *widget, Qt::DockWidgetArea area)
 
 void MainWindow::newDocument()
 {
-    Document *doc = new Document(ui);
+    Document *doc = new Document(ui, true);
 
-    DynamicPage* new_page = new DynamicPage();
-    new_page->setBackgroundType(LinesMargin);
-    doc->addPage(new_page);
-
-    for(int i = 0; i < 2; i++){
-        Page* new_page = new Page();
-        new_page->setBackgroundType(Engineering);
-        doc->addPage(new_page);
-    }
-
+    //adds new doc to tabs
     foreach(DocumentInteractionFrame* view, views){
         view->addDocument(doc);
         view->setDocument(doc);
+    }
+
+    for(int i = 0; i < 1; i++){
+        Page* new_page = new Page();
+        new_page->setBackgroundType(LinesMargin);
+        doc->addPage(new_page);
     }
 }
 
@@ -79,6 +75,18 @@ void MainWindow::addView()
 }
 
 
+void MainWindow::convertToEndless()
+{
+    ui->getActiveDocument()->convertToEndless();
+}
+
+
+void MainWindow::convertToPages()
+{
+    ui->getActiveDocument()->convertToPages();
+}
+
+
 void MainWindow::createMenus(){
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(tr("&New..."), this, &MainWindow::newDocument, QKeySequence::New);
@@ -92,4 +100,6 @@ void MainWindow::createMenus(){
 
     QMenu* view = menuBar()->addMenu("&View");
     view->addAction(tr("Add V&iew"), this, &MainWindow::addView);
+    view->addAction(tr("Convert to E&ndless Document"), this, &MainWindow::convertToEndless);
+    view->addAction(tr("Convert to P&aged Document"), this, &MainWindow::convertToPages);
 }

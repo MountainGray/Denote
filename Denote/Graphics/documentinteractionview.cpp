@@ -10,6 +10,7 @@
 #include "Graphics/documentsummaryview.h"
 #include "mainwindow.h"
 #include "Framework/History/historymanagerviewer.h"
+#include "Graphics/documentsummaryframe.h"
 
 #include <QtOpenGLWidgets/QOpenGLWidget>
 #include "Tools/image.h"
@@ -20,11 +21,9 @@
 DocumentInteractionView::DocumentInteractionView(Document* doc)
 {
     this->doc = doc;
-    page_layout_scene = new PageLayoutScene(this, doc);
+    page_layout_scene = new PageLayoutScene(doc, this, Interaction);
     page_layout_scene->setLayoutType(LayoutType::FitToView);
     setScene(page_layout_scene);
-
-    summary_view = new DocumentSummaryView(doc);
 
     doc->getUI()->setActiveLayout(page_layout_scene);
 
@@ -42,6 +41,11 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
     setMouseTracking(true);
 
     setBackgroundBrush(QBrush(QColor(37,37,40)));
+
+    page_layout_scene->updatePageLayout(true);
+    doc->updateEndlessLength();
+
+    setResizeAnchor(ViewportAnchor::AnchorViewCenter);
 }
 
 
@@ -153,6 +157,7 @@ void DocumentInteractionView::mouseDoubleClickEvent(QMouseEvent *event)
 }
 
 
+
 void DocumentInteractionView::wheelEvent(QWheelEvent *event){
     if (event->modifiers() & Qt::ControlModifier){
         if(event->modifiers() & Qt::ShiftModifier){//rotate
@@ -161,17 +166,22 @@ void DocumentInteractionView::wheelEvent(QWheelEvent *event){
             else
                 rotate(-5);
         } else {//zoom
-            if (event->angleDelta().y() > 0){
+            if (event->angleDelta().y() > 0 and view_scale < 5){
                 scale(1.1,1.1);
-            } else {
+                QTransform t = transform();
+                view_scale = sqrt(t.m11() * t.m11() + t.m12() * t.m12());
+            } else if(event->angleDelta().y() < 0 and view_scale > 0.3){
                 scale(1/1.1,1/1.1);
+                QTransform t = transform();
+                view_scale = sqrt(t.m11() * t.m11() + t.m12() * t.m12());
             }
-            page_layout_scene->updatePageLayout();
         }
         event->accept();
+        doc->updateAllLayouts();
     } else {
         QGraphicsView::wheelEvent(event);
     }
+    doc->updateEndlessLength();
     view_inverse = viewportTransform().inverted();
 }
 
@@ -187,16 +197,6 @@ void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
         if(not image.isNull()){
             Image *new_image = new Image(doc->getUI());
             new_image->setImage(image);
-        }
-    } else if (event->key() == Qt::Key_Up){
-        foreach(Page* page, doc->getPages()){
-            page->updateHeight(page->getHeight()+10);
-            doc->updateAllLayouts();
-        }
-    } else if (event->key() == Qt::Key_Down){
-        foreach(Page* page, doc->getPages()){
-            page->updateHeight(page->getHeight()-10);
-            doc->updateAllLayouts();
         }
     }
     /*
@@ -221,11 +221,4 @@ void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
         doc->getUI()->setActiveTool(doc->getUI()->getActiveTool());
     }
     */
-}
-
-
-void DocumentInteractionView::resizeEvent(QResizeEvent *event)
-{
-    Q_UNUSED(event);
-    page_layout_scene->updatePageLayout();
 }

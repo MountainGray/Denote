@@ -24,8 +24,8 @@ public:
     QPointF getPageInverse(){return page_inverse;}
     Document* getDoc(){return doc;}
     void resetGL();
-    DocumentSummaryView* getSummary(){return summary_view;}
     void focusDoc();
+    float getScale(){return view_scale;}
 
 protected:
     void enterEvent(QEnterEvent *event) override;
@@ -37,7 +37,6 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
-    void resizeEvent(QResizeEvent* event) override;
 
 
 private:
@@ -45,7 +44,7 @@ private:
     QTransform view_inverse;
     QPointF page_inverse;
     PageLayoutScene* page_layout_scene;
-    DocumentSummaryView* summary_view;
+    float view_scale = 1;
 };
 
 #endif // DOCUMENTINTERACTIONVIEW_H

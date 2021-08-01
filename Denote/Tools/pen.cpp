@@ -129,6 +129,7 @@ void Pen::drawReleaseEvent(ToolEvent event)
             stroke->finish(event.pagePos(),pressureToWidth(event.pressure()));
         }
         ui->getActivePage()->updatePortals(stroke->sceneBoundingRect());
+        ui->getActivePage()->updateLowestObject(stroke);
         stroke = nullptr;
     }
 }

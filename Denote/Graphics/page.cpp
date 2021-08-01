@@ -13,6 +13,7 @@ void Page::setPageSize(int width, int height)
     this->width = width;
     this->height = height;
     setSceneRect(QRect(0,0,width,height));
+    updatePortals();
 }
 
 
@@ -58,6 +59,36 @@ void Page::updatePortals(QRectF rect)
             portal->update(rect);
         }
     }
+}
+
+
+void Page::findLowestObject()
+{
+    int y = 0;
+    lowest_object = nullptr;
+    foreach(QGraphicsItem* item, items()){
+        if(item->isEnabled() and (lowest_object == nullptr or item->sceneBoundingRect().bottom() > y)){
+            y = item->sceneBoundingRect().bottom();
+            lowest_object = item;
+        }
+    }
+}
+
+
+void Page::updateLowestObject(QGraphicsItem *potential_lowest)
+{
+    if(potential_lowest->scene() != this or !potential_lowest->isEnabled()) return;
+
+    if(potential_lowest->sceneBoundingRect().bottom() > getLowestPoint()){
+        lowest_object = potential_lowest;
+    }
+}
+
+
+int Page::getLowestPoint()
+{
+    if(lowest_object == nullptr) return 0;
+    return lowest_object->sceneBoundingRect().bottom();
 }
 
 

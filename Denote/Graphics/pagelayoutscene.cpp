@@ -6,10 +6,11 @@
 #include "Ui/ui.h"
 
 
-PageLayoutScene::PageLayoutScene(QGraphicsView *viewport, Document *doc)
+PageLayoutScene::PageLayoutScene(Document *doc, QGraphicsView *viewport, ViewType view_type)
 {
-    this->viewport = viewport;
     this->doc = doc;
+    this->viewport = viewport;
+    this->view_type = view_type;
 
     doc->addLayout(this);
 
@@ -35,8 +36,10 @@ PageLayoutScene::~PageLayoutScene()
 }
 
 
-void PageLayoutScene::updatePageLayout()
+void PageLayoutScene::updatePageLayout(bool force_endless_update)
 {
+    if(doc->isEndless() and !force_endless_update) return;
+
     QRectF bounds = QRectF();
     QTransform t = viewport->transform();
     float scale = sqrt(t.m11() * t.m11() + t.m12() * t.m12());
