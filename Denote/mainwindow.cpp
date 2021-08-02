@@ -87,6 +87,12 @@ void MainWindow::convertToPages()
 }
 
 
+void MainWindow::toggleCropWorkArea()
+{
+    ui->getActiveDocument()->CropWorkArea(!ui->getActiveDocument()->isWorkAreaCropped());
+}
+
+
 void MainWindow::createMenus(){
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(tr("&New..."), this, &MainWindow::newDocument, QKeySequence::New);
@@ -102,4 +108,5 @@ void MainWindow::createMenus(){
     view->addAction(tr("Add V&iew"), this, &MainWindow::addView);
     view->addAction(tr("Convert to E&ndless Document"), this, &MainWindow::convertToEndless);
     view->addAction(tr("Convert to P&aged Document"), this, &MainWindow::convertToPages);
+    view->addAction(tr("Toggle S&eamless View"), this, &MainWindow::toggleCropWorkArea);
 }

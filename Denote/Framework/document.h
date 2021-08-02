@@ -29,15 +29,17 @@ public:
     UI* getUI(){return ui;}
     HistoryManager* getHistoryManager(){return history_manager;}
     DocumentSummaryView* getSummaryView(){return summary_view;}
-    void updateAll(QRectF update_area);
+    void updateAll(QRectF update_area = QRectF());
 
     void focusDoc();
 
     void convertToEndless();
     void convertToPages();
-
-    void updateEndlessLength();
     bool isEndless(){return endless;}
+    void updateEndlessLength(bool ignore_views = false);
+
+    void CropWorkArea(bool crop);
+    bool isWorkAreaCropped(){return crop_work_area;}
 
 private:
     QList<Page*> pages;
@@ -46,6 +48,7 @@ private:
     HistoryManager* history_manager;
     DocumentSummaryView* summary_view;
     bool endless;
+    bool crop_work_area = false;
 };
 
 #endif // DOCUMENT_H

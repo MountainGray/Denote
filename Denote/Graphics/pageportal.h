@@ -16,6 +16,8 @@ public:
 
 public:
     Page* getPage(){return page;}
+    int getWidth(){return boundingRect().width();}
+    int getHeight(){return boundingRect().height();}
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

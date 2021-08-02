@@ -40,6 +40,11 @@ void PageLayoutScene::updatePageLayout(bool force_endless_update)
 {
     if(doc->isEndless() and !force_endless_update) return;
 
+    bool compact = doc->isWorkAreaCropped() and view_type == ViewType::Interaction;
+
+    int x_padding = 22;
+    int y_padding = compact ? 3 : 22;
+
     QRectF bounds = QRectF();
     QTransform t = viewport->transform();
     float scale = sqrt(t.m11() * t.m11() + t.m12() * t.m12());
@@ -53,27 +58,27 @@ void PageLayoutScene::updatePageLayout(bool force_endless_update)
         width = 0;
         row.clear();
         while(i < max_i){
-            if(width + portals.at(i)->getPage()->getWidth() < max_width or width == 0){//if can fit, add to list
+            if(width + portals.at(i)->getWidth() < max_width or width == 0){//if can fit, add to list
                 row.append(portals.at(i));
-                if(width != 0) width += page_padding;
-                width += portals.at(i)->getPage()->getWidth();
+                if(width != 0) width += x_padding;
+                width += portals.at(i)->getWidth();
                 i ++;
             } else {
                 break;
             }
-            if(layout_type == SingleColumn) break;
+            if(layout_type == SingleColumn or compact) break;
         }
         x = -width/2;
         height = 0;
         foreach(PagePortal* portal, row){
             portal->setPos(x,y);
-            x += portal->getPage()->getWidth();
-            x += page_padding;
-            height = std::max(height, portal->getPage()->getHeight());
+            x += portal->getWidth();
+            x += x_padding;
+            height = std::max(height, portal->getHeight());
             bounds = bounds.united(portal->sceneBoundingRect());
         }
         y += height;
-        y += page_padding;
+        y += y_padding;
     }
     setSceneRect(bounds);
     if(focused_portal != nullptr){

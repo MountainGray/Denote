@@ -123,6 +123,8 @@ void Document::convertToEndless()
 void Document::convertToPages()
 {
     if(!endless or pages.length() != 1) return;
+
+    updateEndlessLength(true);
     endless = false;
 
     const int new_height = 1100;
@@ -130,13 +132,16 @@ void Document::convertToPages()
     Page* first_page = pages.at(0);
     int y_offset = 0;
 
-    while(y_offset < first_page->getBounds().bottom()){
+    while(true){
+        QList<QGraphicsItem*> area_items = first_page->items(QRect(0,y_offset,first_page->getWidth(),new_height));
+        if(y_offset+new_height >= first_page->getBounds().bottom() and area_items.length() == 0) break;
+
         Page* new_page = new Page();
         new_page->setBackgroundType(Engineering);
         new_page->setPageSize(850,new_height);
         addPage(new_page);
 
-        foreach(QGraphicsItem* item, first_page->items(QRect(0,y_offset,first_page->getWidth(),new_height))){
+        foreach(QGraphicsItem* item, area_items){
             new_page->addItem(item);
             item->moveBy(0,-y_offset);
         }
@@ -149,17 +154,19 @@ void Document::convertToPages()
 }
 
 
-void Document::updateEndlessLength()
+void Document::updateEndlessLength(bool ignore_views)
 {
     if(!endless or pages.length() != 1) return;
 
     int lowest = 0;
     Page* page = pages.at(0);
 
-    foreach(PageLayoutScene* layout, layouts){
-        if(layout->getViewType() == Interaction){
-            int view_bottom = layout->getView()->mapToScene(layout->getView()->rect()).boundingRect().bottom();
-            if(view_bottom > lowest) lowest = view_bottom;
+    if(!ignore_views){
+        foreach(PageLayoutScene* layout, layouts){
+            if(layout->getViewType() == Interaction){
+                int view_bottom = layout->getView()->mapToScene(layout->getView()->rect()).boundingRect().bottom();
+                if(view_bottom > lowest) lowest = view_bottom;
+            }
         }
     }
     if(page->getLowestPoint() > lowest) lowest = page->getLowestPoint();
@@ -176,5 +183,12 @@ void Document::updateEndlessLength()
             layout->setSceneRect(bounds);
         }
     }
+}
+
+
+void Document::CropWorkArea(bool crop)
+{
+    crop_work_area = crop;
+    updateAll();
 }
 

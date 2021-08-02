@@ -105,6 +105,8 @@ void Page::paintLines(QPainter *painter){
     for(int line = margin; line < height-margin; line += spacing){
         painter->drawLine(QLineF(0,line,width,line));
     }
+
+    work_area = QRectF(0,margin,width,height-2*margin);
 }
 
 
@@ -152,6 +154,8 @@ void Page::paintEngineering(QPainter *painter){
     for(int i = 0; i < h_majors*major_minor; i ++){//minor vertical lines
         if(i%major_minor) painter->drawLine(QLineF(left+i*minor_size,top,left+i*minor_size,bottom));
     }
+
+    work_area = QRectF(0,top,width,bottom-top);
 }
 
 
@@ -166,6 +170,8 @@ void Page::paintGraph(QPainter *painter){
     for(int i = 0; i < height; i += grid_size){//horizontal lines
         painter->drawLine(QLineF(0,i,width,i));
     }
+
+    work_area = QRectF(0,0,width,height);
 }
 
 
@@ -180,6 +186,8 @@ void Page::paintStaves(QPainter *painter){
             painter->drawLine(QLineF(0.08*width, i+j*line_spacing,0.92*width, i+j*line_spacing));
         }
     }
+
+    work_area = QRectF(0,stave_spacing,width,height-2*stave_spacing);
 }
 
 

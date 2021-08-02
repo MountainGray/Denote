@@ -32,20 +32,30 @@ void PagePortal::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    page->render(painter, page->getBounds(), page->getBounds());
+
+    if(page_layout->getDoc()->isWorkAreaCropped() and page_layout->getViewType() == Interaction){
+        page->render(painter, boundingRect(), page->getWorkArea());
+    } else {
+        page->render(painter, page->getBounds(), page->getBounds());
+    }
 
     QPen pen = QPen(QColor(120,190,255),4);
     pen.setCosmetic(true);
     painter->setPen(pen);
 
     if(isSelected()){
-        painter->drawRect(page->getBounds());
+        painter->drawRect(boundingRect());
     }
 }
 
 
 QRectF PagePortal::boundingRect() const
 {
+    //inefficient, should cache bounds
+    if(page_layout->getDoc()->isWorkAreaCropped() and page_layout->getViewType() == Interaction){
+        QRectF work_area = page->getWorkArea();
+        return QRectF(0,0,work_area.width(),work_area.height());
+    }
     return page->getBounds();
 }
 

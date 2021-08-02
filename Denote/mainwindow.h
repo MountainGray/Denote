@@ -31,6 +31,7 @@ private slots:
     void addView();
     void convertToEndless();
     void convertToPages();
+    void toggleCropWorkArea();
 
 private:
     void createMenus();

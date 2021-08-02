@@ -27,7 +27,7 @@ public:
     void updatePageLayout(bool force_endless_update = false);
     void setLayoutType(LayoutType type);
     void setFocusedPortal(PagePortal* portal);
-
+    Document* getDoc(){return doc;}
     QList<PagePortal*> getPortals(){return portals;}
 
 private:
@@ -41,9 +41,6 @@ private:
     PagePortal* focused_portal = nullptr;
     LayoutType layout_type = SingleColumn;
     QRectF last_focused_portal_bounds;
-
-    const int page_padding = 20;
-    const int view_padding = 100;
 };
 
 #endif // PAGELAYOUTSCENE_H

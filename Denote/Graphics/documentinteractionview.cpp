@@ -11,11 +11,11 @@
 #include "mainwindow.h"
 #include "Framework/History/historymanagerviewer.h"
 #include "Graphics/documentsummaryframe.h"
-
-#include <QtOpenGLWidgets/QOpenGLWidget>
 #include "Tools/image.h"
 
+#include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QClipboard>
+#include <QScrollBar>
 
 
 DocumentInteractionView::DocumentInteractionView(Document* doc)
@@ -46,6 +46,8 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
     doc->updateEndlessLength();
 
     setResizeAnchor(ViewportAnchor::AnchorViewCenter);
+
+    connect(verticalScrollBar(), &QAbstractSlider::valueChanged, this, &DocumentInteractionView::scrollPositionChanged);
 }
 
 
@@ -178,10 +180,10 @@ void DocumentInteractionView::wheelEvent(QWheelEvent *event){
         }
         event->accept();
         doc->updateAllLayouts();
+        doc->updateEndlessLength();
     } else {
         QGraphicsView::wheelEvent(event);
     }
-    doc->updateEndlessLength();
     view_inverse = viewportTransform().inverted();
 }
 
@@ -221,4 +223,10 @@ void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
         doc->getUI()->setActiveTool(doc->getUI()->getActiveTool());
     }
     */
+}
+
+
+void DocumentInteractionView::scrollPositionChanged()
+{
+    doc->updateEndlessLength();
 }

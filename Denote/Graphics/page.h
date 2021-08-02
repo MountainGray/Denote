@@ -21,6 +21,7 @@ public:
     int getHeight(){ return height; }
     void setPageSize(int width, int height);
     QRectF getBounds(){ return QRectF(0,0,width,height);}
+    QRectF getWorkArea(){ return work_area;}
     void setBackgroundType(BackgroundType t){ page_type = t; }
     void updatePortals(QRectF rect = QRectF());
     QList<PagePortal*> getPortals(){return portals;}
@@ -28,7 +29,6 @@ public:
     void updateLowestObject(QGraphicsItem* potential_lowest);
     QGraphicsItem* getLowestObject(){return lowest_object;}
     int getLowestPoint();
-
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
@@ -48,6 +48,7 @@ private:
     BackgroundType page_type = Engineering;
     QList<PagePortal*> portals;
     QGraphicsItem* lowest_object = nullptr;
+    QRectF work_area;
 };
 
 #endif // PAGE_H
