@@ -23,7 +23,7 @@ DocumentSummaryView::DocumentSummaryView(Document* doc)
     setBackgroundBrush(QBrush(QColor(20,23,23)));
 
     this->doc = doc;
-    page_layout_scene = new PageLayoutScene(this,doc);
+    page_layout_scene = new PageLayoutScene(doc, this, Summary);
     setScene(page_layout_scene);
     page_layout_scene->updatePageLayout();
     doc->getUI()->setActiveLayout(page_layout_scene);

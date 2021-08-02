@@ -23,12 +23,16 @@ public:
     void setPageSize(int width, int height);
     QRectF getBounds(){ return QRectF(0,0,width,height);}
     QSizeF getPageSize(){return QSizeF(width,height);}
+    QRectF getWorkArea(){ return work_area;}
     void setBackgroundType(BackgroundType t){ page_type = t; }
     void updatePortals(QRectF rect = QRectF());
     QList<PagePortal*> getPortals(){return portals;}
     void setDisplayMode(IColor::DisplayMode display_mode);
     void setPageHoles(bool holes){page_holes = holes;}
-
+    void findLowestObject();
+    void updateLowestObject(QGraphicsItem* potential_lowest);
+    QGraphicsItem* getLowestObject(){return lowest_object;}
+    int getLowestPoint();
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
@@ -57,6 +61,8 @@ private:
     IColor white_page = IColor(QColor(250,250,250));
 
     bool page_holes = true;
+    QGraphicsItem* lowest_object = nullptr;
+    QRectF work_area;
 };
 
 #endif // PAGE_H

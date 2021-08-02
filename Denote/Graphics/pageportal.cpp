@@ -53,8 +53,12 @@ void PagePortal::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    page->render(painter, page->getBounds(), page->getBounds());
 
+    if(page_layout->getDoc()->isWorkAreaCropped() and page_layout->getViewType() == Interaction){
+        page->render(painter, boundingRect(), page->getWorkArea());
+    } else {
+        page->render(painter, page->getBounds(), page->getBounds());
+    }
     painter->setPen(QPen(QColor("black"),2*shadow));
     painter->drawLine(3*shadow,page->getHeight()+shadow,page->getWidth()+shadow,page->getHeight()+shadow);
     painter->drawLine(page->getWidth()+shadow,3*shadow,page->getWidth()+shadow,page->getHeight());
@@ -70,7 +74,12 @@ void PagePortal::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
 QRectF PagePortal::boundingRect() const
 {
-    return page->getBounds().adjusted(0,0,10,10);
+    //inefficient, should cache bounds
+    if(page_layout->getDoc()->isWorkAreaCropped() and page_layout->getViewType() == Interaction){
+        QRectF work_area = page->getWorkArea();
+        return QRectF(0,0,work_area.width(),work_area.height());
+    }
+    return page->getBounds();
 }
 
 

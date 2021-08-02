@@ -29,6 +29,9 @@ private slots:
     void open();
     void about();
     void addView();
+    void convertToEndless();
+    void convertToPages();
+    void toggleCropWorkArea();
     void print();
     void invertView();
     void toggleHoles();

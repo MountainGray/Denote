@@ -37,6 +37,7 @@ void HistoryManager::undo()
         undone_stack.append(object);
         if(not active_stack.isEmpty()) active_stack.last()->setSelected(true);
         doc->updateAll(object->updateArea());
+        doc->updateEndlessLength();
     }
 }
 
@@ -50,6 +51,7 @@ void HistoryManager::redo()
         active_stack.append(object);
         object->setSelected(true);
         doc->updateAll(object->updateArea());
+        doc->updateEndlessLength();
     }
 }
 

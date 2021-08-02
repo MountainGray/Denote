@@ -10,21 +10,20 @@
 #include "Graphics/documentsummaryview.h"
 #include "mainwindow.h"
 #include "Framework/History/historymanagerviewer.h"
-
-#include <QtOpenGLWidgets/QOpenGLWidget>
+#include "Graphics/documentsummaryframe.h"
 #include "Tools/image.h"
 
+#include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QClipboard>
+#include <QScrollBar>
 
 
 DocumentInteractionView::DocumentInteractionView(Document* doc)
 {
     this->doc = doc;
-    page_layout_scene = new PageLayoutScene(this, doc);
+    page_layout_scene = new PageLayoutScene(doc, this, Interaction);
     page_layout_scene->setLayoutType(LayoutType::FitToView);
     setScene(page_layout_scene);
-
-    summary_view = new DocumentSummaryView(doc);
 
     doc->getUI()->setActiveLayout(page_layout_scene);
 
@@ -42,6 +41,10 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
     setMouseTracking(true);
 
     setBackgroundBrush(QBrush(QColor(20,23,23)));
+    page_layout_scene->updatePageLayout(true);
+    doc->updateEndlessLength();
+    setResizeAnchor(ViewportAnchor::AnchorViewCenter);
+    connect(verticalScrollBar(), &QAbstractSlider::valueChanged, this, &DocumentInteractionView::scrollPositionChanged);
 }
 
 
@@ -153,6 +156,7 @@ void DocumentInteractionView::mouseDoubleClickEvent(QMouseEvent *event)
 }
 
 
+
 void DocumentInteractionView::wheelEvent(QWheelEvent *event){
     if (event->modifiers() & Qt::ControlModifier){
         if(event->modifiers() & Qt::ShiftModifier){//rotate
@@ -161,14 +165,19 @@ void DocumentInteractionView::wheelEvent(QWheelEvent *event){
             else
                 rotate(-5);
         } else {//zoom
-            if (event->angleDelta().y() > 0){
+            if (event->angleDelta().y() > 0 and view_scale < 5){
                 scale(1.1,1.1);
-            } else {
+                QTransform t = transform();
+                view_scale = sqrt(t.m11() * t.m11() + t.m12() * t.m12());
+            } else if(event->angleDelta().y() < 0 and view_scale > 0.3){
                 scale(1/1.1,1/1.1);
+                QTransform t = transform();
+                view_scale = sqrt(t.m11() * t.m11() + t.m12() * t.m12());
             }
-            page_layout_scene->updatePageLayout();
         }
         event->accept();
+        doc->updateAllLayouts();
+        doc->updateEndlessLength();
     } else {
         QGraphicsView::wheelEvent(event);
     }
@@ -214,8 +223,7 @@ void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
 }
 
 
-void DocumentInteractionView::resizeEvent(QResizeEvent *event)
+void DocumentInteractionView::scrollPositionChanged()
 {
-    Q_UNUSED(event);
-    page_layout_scene->updatePageLayout();
+    doc->updateEndlessLength();
 }

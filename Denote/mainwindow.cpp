@@ -36,7 +36,7 @@ void MainWindow::addSubWindow(QDockWidget *widget, Qt::DockWidgetArea area)
 
 void MainWindow::newDocument()
 {
-    Document *doc = new Document(ui);
+    Document *doc = new Document(ui, true);
 
     for(int i = 0; i < 3; i++){
         Page* new_page = new Page();
@@ -48,6 +48,12 @@ void MainWindow::newDocument()
     foreach(DocumentInteractionFrame* view, views){
         view->addDocument(doc);
         view->setDocument(doc);
+    }
+
+    for(int i = 0; i < 1; i++){
+        Page* new_page = new Page();
+        new_page->setBackgroundType(LinesMargin);
+        doc->addPage(new_page);
     }
 }
 
@@ -74,6 +80,24 @@ void MainWindow::addView()
     addSubWindow(new_frame, Qt::BottomDockWidgetArea);
     new_frame->addDocument(ui->getActiveDocument());
     views.append(new_frame);
+}
+
+
+void MainWindow::convertToEndless()
+{
+    ui->getActiveDocument()->convertToEndless();
+}
+
+
+void MainWindow::convertToPages()
+{
+    ui->getActiveDocument()->convertToPages();
+}
+
+
+void MainWindow::toggleCropWorkArea()
+{
+    ui->getActiveDocument()->CropWorkArea(!ui->getActiveDocument()->isWorkAreaCropped());
 }
 
 
@@ -120,4 +144,7 @@ void MainWindow::createMenus(){
     view->addAction(tr("Add V&iew"), this, &MainWindow::addView);
     view->addAction("Invert View", this, &MainWindow::invertView, QKeySequence("Ctrl+I"));
     view->addAction("Toggle Hole Punches", this, &MainWindow::toggleHoles);
+    view->addAction(tr("Convert to E&ndless Document"), this, &MainWindow::convertToEndless);
+    view->addAction(tr("Convert to P&aged Document"), this, &MainWindow::convertToPages);
+    view->addAction(tr("Toggle S&eamless View"), this, &MainWindow::toggleCropWorkArea);
 }

@@ -13,6 +13,7 @@ void Page::setPageSize(int width, int height)
     this->width = width;
     this->height = height;
     setSceneRect(QRect(0,0,width,height));
+    updatePortals();
 }
 
 
@@ -74,11 +75,51 @@ void Page::setDisplayMode(IColor::DisplayMode display_mode)
 }
 
 
+void Page::findLowestObject()
+{
+    int y = 0;
+    lowest_object = nullptr;
+    foreach(QGraphicsItem* item, items()){
+        if(item->isEnabled() and (lowest_object == nullptr or item->sceneBoundingRect().bottom() > y)){
+            y = item->sceneBoundingRect().bottom();
+            lowest_object = item;
+        }
+    }
+}
+
+
+void Page::updateLowestObject(QGraphicsItem *potential_lowest)
+{
+    if(potential_lowest->scene() != this or !potential_lowest->isEnabled()) return;
+
+    if(potential_lowest->sceneBoundingRect().bottom() > getLowestPoint()){
+        lowest_object = potential_lowest;
+    }
+}
+
+
+int Page::getLowestPoint()
+{
+    if(lowest_object == nullptr) return 0;
+    return lowest_object->sceneBoundingRect().bottom();
+}
+
+
 void Page::paintLines(QPainter *painter){
     painter->setPen(QPen(blue_line.active(),2));
+    /*
     for(int line = height/10; line < 20*height/21; line += height/40){
         painter->drawLine(QLineF(0,line,width,line));
     }
+    */
+    const int spacing = 28;
+    const int margin = 40;
+
+    for(int line = margin; line < height-margin; line += spacing){
+        painter->drawLine(QLineF(0,line,width,line));
+    }
+
+    work_area = QRectF(0,margin,width,height-2*margin);
 }
 
 
@@ -126,6 +167,8 @@ void Page::paintEngineering(QPainter *painter){
     for(int i = 0; i < h_majors*major_minor; i ++){//minor vertical lines
         if(i%major_minor) painter->drawLine(QLineF(left+i*minor_size,top,left+i*minor_size,bottom));
     }
+
+    work_area = QRectF(0,top,width,bottom-top);
 }
 
 
@@ -140,6 +183,8 @@ void Page::paintGraph(QPainter *painter){
     for(int i = 0; i < height; i += grid_size){//horizontal lines
         painter->drawLine(QLineF(0,i,width,i));
     }
+
+    work_area = QRectF(0,0,width,height);
 }
 
 
@@ -154,6 +199,8 @@ void Page::paintStaves(QPainter *painter){
             painter->drawLine(QLineF(0.08*width, i+j*line_spacing,0.92*width, i+j*line_spacing));
         }
     }
+
+    work_area = QRectF(0,stave_spacing,width,height-2*stave_spacing);
 }
 
 
