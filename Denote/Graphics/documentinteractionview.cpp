@@ -21,8 +21,8 @@
 DocumentInteractionView::DocumentInteractionView(Document* doc)
 {
     this->doc = doc;
-    page_layout_scene = new PageLayoutScene(doc, this, Interaction);
-    page_layout_scene->setLayoutType(LayoutType::FitToView);
+    page_layout_scene = new PageLayoutScene(doc, this);
+    page_layout_scene->setLayoutType(PageLayoutScene::FitToView);
     setScene(page_layout_scene);
 
     doc->getUI()->setActiveLayout(page_layout_scene);
@@ -40,9 +40,10 @@ DocumentInteractionView::DocumentInteractionView(Document* doc)
     setTabletTracking(true);
     setMouseTracking(true);
 
-    setBackgroundBrush(QBrush(QColor(20,23,23)));
-    page_layout_scene->updatePageLayout(true);
+    setBackgroundBrush(QBrush(PageLayoutScene::BACKGROUND));
     doc->updateEndlessLength();
+    page_layout_scene->updatePageLayout();
+
     setResizeAnchor(ViewportAnchor::AnchorViewCenter);
     connect(verticalScrollBar(), &QAbstractSlider::valueChanged, this, &DocumentInteractionView::scrollPositionChanged);
 }
@@ -101,7 +102,7 @@ void DocumentInteractionView::tabletEvent(QTabletEvent *event){
                 page_layout_scene->setFocusedPortal(portal);
                 doc->getUI()->setActivePage(portal->getPage());
                 doc->getUI()->setActivePortal(portal);
-                page_inverse = -portal->scenePos();
+                page_inverse = portal->getPageOffset() - portal->scenePos();
             }
         }
         doc->getUI()->getActiveTool()->drawPressEvent(ToolEvent(event, this));
@@ -122,7 +123,7 @@ void DocumentInteractionView::mousePressEvent(QMouseEvent *event)
                 page_layout_scene->setFocusedPortal(portal);
                 doc->getUI()->setActivePage(portal->getPage());
                 doc->getUI()->setActivePortal(portal);
-                page_inverse = -portal->scenePos();
+                page_inverse = portal->getPageOffset() - portal->scenePos();
             }
         }
         doc->getUI()->getActiveTool()->drawPressEvent(ToolEvent(event, this));

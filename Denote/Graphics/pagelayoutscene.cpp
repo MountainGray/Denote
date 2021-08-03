@@ -6,11 +6,10 @@
 #include "Ui/ui.h"
 
 
-PageLayoutScene::PageLayoutScene(Document *doc, QGraphicsView *viewport, ViewType view_type)
+PageLayoutScene::PageLayoutScene(Document *doc, QGraphicsView *viewport)
 {
     this->doc = doc;
     this->viewport = viewport;
-    this->view_type = view_type;
 
     doc->addLayout(this);
 
@@ -36,14 +35,9 @@ PageLayoutScene::~PageLayoutScene()
 }
 
 
-void PageLayoutScene::updatePageLayout(bool force_endless_update)
+void PageLayoutScene::updatePageLayout()
 {
-    if(doc->isEndless() and !force_endless_update) return;
-
-    bool compact = doc->isWorkAreaCropped() and view_type == ViewType::Interaction;
-
-    int x_padding = 22;
-    int y_padding = compact ? 3 : 22;
+    int padding = layout_type == Seamless ? 3 : 15;
 
     QRectF bounds = QRectF();
     QTransform t = viewport->transform();
@@ -60,32 +54,32 @@ void PageLayoutScene::updatePageLayout(bool force_endless_update)
         while(i < max_i){
             if(width + portals.at(i)->getWidth() < max_width or width == 0){//if can fit, add to list
                 row.append(portals.at(i));
-                if(width != 0) width += x_padding;
+                if(width != 0) width += padding;
                 width += portals.at(i)->getWidth();
                 i ++;
             } else {
                 break;
             }
-            if(layout_type == SingleColumn or compact) break;
+            if(layout_type == Vertical or layout_type == Seamless) break;
         }
         x = -width/2;
         height = 0;
         foreach(PagePortal* portal, row){
             portal->setPos(x,y);
             x += portal->getWidth();
-            x += x_padding;
+            x += padding;
             height = std::max(height, portal->getHeight());
-            bounds = bounds.united(portal->sceneBoundingRect());
+            bounds = bounds.united(portal->scenePageBoundingRect());
         }
         y += height;
-        y += y_padding;
+        y += padding;
     }
     setSceneRect(bounds);
     if(focused_portal != nullptr){
-        if(focused_portal->sceneBoundingRect() != last_focused_portal_bounds){
+        if(focused_portal->scenePageBoundingRect() != last_focused_portal_bounds){
             viewport->ensureVisible(focused_portal);
         }
-        last_focused_portal_bounds = focused_portal->sceneBoundingRect();
+        last_focused_portal_bounds = focused_portal->scenePageBoundingRect();
     }
 }
 
@@ -93,6 +87,9 @@ void PageLayoutScene::updatePageLayout(bool force_endless_update)
 void PageLayoutScene::setLayoutType(LayoutType type)
 {
     layout_type = type;
+    foreach(PagePortal* portal, portals){
+        portal->updateRenderArea();
+    }
     updatePageLayout();
 }
 
@@ -101,4 +98,23 @@ void PageLayoutScene::setFocusedPortal(PagePortal *portal)
 {
     focused_portal = portal;
     last_focused_portal_bounds = focused_portal->sceneBoundingRect();
+}
+
+
+void PageLayoutScene::setHoles(bool holes)
+{
+    this->holes = holes;
+    foreach(PagePortal* portal, portals){
+        portal->updateRenderArea();
+    }
+}
+
+
+void PageLayoutScene::setShadow(bool shadow)
+{
+    this->shadow = shadow;
+    foreach(PagePortal* portal, portals){
+        portal->updateRenderArea();
+    }
+    updatePageLayout();
 }

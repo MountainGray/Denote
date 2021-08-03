@@ -12,7 +12,10 @@ void Page::setPageSize(int width, int height)
 {
     this->width = width;
     this->height = height;
-    setSceneRect(QRect(0,0,width,height));
+    setSceneRect(getPageBounds());
+    foreach(PagePortal* portal, portals){
+        portal->updateRenderArea();
+    }
     updatePortals();
 }
 
@@ -22,7 +25,7 @@ void Page::drawBackground(QPainter *painter, const QRectF &rect){
 
     painter->setPen(Qt::NoPen);
     painter->setBrush(QBrush(white_page.active()));
-    painter->drawRect(QRect(0,0,width,height));
+    painter->drawRect(getPageBounds());
 
     if(page_type == Lines) paintLines(painter);
     else if(page_type == LinesMargin) paintLinesMargin(painter);
@@ -31,23 +34,6 @@ void Page::drawBackground(QPainter *painter, const QRectF &rect){
     else if(page_type == Staves) paintStaves(painter);
     else if(page_type == Custom) paintEngineering(painter);
     else paintEngineering(painter);
-}
-
-
-void Page::drawForeground(QPainter *painter, const QRectF &rect)
-{
-    Q_UNUSED(rect);
-    if(page_holes){
-        float hole_x = 26;
-        float hole_size = 27;
-
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(QBrush(QColor(20,23,23)));
-
-        painter->drawEllipse(hole_x, 0.12*height, hole_size, hole_size);
-        painter->drawEllipse(hole_x, 0.5*height, hole_size, hole_size);
-        painter->drawEllipse(hole_x, 0.88*height, hole_size, hole_size);
-    }
 }
 
 
@@ -107,11 +93,7 @@ int Page::getLowestPoint()
 
 void Page::paintLines(QPainter *painter){
     painter->setPen(QPen(blue_line.active(),2));
-    /*
-    for(int line = height/10; line < 20*height/21; line += height/40){
-        painter->drawLine(QLineF(0,line,width,line));
-    }
-    */
+
     const int spacing = 28;
     const int margin = 40;
 
@@ -119,7 +101,7 @@ void Page::paintLines(QPainter *painter){
         painter->drawLine(QLineF(0,line,width,line));
     }
 
-    work_area = QRectF(0,margin,width,height-2*margin);
+    work_area = QRect(0,margin,width,height-2*margin);
 }
 
 
@@ -168,7 +150,7 @@ void Page::paintEngineering(QPainter *painter){
         if(i%major_minor) painter->drawLine(QLineF(left+i*minor_size,top,left+i*minor_size,bottom));
     }
 
-    work_area = QRectF(0,top,width,bottom-top);
+    work_area = QRect(0,top,width,bottom-top);
 }
 
 
@@ -184,7 +166,7 @@ void Page::paintGraph(QPainter *painter){
         painter->drawLine(QLineF(0,i,width,i));
     }
 
-    work_area = QRectF(0,0,width,height);
+    work_area = QRect(0,0,width,height);
 }
 
 
@@ -200,7 +182,7 @@ void Page::paintStaves(QPainter *painter){
         }
     }
 
-    work_area = QRectF(0,stave_spacing,width,height-2*stave_spacing);
+    work_area = QRect(0,stave_spacing,width,height-2*stave_spacing);
 }
 
 

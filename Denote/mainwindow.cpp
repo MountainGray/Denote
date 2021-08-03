@@ -7,6 +7,7 @@
 #include "Graphics/page.h"
 #include "Framework/pageitem.h"
 #include "Tools/tool.h"
+#include "Graphics/pagelayoutscene.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -48,12 +49,6 @@ void MainWindow::newDocument()
     foreach(DocumentInteractionFrame* view, views){
         view->addDocument(doc);
         view->setDocument(doc);
-    }
-
-    for(int i = 0; i < 1; i++){
-        Page* new_page = new Page();
-        new_page->setBackgroundType(LinesMargin);
-        doc->addPage(new_page);
     }
 }
 
@@ -97,21 +92,20 @@ void MainWindow::convertToPages()
 
 void MainWindow::toggleCropWorkArea()
 {
-    ui->getActiveDocument()->CropWorkArea(!ui->getActiveDocument()->isWorkAreaCropped());
+    if(ui->getActiveLayout()->getLayoutType() == PageLayoutScene::Seamless){
+        ui->getActiveLayout()->setLayoutType(PageLayoutScene::FitToView);
+    } else {
+        ui->getActiveLayout()->setLayoutType(PageLayoutScene::Seamless);
+    }
 }
 
 
 void MainWindow::print()
 {
     IColor::DisplayMode mode = ui->getDisplayMode();
-    bool holes = ui->getPageHoles();
     ui->setDisplayMode(IColor::DisplayMode::Normal);
-    ui->setPageHoles(false);
-
     ui->getActiveDocument()->print();
-
     ui->setDisplayMode(mode);
-    ui->setPageHoles(holes);
 }
 
 
@@ -124,7 +118,13 @@ void MainWindow::invertView()
 
 void MainWindow::toggleHoles()
 {
-    ui->setPageHoles(!ui->getPageHoles());
+    ui->getActiveLayout()->setHoles(!ui->getActiveLayout()->hasHoles());
+}
+
+
+void MainWindow::toggleShadow()
+{
+    ui->getActiveLayout()->setShadow(!ui->getActiveLayout()->hasShadow());
 }
 
 
@@ -142,9 +142,10 @@ void MainWindow::createMenus(){
 
     QMenu* view = menuBar()->addMenu("&View");
     view->addAction(tr("Add V&iew"), this, &MainWindow::addView);
-    view->addAction("Invert View", this, &MainWindow::invertView, QKeySequence("Ctrl+I"));
-    view->addAction("Toggle Hole Punches", this, &MainWindow::toggleHoles);
     view->addAction(tr("Convert to E&ndless Document"), this, &MainWindow::convertToEndless);
     view->addAction(tr("Convert to P&aged Document"), this, &MainWindow::convertToPages);
+    view->addAction("Invert View", this, &MainWindow::invertView, QKeySequence("Ctrl+I"));
     view->addAction(tr("Toggle S&eamless View"), this, &MainWindow::toggleCropWorkArea);
+    view->addAction("Toggle Hole Punches", this, &MainWindow::toggleHoles);
+    view->addAction("Toggle Page Shad&ows", this, &MainWindow::toggleShadow);
 }

@@ -18,25 +18,26 @@ public:
     Page();
 
 public:
-    int getWidth(){ return width; }
-    int getHeight(){ return height; }
     void setPageSize(int width, int height);
-    QRectF getBounds(){ return QRectF(0,0,width,height);}
-    QSizeF getPageSize(){return QSizeF(width,height);}
-    QRectF getWorkArea(){ return work_area;}
-    void setBackgroundType(BackgroundType t){ page_type = t; }
+    QRect getWorkArea(){return work_area;}
+    QRect getPageBounds(){return QRect(0,0,width,height);}
+    int getWidth(){return width;}
+    int getHeight(){return height;}
+    QSize getPageSize(){return QSize(width,height);}
+
     void updatePortals(QRectF rect = QRectF());
     QList<PagePortal*> getPortals(){return portals;}
-    void setDisplayMode(IColor::DisplayMode display_mode);
-    void setPageHoles(bool holes){page_holes = holes;}
+
     void findLowestObject();
     void updateLowestObject(QGraphicsItem* potential_lowest);
     QGraphicsItem* getLowestObject(){return lowest_object;}
     int getLowestPoint();
 
+    void setBackgroundType(BackgroundType t){ page_type = t; }
+    void setDisplayMode(IColor::DisplayMode display_mode);
+
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
-    void drawForeground(QPainter *painter, const QRectF &rect) override;
 
 private:
     void paintLines(QPainter *painter);
@@ -49,7 +50,8 @@ private:
 private:
     int width = 850;
     int height = 1100;
-    BackgroundType page_type = Engineering;
+    QRect work_area;
+
     QList<PagePortal*> portals;
 
     IColor blue_line = IColor(QColor(43,167,255,150));
@@ -60,9 +62,8 @@ private:
     IColor alpha_black = IColor(QColor(0,0,0,125));
     IColor white_page = IColor(QColor(250,250,250));
 
-    bool page_holes = true;
+    BackgroundType page_type = Engineering;
     QGraphicsItem* lowest_object = nullptr;
-    QRectF work_area;
 };
 
 #endif // PAGE_H

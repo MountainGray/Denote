@@ -46,7 +46,7 @@ void Document::addPage(Page *page, int index){
     //create a page_portal between the page_layout and page
     foreach(PageLayoutScene* page_layout, layouts){
         new PagePortal(page, page_layout, index);
-        page_layout->updatePageLayout(true);
+        page_layout->updatePageLayout();
     }
 }
 
@@ -154,6 +154,7 @@ void Document::convertToEndless()
     addPage(new_page);
     new_page->findLowestObject();
     updateEndlessLength();
+    updateAllLayouts();
 }
 
 
@@ -171,7 +172,7 @@ void Document::convertToPages()
 
     while(true){
         QList<QGraphicsItem*> area_items = first_page->items(QRect(0,y_offset,first_page->getWidth(),new_height));
-        if(y_offset+new_height >= first_page->getBounds().bottom() and area_items.length() == 0) break;
+        if(y_offset+new_height >= first_page->getPageBounds().bottom() and area_items.length() == 0) break;
 
         Page* new_page = new Page();
         new_page->setBackgroundType(Engineering);
@@ -200,7 +201,7 @@ void Document::updateEndlessLength(bool ignore_views)
 
     if(!ignore_views){
         foreach(PageLayoutScene* layout, layouts){
-            if(layout->getViewType() == Interaction){
+            if(layout->isInteractive()){
                 int view_bottom = layout->getView()->mapToScene(layout->getView()->rect()).boundingRect().bottom();
                 if(view_bottom > lowest) lowest = view_bottom;
             }
@@ -213,19 +214,6 @@ void Document::updateEndlessLength(bool ignore_views)
 
     if(page->getHeight() != full_length){
         page->setPageSize(page->getWidth(),full_length);
-        QRectF bounds = page->getBounds();
-        bounds.moveRight(page->getWidth()/2);
-
-        foreach(PageLayoutScene* layout, layouts){
-            layout->setSceneRect(bounds);
-        }
+        updateAllLayouts();
     }
 }
-
-
-void Document::CropWorkArea(bool crop)
-{
-    crop_work_area = crop;
-    updateAll();
-}
-

@@ -79,18 +79,6 @@ void UI::setActiveTool(Tool *tool){
 }
 
 
-void UI::setPageHoles(bool holes)
-{
-    foreach(Page* page, getActiveDocument()->getPages()){
-        page->setPageHoles(holes);
-        page->update();
-        page->updatePortals();
-    }
-
-    this->page_holes = holes;
-}
-
-
 ToolMenu *UI::getToolMenu()
 {
     return tool_menu_viewer->getMenu();

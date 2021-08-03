@@ -39,9 +39,6 @@ public:
     bool isEndless(){return endless;}
     void updateEndlessLength(bool ignore_views = false);
 
-    void CropWorkArea(bool crop);
-    bool isWorkAreaCropped(){return crop_work_area;}
-
 private:
     QList<Page*> pages;
     UI* ui;
@@ -49,7 +46,6 @@ private:
     HistoryManager* history_manager;
     DocumentSummaryView* summary_view;
     bool endless;
-    bool crop_work_area = false;
 };
 
 #endif // DOCUMENT_H

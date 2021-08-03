@@ -3,8 +3,6 @@
 #include "pagelayoutscene.h"
 
 #include <QPainter>
-#include <QGraphicsDropShadowEffect>
-
 
 PagePortal::PagePortal(Page* page, PageLayoutScene* page_layout, int index)
 {
@@ -13,16 +11,10 @@ PagePortal::PagePortal(Page* page, PageLayoutScene* page_layout, int index)
 
     page->portals.append(this);
     page_layout->portals.insert(index, this);
-
     page_layout->addItem(this);
     setFlag(GraphicsItemFlag::ItemIsSelectable, true);
 
-    /*
-    QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect();
-    shadow->setBlurRadius(10);
-    shadow->setColor(QColor(0,0,0));
-    setGraphicsEffect(shadow);
-    */
+    updateRenderArea();
 }
 
 
@@ -37,15 +29,31 @@ PagePortal::~PagePortal()
 }
 
 
-int PagePortal::getWidth()
+QRectF PagePortal::scenePageBoundingRect()
 {
-    return page->getWidth()+shadow;
+    return mapRectToScene(render_to);
 }
 
 
-int PagePortal::getHeight()
+void PagePortal::updateRenderArea()
 {
-    return page->getHeight()+shadow;
+    if(page_layout->getLayoutType() == PageLayoutScene::Seamless){
+        render_from = page->getWorkArea();
+        render_to = QRectF(0,0,render_from.width(),render_from.height());
+        page_offset = render_from.topLeft();
+    } else {
+        render_from = page->getPageBounds();
+        render_to = render_from;
+        page_offset = QPointF(0,0);
+    }
+
+    if(page_layout->hasShadow()){
+        bounds = render_to.adjusted(0,0,SHADOW,SHADOW);
+    } else {
+        bounds = render_to;
+    }
+
+    update();
 }
 
 
@@ -54,32 +62,49 @@ void PagePortal::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    if(page_layout->getDoc()->isWorkAreaCropped() and page_layout->getViewType() == Interaction){
-        page->render(painter, boundingRect(), page->getWorkArea());
-    } else {
-        page->render(painter, page->getBounds(), page->getBounds());
+    painter->setBrush(Qt::NoBrush);
+    QPen pen = QPen(QColor("black"),1,Qt::SolidLine,Qt::SquareCap, Qt::MiterJoin);
+
+    if(page_layout->hasShadow()){
+        for(int i = 0; i <= SHADOW; i ++){
+            pen.setColor(QColor(0,0,0,std::min(i*17+15,255)));
+            painter->setPen(pen);
+            painter->drawRect(SHADOW+i, SHADOW+i, render_to.width()-2*i, render_to.height()-2*i);
+        }
     }
-    painter->setPen(QPen(QColor("black"),2*shadow));
-    painter->drawLine(3*shadow,page->getHeight()+shadow,page->getWidth()+shadow,page->getHeight()+shadow);
-    painter->drawLine(page->getWidth()+shadow,3*shadow,page->getWidth()+shadow,page->getHeight());
+
+    page->render(painter, render_to, render_from);
+
+    if(page_layout->hasHoles() and not page_layout->getDoc()->isEndless()){
+        float hole_x = 26;
+        float hole_size = 27;
+
+        painter->setPen(Qt::NoPen);
+
+        if(page_layout->hasShadow()){
+            QLinearGradient grad = QLinearGradient(hole_x-2,0,hole_x+hole_size,0);
+            grad.setColorAt(0,PageLayoutScene::BACKGROUND);
+            grad.setColorAt(0.4,QColor(0,0,0));
+            grad.setColorAt(1,QColor(0,0,0));
+            painter->setBrush(QBrush(grad));
+        } else {
+            painter->setBrush(QBrush(PageLayoutScene::BACKGROUND));
+        }
+
+        int height = render_to.height();
+
+        painter->drawEllipse(hole_x, 0.12*height, hole_size, hole_size);
+        painter->drawEllipse(hole_x, 0.5*height, hole_size, hole_size);
+        painter->drawEllipse(hole_x, 0.88*height, hole_size, hole_size);
+    }
 
     if(isSelected()){
         QPen pen = QPen(QColor(120,190,255),4);
         pen.setCosmetic(true);
         painter->setPen(pen);
-        painter->drawRect(page->getBounds());
+        painter->setBrush(Qt::NoBrush);
+        painter->drawRect(page->getPageBounds());
     }
-}
-
-
-QRectF PagePortal::boundingRect() const
-{
-    //inefficient, should cache bounds
-    if(page_layout->getDoc()->isWorkAreaCropped() and page_layout->getViewType() == Interaction){
-        QRectF work_area = page->getWorkArea();
-        return QRectF(0,0,work_area.width(),work_area.height());
-    }
-    return page->getBounds();
 }
 
 

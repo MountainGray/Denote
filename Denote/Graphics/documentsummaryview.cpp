@@ -20,12 +20,15 @@ DocumentSummaryView::DocumentSummaryView(Document* doc)
     setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
 
-    setBackgroundBrush(QBrush(QColor(20,23,23)));
+    setBackgroundBrush(QBrush(PageLayoutScene::BACKGROUND));
 
     this->doc = doc;
-    page_layout_scene = new PageLayoutScene(doc, this, Summary);
+    page_layout_scene = new PageLayoutScene(doc, this);
+    page_layout_scene->setLayoutType(PageLayoutScene::Vertical);
+    page_layout_scene->setInteractive(false);
+    page_layout_scene->setShadow(false);
     setScene(page_layout_scene);
-    page_layout_scene->updatePageLayout();
+
     doc->getUI()->setActiveLayout(page_layout_scene);
 }
 
