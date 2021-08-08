@@ -4,6 +4,7 @@
 #include <QGraphicsItem>
 #include "Framework/History/undocreation.h"
 #include "Framework/icolor.h"
+#include "Framework/serializable.h"
 
 const int UserType = QGraphicsItem::UserType;
 
@@ -18,7 +19,7 @@ enum ItemType {
     TypeImage = UserType+8
 };
 
-class PageItem : public QGraphicsItem
+class PageItem : public QGraphicsItem, public Serializable
 {
 public:
     PageItem();
@@ -28,6 +29,8 @@ public:
     void removeItem();
     void recoverItem();
     virtual void setDisplayMode(IColor::DisplayMode){};
+    virtual void serializeRead(QDataStream &in) override;
+    virtual void serializeWrite(QDataStream &out) override;
 
 private:
     bool present = true;

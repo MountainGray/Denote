@@ -9,6 +9,9 @@
 #include "Tools/tool.h"
 #include "Graphics/pagelayoutscene.h"
 
+#include <QMessageBox>
+#include <QFileDialog>
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
@@ -37,14 +40,10 @@ void MainWindow::addSubWindow(QDockWidget *widget, Qt::DockWidgetArea area)
 
 void MainWindow::newDocument()
 {
-    Document *doc = new Document(ui, true);
+    Document *doc = new Document(ui);
 
-    for(int i = 0; i < 3; i++){
-        Page* new_page = new Page();
-        new_page->setBackgroundType(Engineering);
-        new_page->setPageSize(850+200*i,1100-200*i);
-        doc->addPage(new_page);
-    }
+    Page* new_page = new Page();
+    doc->addPage(new_page);
 
     foreach(DocumentInteractionFrame* view, views){
         view->addDocument(doc);
@@ -53,13 +52,62 @@ void MainWindow::newDocument()
 }
 
 
-bool MainWindow::save(){
-    return false;
+void MainWindow::save(){
+    QString file_name = QFileDialog::getSaveFileName(this->getUI()->getMain(),
+        tr("Save Denote Document"), "",
+        tr("Denote Document (*.denote);;All Files (*)"));
+    if(file_name.isEmpty())
+        return;
+
+    QFile file(file_name);
+    QFileInfo file_info(file_name);
+
+    if(!file.open(QIODevice::WriteOnly)){
+        QMessageBox::information(this->getUI()->getMain(), tr("Unable to open file"),
+            file.errorString());
+    }
+    QByteArray data;
+    QDataStream out(&data, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_6_1);
+    ui->getActiveDocument()->serializeWrite(out);
+    ui->getActiveDocument()->setName(file_info.baseName());
+    data = qCompress(data, 9);
+    file.write(data);
+    file.close();
 }
 
 
 void MainWindow::open(){
-    
+    QString file_name = QFileDialog::getOpenFileName(this->getUI()->getMain(),
+        tr("Open Denote Document"), "",
+        tr("Denote Document (*.denote);;All Files (*)"));
+    if(file_name.isEmpty())
+        return;
+
+    QFile file(file_name);
+    QFileInfo file_info(file_name);
+
+    if(!file.open(QIODevice::ReadOnly)){
+        QMessageBox::information(this->getUI()->getMain(), tr("Unable to open file"),
+            file.errorString());
+    }
+    QByteArray data = file.readAll();
+    data = qUncompress(data);
+    QDataStream in(&data, QIODevice::ReadOnly);
+    if(in.version() != QDataStream::Qt_6_1){
+        QMessageBox::information(this->getUI()->getMain(), tr("Unable to open file"), tr("File version is not compatible"));
+        return;
+    }
+
+    Document *new_doc = new Document(ui);
+    new_doc->setName(file_info.baseName());
+    new_doc->serializeRead(in);
+    ui->setDisplayMode(ui->getDisplayMode());
+    foreach(DocumentInteractionFrame* view, views){
+        view->addDocument(new_doc);
+        view->setDocument(new_doc);
+    }
+    file.close();
 }
 
 
@@ -133,8 +181,8 @@ void MainWindow::createMenus(){
     fileMenu->addAction(tr("&New..."), this, &MainWindow::newDocument, QKeySequence::New);
     fileMenu->addAction(tr("&Open..."), this, &MainWindow::open, QKeySequence::Open);
     fileMenu->addAction(tr("&Save As..."), this, &MainWindow::save, QKeySequence::SaveAs);
-    fileMenu->addAction(tr("E&xit"), this, &MainWindow::close, QKeySequence::Quit);
     fileMenu->addAction(tr("&Print"), this, &MainWindow::print, QKeySequence::Print);
+    fileMenu->addAction(tr("E&xit"), this, &MainWindow::close, QKeySequence::Quit);
 
     QMenu* helpMenu = menuBar()->addMenu("&Help");
     helpMenu->addAction(tr("A&bout"), this, &MainWindow::about);

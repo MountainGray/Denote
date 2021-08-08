@@ -6,7 +6,7 @@
 #include "Ui/ui.h"
 
 
-PageLayoutScene::PageLayoutScene(Document *doc, QGraphicsView *viewport)
+PageLayoutScene::PageLayoutScene(Document *doc, DocumentView *viewport)
 {
     this->doc = doc;
     this->viewport = viewport;
@@ -40,9 +40,7 @@ void PageLayoutScene::updatePageLayout()
     int padding = layout_type == Seamless ? 3 : 15;
 
     QRectF bounds = QRectF();
-    QTransform t = viewport->transform();
-    float scale = sqrt(t.m11() * t.m11() + t.m12() * t.m12());
-    int max_width = int(float(viewport->width()) / scale);
+    int max_width = int(float(viewport->width()) / viewport->getScale());
     int max_i = portals.length();
 
     int width, height, x, y = 0, i = 0;
@@ -52,12 +50,12 @@ void PageLayoutScene::updatePageLayout()
         width = 0;
         row.clear();
         while(i < max_i){
-            if(width + portals.at(i)->getWidth() < max_width or width == 0){//if can fit, add to list
+            if(width + portals.at(i)->getWidth() < max_width or width == 0 or layout_type == Horizontal){//if can fit, add to list
                 row.append(portals.at(i));
                 if(width != 0) width += padding;
                 width += portals.at(i)->getWidth();
                 i ++;
-            } else {
+            } else{
                 break;
             }
             if(layout_type == Vertical or layout_type == Seamless) break;

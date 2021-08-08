@@ -1,81 +1,24 @@
 #include "documentinteractionview.h"
-#include "pagelayoutscene.h"
-#include "Framework/document.h"
-#include "Tools/tool.h"
-#include "Ui/ui.h"
-#include "Framework/toolevent.h"
-#include "Graphics/pageportal.h"
-#include "Framework/History/historymanager.h"
-#include "Graphics/page.h"
-#include "Graphics/documentsummaryview.h"
-#include "mainwindow.h"
 #include "Framework/History/historymanagerviewer.h"
-#include "Graphics/documentsummaryframe.h"
+#include "Graphics/documentinteractionframe.h"
 #include "Tools/image.h"
 
-#include <QtOpenGLWidgets/QOpenGLWidget>
-#include <QClipboard>
 #include <QScrollBar>
+#include <QClipboard>
 
 
-DocumentInteractionView::DocumentInteractionView(Document* doc)
+DocumentInteractionView::DocumentInteractionView(Document* doc, DocumentInteractionFrame* frame) : DocumentView(doc)
 {
-    this->doc = doc;
-    page_layout_scene = new PageLayoutScene(doc, this);
+    this->frame = frame;
     page_layout_scene->setLayoutType(PageLayoutScene::FitToView);
-    setScene(page_layout_scene);
-
-    doc->getUI()->setActiveLayout(page_layout_scene);
-
-    setDragMode(QGraphicsView::NoDrag);
-    setTransformationAnchor(AnchorUnderMouse);
-
-    setRenderHint(QPainter::Antialiasing, true);
-    setRenderHint(QPainter::SmoothPixmapTransform, true);
-
-    resetGL();
-
-    centerOn(0,0);
-
-    setTabletTracking(true);
-    setMouseTracking(true);
-
-    setBackgroundBrush(QBrush(PageLayoutScene::BACKGROUND));
-    doc->updateEndlessLength();
-    page_layout_scene->updatePageLayout();
-
-    setResizeAnchor(ViewportAnchor::AnchorViewCenter);
     connect(verticalScrollBar(), &QAbstractSlider::valueChanged, this, &DocumentInteractionView::scrollPositionChanged);
+    frame->resetScale();
 }
 
 
 DocumentInteractionView::~DocumentInteractionView()
 {
-    delete page_layout_scene;
-}
 
-
-void DocumentInteractionView::setScale(float view_scale)
-{
-    float new_scale = view_scale / transform().m11();
-    scale(new_scale, new_scale);
-}
-
-
-void DocumentInteractionView::resetGL()
-{
-    QOpenGLWidget* gl = new QOpenGLWidget();
-    QSurfaceFormat format;
-    format.setSamples(6);
-    gl->setFormat(format);
-    setViewport(gl);
-    //should need to exist. Antialiasing missing when popping in/out subwindow.
-}
-
-
-void DocumentInteractionView::focusDoc()
-{
-    if(doc->getUI()->getActiveDocument() != doc) doc->focusDoc();
 }
 
 
@@ -157,7 +100,6 @@ void DocumentInteractionView::mouseDoubleClickEvent(QMouseEvent *event)
 }
 
 
-
 void DocumentInteractionView::wheelEvent(QWheelEvent *event){
     if (event->modifiers() & Qt::ControlModifier){
         if(event->modifiers() & Qt::ShiftModifier){//rotate
@@ -165,20 +107,17 @@ void DocumentInteractionView::wheelEvent(QWheelEvent *event){
                 rotate(5);
             else
                 rotate(-5);
+            doc->updateAllLayouts();
+            doc->updateEndlessLength();
         } else {//zoom
             if (event->angleDelta().y() > 0 and view_scale < 5){
-                scale(1.1,1.1);
-                QTransform t = transform();
-                view_scale = sqrt(t.m11() * t.m11() + t.m12() * t.m12());
-            } else if(event->angleDelta().y() < 0 and view_scale > 0.3){
-                scale(1/1.1,1/1.1);
-                QTransform t = transform();
-                view_scale = sqrt(t.m11() * t.m11() + t.m12() * t.m12());
+                scaleBy(1.1);
+            } else if(event->angleDelta().y() < 0 and view_scale > 0.2){
+                scaleBy(1/1.1);
             }
+            frame->resetScale();
         }
         event->accept();
-        doc->updateAllLayouts();
-        doc->updateEndlessLength();
     } else {
         QGraphicsView::wheelEvent(event);
     }

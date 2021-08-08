@@ -117,6 +117,18 @@ void FillStroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 }
 
 
+void FillStroke::serializeRead(QDataStream &in)
+{
+
+}
+
+
+void FillStroke::serializeWrite(QDataStream &out)
+{
+
+}
+
+
 void FillStroke::updateBounds(QPointF point)
 {
     float padding = 1;

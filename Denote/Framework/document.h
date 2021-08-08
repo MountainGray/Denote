@@ -2,6 +2,7 @@
 #define DOCUMENT_H
 
 #include <QGraphicsScene>
+#include "Framework/serializable.h"
 
 class PageLayoutScene;
 class Page;
@@ -9,8 +10,9 @@ class UI;
 class HistoryManager;
 class DocumentSummaryView;
 
-class Document
+class Document: public QObject, public Serializable
 {
+    Q_OBJECT
 public:
     Document(UI* ui, bool endless = false);
     ~Document();
@@ -39,6 +41,12 @@ public:
     bool isEndless(){return endless;}
     void updateEndlessLength(bool ignore_views = false);
 
+    void serializeRead(QDataStream &in) override;
+    void serializeWrite(QDataStream &out) override;
+
+    void setName(QString name);
+    QString getName(){return doc_name;}
+
 private:
     QList<Page*> pages;
     UI* ui;
@@ -46,6 +54,7 @@ private:
     HistoryManager* history_manager;
     DocumentSummaryView* summary_view;
     bool endless;
+    QString doc_name = "Untitled";
 };
 
 #endif // DOCUMENT_H

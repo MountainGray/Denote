@@ -91,11 +91,12 @@ void PagePortal::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
             painter->setBrush(QBrush(PageLayoutScene::BACKGROUND));
         }
 
-        int height = render_to.height();
+        int height = page->getHeight();
+        int offset = page_offset.y();
 
-        painter->drawEllipse(hole_x, 0.12*height, hole_size, hole_size);
-        painter->drawEllipse(hole_x, 0.5*height, hole_size, hole_size);
-        painter->drawEllipse(hole_x, 0.88*height, hole_size, hole_size);
+        painter->drawEllipse(hole_x, 0.12*height-offset, hole_size, hole_size);
+        painter->drawEllipse(hole_x, 0.5*height-offset, hole_size, hole_size);
+        painter->drawEllipse(hole_x, 0.88*height-offset, hole_size, hole_size);
     }
 
     if(isSelected()){

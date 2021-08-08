@@ -54,3 +54,15 @@ void Image::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
         painter->drawRect(bounds);
     }
 }
+
+
+void Image::serializeRead(QDataStream &in)
+{
+
+}
+
+
+void Image::serializeWrite(QDataStream &out)
+{
+
+}

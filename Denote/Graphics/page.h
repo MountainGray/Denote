@@ -5,12 +5,13 @@
 
 #include <QGraphicsScene>
 #include "Framework/icolor.h"
+#include "Framework/serializable.h"
 
 class PagePortal;
 
 enum BackgroundType { Lines, LinesMargin, Engineering, Graph, Staves, Custom };
 
-class Page : public QGraphicsScene
+class Page : public QGraphicsScene, public Serializable
 {
     Q_OBJECT
     friend PagePortal;
@@ -35,6 +36,9 @@ public:
 
     void setBackgroundType(BackgroundType t){ page_type = t; }
     void setDisplayMode(IColor::DisplayMode display_mode);
+
+    void serializeRead(QDataStream &in) override;
+    void serializeWrite(QDataStream &out) override;
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;

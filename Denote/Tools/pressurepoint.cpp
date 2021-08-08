@@ -17,3 +17,21 @@ PressurePoint::PressurePoint(qreal x_pos, qreal y_pos, float pressure) : QPointF
 {
     this->pressure = pressure;
 }
+
+
+void PressurePoint::serializeRead(QDataStream &in)
+{
+    float x, y, p;
+    in >> x >> y >> p;
+    setX(x);
+    setY(y);
+    setP(p);
+}
+
+
+void PressurePoint::serializeWrite(QDataStream &out)
+{
+    out << x();
+    out << y();
+    out << p();
+}

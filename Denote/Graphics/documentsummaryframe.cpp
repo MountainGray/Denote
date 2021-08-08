@@ -37,6 +37,7 @@ DocumentSummaryFrame::DocumentSummaryFrame(MainWindow *parent) : SubWindow(paren
     setWidget(frame_widget);
 
     frame_layout = new QGridLayout();
+    frame_layout->setContentsMargins(0,0,0,0);
     frame_widget->setLayout(frame_layout);
 
     empty_widget = new QLabel();

@@ -32,3 +32,23 @@ void PageItem::recoverItem()
         page->updateLowestObject(this);
     }
 }
+
+
+void PageItem::serializeRead(QDataStream &in)
+{
+    in >> present;
+    QPointF new_pos;
+    in >> new_pos;
+    setPos(new_pos);
+    QTransform new_transform;
+    in >> new_transform;
+    setTransform(new_transform);
+}
+
+
+void PageItem::serializeWrite(QDataStream &out)
+{
+    out << present;
+    out << pos();
+    out << transform();
+}

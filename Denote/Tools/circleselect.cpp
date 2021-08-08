@@ -106,9 +106,9 @@ void CircleSelect::paintPreset(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(QBrush(QColor("white")));
     painter.setPen(QPen(QColor("black")));
-    painter.drawRect(QRectF(0,0,60,60));
+    painter.drawRect(QRectF(0,0,tool_preset->width(),tool_preset->height()));
     painter.setBrush(QBrush(QColor("Blue")));
-    painter.drawEllipse(QPointF(30,30),width/2,width/2);
+    painter.drawEllipse(QPointF(tool_preset->width()/2,tool_preset->height()/2),width/2,width/2);
     painter.drawText(QPointF(2,12),"Circle Select");
 }
 

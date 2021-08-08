@@ -3,21 +3,14 @@
 
 //Static viewport of page layout scene, only allows reordering of pages.
 
-#include <QGraphicsView>
+#include "Framework/documentview.h"
 
-class Document;
-class PageLayoutScene;
-
-class DocumentSummaryView : public QGraphicsView
+class DocumentSummaryView : public DocumentView
 {
+    Q_OBJECT
 public:
     DocumentSummaryView(Document* doc);
     ~DocumentSummaryView();
-
-public:
-    PageLayoutScene* getPageLayoutScene(){return page_layout_scene;}
-    Document* getDoc(){return doc;}
-    void resetGL();
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -25,10 +18,7 @@ protected:
     void keyPressEvent(QKeyEvent* event) override;
 
 private:
-    Document* doc;
-    PageLayoutScene* page_layout_scene;
-
-    const int x_padding = 4;
+    static const int view_padding = 4;
 };
 
 #endif // DOCUMENTSUMMARYVIEW_H

@@ -13,6 +13,7 @@ class Stroke : public PageItem
 public:
     Stroke(Pen *pen);
     Stroke(Stroke *stroke);
+    Stroke(QDataStream &in);
 
 public:
     void init(QPointF pos, float pressure);
@@ -25,6 +26,8 @@ public:
     void paint(QPainter *ogpainter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     int type() const override {return TypePenStroke;}
     void setDisplayMode(IColor::DisplayMode display_mode) override;
+    void serializeRead(QDataStream &in) override;
+    void serializeWrite(QDataStream &out) override;
 
 protected:
     void updateBounds(PressurePoint point);

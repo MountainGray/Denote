@@ -30,6 +30,13 @@ Stroke::Stroke(Stroke *stroke)
 }
 
 
+Stroke::Stroke(QDataStream &in)
+{
+    setFlag(GraphicsItemFlag::ItemIsSelectable, true);
+    Stroke::serializeRead(in);
+}
+
+
 void Stroke::init(QPointF pos, float pressure)
 {
     points.append(PressurePoint(pos,pressure));
@@ -149,6 +156,43 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 void Stroke::setDisplayMode(IColor::DisplayMode display_mode)
 {
     color.setDisplayMode(display_mode);
+}
+
+
+void Stroke::serializeRead(QDataStream &in)
+{
+    PageItem::serializeRead(in);
+
+    qsizetype num_points;
+    in >> num_points;
+    points.clear();
+    for(qsizetype i = 0; i < num_points; i++){
+        PressurePoint p;
+        p.serializeRead(in);
+        points.push_back(p);
+    }
+    in >> painter_pen;
+    in >> bounds;
+    in >> width;
+    QColor normal;
+    in >> normal;
+    color = IColor(normal);
+    update();
+}
+
+
+void Stroke::serializeWrite(QDataStream &out)
+{
+    PageItem::serializeWrite(out);
+
+    out << points.length();
+    foreach(PressurePoint point, points){
+        point.serializeWrite(out);
+    }
+    out << painter_pen;
+    out << bounds;
+    out << width;
+    out << color.normalColor();
 }
 
 

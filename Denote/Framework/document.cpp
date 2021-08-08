@@ -7,6 +7,16 @@
 #include "Framework/History/historymanagerviewer.h"
 #include "Graphics/documentsummaryview.h"
 #include "Graphics/documentsummaryframe.h"
+#include "Graphics/documentinteractionframe.h"
+
+
+#if defined(QT_PRINTSUPPORT_LIB)
+#include <QtPrintSupport/qtprintsupportglobal.h>
+#include <QPrinter>
+#endif
+
+#include <QFileDialog>
+#include <QDesktopServices>
 
 
 Document::Document(UI* ui, bool endless){
@@ -48,6 +58,10 @@ void Document::addPage(Page *page, int index){
         new PagePortal(page, page_layout, index);
         page_layout->updatePageLayout();
     }
+    if(ui->getActiveLayout() != nullptr and not ui->getActiveLayout()->getPortals().isEmpty()){
+        ui->setActivePortal(ui->getActiveLayout()->getPortals().at(0));
+    }
+    ui->setActivePage(page);
 }
 
 
@@ -95,14 +109,6 @@ void Document::focusDoc()
     ui->getSummaryFrame()->setView(summary_view);
 }
 
-
-#if defined(QT_PRINTSUPPORT_LIB)
-#include <QtPrintSupport/qtprintsupportglobal.h>
-#include <QPrinter>
-#endif
-
-#include <QFileDialog>
-#include <QDesktopServices>
 
 void Document::print()
 {
@@ -154,7 +160,6 @@ void Document::convertToEndless()
     addPage(new_page);
     new_page->findLowestObject();
     updateEndlessLength();
-    updateAllLayouts();
 }
 
 
@@ -215,5 +220,38 @@ void Document::updateEndlessLength(bool ignore_views)
     if(page->getHeight() != full_length){
         page->setPageSize(page->getWidth(),full_length);
         updateAllLayouts();
+    }
+}
+
+
+void Document::serializeRead(QDataStream &in)
+{
+    size_t num_pages;
+    in >> num_pages;
+    in >> endless;
+
+    for(size_t i = 0; i < num_pages; i++){
+        Page* new_page = new Page();
+        new_page->serializeRead(in);
+        addPage(new_page);
+    }
+}
+
+
+void Document::serializeWrite(QDataStream &out)
+{
+    out << pages.length();
+    out << endless;
+    foreach(Page* page, pages){
+        page->serializeWrite(out);
+    }
+}
+
+
+void Document::setName(QString name)
+{
+    doc_name = name;
+    foreach(DocumentInteractionFrame* frame, ui->getMain()->getViews()){
+        frame->updateDocNames();
     }
 }

@@ -21,11 +21,12 @@ public:
 
 public:
     UI* getUI(){return this->ui;}
+    QList<DocumentInteractionFrame*> getViews(){return views;}
     void addSubWindow(QDockWidget* widget, Qt::DockWidgetArea area = Qt::DockWidgetArea::BottomDockWidgetArea);
 
 private slots:
     void newDocument();
-    bool save();
+    void save();
     void open();
     void about();
     void addView();

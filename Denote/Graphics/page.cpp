@@ -1,10 +1,13 @@
 #include "Graphics/page.h"
 #include "pageportal.h"
 #include <QPainter>
+#include "Framework/pageitem.h"
+#include "Tools/stroke.h"
+#include "Tools/pen.h"
 
 
-Page::Page() : QGraphicsScene(){
-    setPageSize(850,1100);
+Page::Page(){
+
 }
 
 
@@ -58,6 +61,50 @@ void Page::setDisplayMode(IColor::DisplayMode display_mode)
     minor_green_line.setDisplayMode(display_mode);
     alpha_black.setDisplayMode(display_mode);
     white_page.setDisplayMode(display_mode);
+}
+
+
+void Page::serializeRead(QDataStream &in)
+{
+    in >> width;
+    in >> height;
+    in >> work_area;
+    in >> page_type;
+    setPageSize(width,height);
+
+    size_t num_items;
+    in >> num_items;
+    for(size_t i = 0; i < num_items; i++){
+        ItemType type;
+        in >> type;
+        PageItem* new_item;
+        if(type == ItemType::TypePenStroke) new_item = new Stroke(in);
+        else continue;
+        addItem(new_item);
+    }
+    update();
+}
+
+
+void Page::serializeWrite(QDataStream &out)
+{
+    out << width;
+    out << height;
+    out << work_area;
+    out << page_type;
+    size_t num_items = 0;
+    foreach(QGraphicsItem* item, items()){
+        PageItem* page_item = static_cast<PageItem*>(item);
+        if(page_item != nullptr) num_items++;
+    }
+    out << num_items;
+    foreach(QGraphicsItem* item, items()){
+        PageItem* page_item = static_cast<PageItem*>(item);
+        if(page_item != nullptr){
+            out << page_item->type();
+            page_item->serializeWrite(out);
+        }
+    }
 }
 
 

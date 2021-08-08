@@ -5,25 +5,25 @@
 //All tools are only added to the active scene
 
 #include <QGraphicsScene>
-#include <QGraphicsView>
 #include "Framework/document.h"
 
 class Page;
 class PagePortal;
+class DocumentView;
 
 class PageLayoutScene : public QGraphicsScene
 {
     friend PagePortal;
 public:
-    enum LayoutType {Vertical, Seamless, FitToView};
+    enum LayoutType {Vertical, Horizontal, Seamless, FitToView};
     static constexpr QColor BACKGROUND = QColor(30,33,33);
 
-    PageLayoutScene(Document* doc, QGraphicsView* viewport);
+    PageLayoutScene(Document* doc, DocumentView* viewport);
     ~PageLayoutScene();
 
 public:
     Document* getDoc(){return doc;}
-    QGraphicsView* getView(){return viewport;}
+    DocumentView* getView(){return viewport;}
 
     void setLayoutType(LayoutType type);
     LayoutType getLayoutType(){return layout_type;}
@@ -45,7 +45,7 @@ private:
 
 private:
     Document* doc;
-    QGraphicsView* viewport;
+    DocumentView* viewport;
     QList<PagePortal*> portals;
     PagePortal* focused_portal = nullptr;
     LayoutType layout_type = Vertical;

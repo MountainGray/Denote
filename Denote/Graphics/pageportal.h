@@ -34,7 +34,7 @@ private:
     QRectF render_from;
     QRectF render_to;
     QPointF page_offset;
-    static const int SHADOW = 20;
+    static const int SHADOW = 25;
 };
 
 #endif // PAGEPORTAL_H

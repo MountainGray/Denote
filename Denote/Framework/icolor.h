@@ -12,7 +12,7 @@ public:
     IColor(QColor color = QColor(), DisplayMode mode = Normal);
 
 public:
-    QColor colornormal(){return normal_color;}
+    QColor normalColor(){return normal_color;}
     QColor active(){return active_color;}
     QColor inverted();
     void setDisplayMode(DisplayMode mode);

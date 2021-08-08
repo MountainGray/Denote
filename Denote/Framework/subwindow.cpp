@@ -7,6 +7,7 @@
 SubWindow::SubWindow(QMainWindow *parent) : QDockWidget(parent){
     this->mainWindow = parent;
     connect(this, SIGNAL(topLevelChanged(bool)), this, SLOT(makeTopLevel(bool)));
+
     /*
     QLabel *label = new QLabel("Test",this);
     QPushButton *close = new QPushButton("X",this);

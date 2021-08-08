@@ -8,7 +8,7 @@ ToolPreset::ToolPreset(Tool* tool)
 {
     this->tool = tool;
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    setFixedSize(60,60);
+    setFixedSize(50,50);
 }
 
 
@@ -20,7 +20,7 @@ void ToolPreset::paintEvent(QPaintEvent *event)
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing, true);
         painter.setPen(QPen(QColor(50,150,255), 3));
-        painter.drawRect(QRectF(0,0,60,60));
+        painter.drawRect(QRectF(0,0,width(),height()));
     }
 }
 

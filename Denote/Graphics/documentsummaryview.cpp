@@ -1,52 +1,21 @@
 #include "documentsummaryview.h"
-#include "Framework/document.h"
-#include "pagelayoutscene.h"
-#include "Tools/tool.h"
-#include "Graphics/pageportal.h"
-#include "Ui/ui.h"
-
-#include <QtOpenGLWidgets/QOpenGLWidget>
 
 
-DocumentSummaryView::DocumentSummaryView(Document* doc)
+DocumentSummaryView::DocumentSummaryView(Document* doc) : DocumentView(doc)
 {
     setInteractive(false);
-
-    setRenderHint(QPainter::Antialiasing, true);
-    setRenderHint(QPainter::SmoothPixmapTransform, true);
-
-    resetGL();
+    page_layout_scene->setInteractive(false);
+    page_layout_scene->setLayoutType(PageLayoutScene::Vertical);
+    page_layout_scene->setShadow(false);
 
     setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
-
-    setBackgroundBrush(QBrush(PageLayoutScene::BACKGROUND));
-
-    this->doc = doc;
-    page_layout_scene = new PageLayoutScene(doc, this);
-    page_layout_scene->setLayoutType(PageLayoutScene::Vertical);
-    page_layout_scene->setInteractive(false);
-    page_layout_scene->setShadow(false);
-    setScene(page_layout_scene);
-
-    doc->getUI()->setActiveLayout(page_layout_scene);
 }
 
 
 DocumentSummaryView::~DocumentSummaryView()
 {
-    delete page_layout_scene;
-}
 
-
-void DocumentSummaryView::resetGL()
-{
-    QOpenGLWidget* gl = new QOpenGLWidget();
-    QSurfaceFormat format;
-    format.setSamples(6);
-    gl->setFormat(format);
-    setViewport(gl);
-    //should need to exist. Antialiasing missing when popping in/out subwindow.
 }
 
 
@@ -66,7 +35,7 @@ void DocumentSummaryView::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
     if(doc != nullptr){
-        fitInView(0,0,page_layout_scene->width()+x_padding,10,Qt::AspectRatioMode::KeepAspectRatio);
+        fitInView(0,0,page_layout_scene->width()+view_padding,10,Qt::AspectRatioMode::KeepAspectRatio);
     }
 }
 

@@ -4,28 +4,16 @@
 //QGraphicsView that has its own page layout which is connected to the same document
 //Handles inputs to add strokes to the appropriate page
 
-#include <QGraphicsView>
+#include "Framework/documentview.h"
 
-class Document;
-class PageLayoutScene;
-class DocumentSummaryView;
+class DocumentInteractionFrame;
 
-class DocumentInteractionView : public QGraphicsView
+class DocumentInteractionView : public DocumentView
 {
     Q_OBJECT
 public:
-    DocumentInteractionView(Document* doc);
+    DocumentInteractionView(Document* doc, DocumentInteractionFrame* frame);
     ~DocumentInteractionView();
-
-public:
-    void setScale(float new_scale);
-    PageLayoutScene* getPageLayoutScene(){return page_layout_scene;}
-    QTransform getViewInverse(){return view_inverse;}
-    QPointF getPageInverse(){return page_inverse;}
-    Document* getDoc(){return doc;}
-    void resetGL();
-    void focusDoc();
-    float getScale(){return view_scale;}
 
 protected:
     void enterEvent(QEnterEvent *event) override;
@@ -42,11 +30,7 @@ private slots:
     void scrollPositionChanged();
 
 private:
-    Document* doc;
-    QTransform view_inverse;
-    QPointF page_inverse;
-    PageLayoutScene* page_layout_scene;
-    float view_scale = 1;
+    DocumentInteractionFrame* frame;
 };
 
 #endif // DOCUMENTINTERACTIONVIEW_H
