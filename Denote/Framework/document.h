@@ -1,8 +1,8 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-#include <QGraphicsScene>
 #include "Framework/serializable.h"
+#include <QRectF>
 
 class PageLayoutScene;
 class Page;

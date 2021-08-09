@@ -7,15 +7,9 @@
 #include "Graphics/pageportal.h"
 
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-DocumentSummaryFrame::DocumentSummaryFrame(MainWindow *parent) : SubWindow(parent)
-=======
+
+
 DocumentSummaryFrame::DocumentSummaryFrame()
->>>>>>> Stashed changes
-=======
-DocumentSummaryFrame::DocumentSummaryFrame()
->>>>>>> Stashed changes
 {
     setMinimumSize(35,150);
 
@@ -41,24 +35,9 @@ DocumentSummaryFrame::DocumentSummaryFrame()
     button_layout->addWidget(page_width,4,0);
     button_layout->addWidget(page_height,5,0);
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    frame_widget = new QWidget();
-    setWidget(frame_widget);
-
-    frame_layout = new QGridLayout();
-    frame_layout->setContentsMargins(0,0,0,0);
-    frame_widget->setLayout(frame_layout);
-=======
     frame_layout = new QGridLayout();
     frame_layout->setContentsMargins(0,0,0,0);
     setLayout(frame_layout);
->>>>>>> Stashed changes
-=======
-    frame_layout = new QGridLayout();
-    frame_layout->setContentsMargins(0,0,0,0);
-    setLayout(frame_layout);
->>>>>>> Stashed changes
 
     empty_widget = new QLabel();
     empty_widget->setAlignment(Qt::AlignCenter);
@@ -68,13 +47,6 @@ DocumentSummaryFrame::DocumentSummaryFrame()
     connect(new_button, &QPushButton::clicked, this, &DocumentSummaryFrame::addPage);
     connect(up_button, &QPushButton::clicked, this, &DocumentSummaryFrame::raisePage);
     connect(down_button, &QPushButton::clicked, this, &DocumentSummaryFrame::lowerPage);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    connect(this, &QDockWidget::topLevelChanged, this, &DocumentSummaryFrame::resetGL);
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
 
 
@@ -155,15 +127,3 @@ void DocumentSummaryFrame::lowerPage()
         }
     }
 }
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-
-void DocumentSummaryFrame::resetGL()
-{
-    viewport->resetGL();
-}
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
