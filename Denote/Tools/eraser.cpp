@@ -128,7 +128,7 @@ void Eraser::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    QPen pen = QPen(QColor(0,0,0,55), 2, Qt::SolidLine, Qt::RoundCap);
+    QPen pen = QPen(QColor(122,122,122,75), 2, Qt::SolidLine, Qt::RoundCap);
     pen.setCosmetic(true);
     painter->setPen(pen);
     painter->setBrush(Qt::NoBrush);

@@ -66,3 +66,9 @@ void DocumentView::focusDoc()
 {
     if(doc->getUI()->getActiveDocument() != doc) doc->focusDoc();
 }
+
+
+void DocumentView::scaleToFit()
+{
+    fitInView(0,0,page_layout_scene->width()+view_padding,10,Qt::AspectRatioMode::KeepAspectRatio);
+}

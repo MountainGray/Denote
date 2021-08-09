@@ -12,16 +12,16 @@ ToolMenuViewer::ToolMenuViewer()
 void ToolMenuViewer::addToolMenu(ToolMenu* menu)
 {
     addWidget(menu);
-    setCurrentWidget(menu);
-    tool_menu = menu;
+    setToolMenu(menu);
 }
 
 
 void ToolMenuViewer::setToolMenu(ToolMenu *menu)
 {
     if(indexOf(menu) == -1){
-        addWidget(menu);
+        addToolMenu(menu);
     } else {
         setCurrentWidget(menu);
+        tool_menu = menu;
     }
 }

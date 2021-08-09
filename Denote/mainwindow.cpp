@@ -14,6 +14,7 @@
 #include "Framework/toollibrary.h"
 #include "Framework/toolmenuviewer.h"
 #include "Graphics/documentsummaryframe.h"
+#include "Framework/fileviewer.h"
 
 #include <QMessageBox>
 #include <QFileDialog>
@@ -21,6 +22,7 @@
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
+
     QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
     QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents);
     setWindowTitle(tr("Denote Pre-Alpha"));
@@ -39,11 +41,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     ui->setWindows(pages, history, settings);
     ToolLibrary* tools = new ToolLibrary(ui);
     ui->setToolLibrary(tools);
+    FileViewer* file_viewer = new FileViewer();
 
     tabs->addTab(pages, "Pages");
     tabs->addTab(history, "History");
     tabs->addTab(tools, "Tools");
     tabs->addTab(settings, "Tool Settings");
+    tabs->addTab(file_viewer, "File Viewer");
 
     DocumentInteractionFrame *central_view = new DocumentInteractionFrame(ui->getActiveDocument());
 
@@ -144,6 +148,9 @@ void MainWindow::about() {
 
 void MainWindow::addView()
 {
+    DocumentInteractionFrame *new_view = new DocumentInteractionFrame(ui->getActiveDocument());
+    new_view->resize(1000,500);
+    new_view->show();
 
 }
 

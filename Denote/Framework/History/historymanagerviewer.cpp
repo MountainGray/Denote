@@ -26,17 +26,17 @@ void HistoryManagerViewer::keyPressEvent(QKeyEvent *event)
 
 void HistoryManagerViewer::addHistoryManager(HistoryManager *manager)
 {
-    QStackedWidget::addWidget(manager);
-    setCurrentWidget(manager);
-    history_manager = manager;
+    addWidget(manager);
+    setHistoryManager(manager);
 }
 
 
 void HistoryManagerViewer::setHistoryManager(HistoryManager *manager)
 {
     if(indexOf(manager) == -1){
-        addWidget(manager);
+        addHistoryManager(manager);
     } else {
         setCurrentWidget(manager);
+        history_manager = manager;
     }
 }

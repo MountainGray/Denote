@@ -8,7 +8,7 @@ ToolPreset::ToolPreset(Tool* tool)
 {
     this->tool = tool;
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    setFixedSize(50,50);
+    setFixedSize(100,60);
 }
 
 

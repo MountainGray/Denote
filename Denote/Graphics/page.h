@@ -34,7 +34,8 @@ public:
     QGraphicsItem* getLowestObject(){return lowest_object;}
     int getLowestPoint();
 
-    void setBackgroundType(BackgroundType t){ page_type = t; }
+    void setBackgroundType(BackgroundType t){ page_type = t;}
+    BackgroundType getBackgroundType(){return page_type;}
     void setDisplayMode(IColor::DisplayMode display_mode);
 
     void serializeRead(QDataStream &in) override;

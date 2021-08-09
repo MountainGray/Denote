@@ -28,6 +28,7 @@ public:
     PageLayoutScene* getPageLayoutScene(){return page_layout_scene;}
     Document* getDoc(){return doc;}
     void focusDoc();
+    void scaleToFit();
 
 protected:
     Document* doc;
@@ -35,6 +36,9 @@ protected:
     float view_scale = 1;
     QTransform view_inverse;
     QPointF page_inverse;
+
+private:
+    static const int view_padding = 4;
 };
 
 #endif // DOCUMENTVIEW_H

@@ -8,8 +8,8 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QSpinBox>
+#include <QStackedWidget>
 
-class MainWindow;
 class DocumentSummaryView;
 
 class DocumentSummaryFrame : public QWidget
@@ -20,8 +20,9 @@ public:
     ~DocumentSummaryFrame();
 
 public:
-    void setView(DocumentSummaryView* view);
-    DocumentSummaryView* getView(){return viewport;}
+    void addSummaryView(DocumentSummaryView* view);
+    void setSummaryView(DocumentSummaryView* view);
+    //DocumentSummaryView* getView(){return viewport;}
 
 private slots:
     void addPage();
@@ -29,10 +30,11 @@ private slots:
     void lowerPage();
 
 private:
-    DocumentSummaryView* viewport = nullptr;
+    QStackedWidget* stack;
+    DocumentSummaryView* summary_view = nullptr;
 
     QGridLayout* frame_layout;
-    QLabel* empty_widget;
+    QLabel* empty_widget;//not in use rn
     QWidget* frame_widget;
     QGridLayout* button_layout;
 

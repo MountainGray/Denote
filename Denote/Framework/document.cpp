@@ -107,7 +107,7 @@ void Document::focusDoc()
 {
     ui->setActiveDocument(this);
     ui->getHistoryManagerViewer()->setHistoryManager(history_manager);
-    ui->getSummaryFrame()->setView(summary_view);
+    ui->getSummaryFrame()->setSummaryView(summary_view);
 }
 
 
@@ -145,7 +145,7 @@ void Document::convertToEndless()
     if(endless or pages.isEmpty()) return;
 
     Page* new_page = new Page();
-    new_page->setBackgroundType(LinesMargin);
+    new_page->setBackgroundType(pages.at(0)->getBackgroundType());
 
     int y_offset = 0;
 
@@ -182,7 +182,7 @@ void Document::convertToPages()
         if(y_offset+new_height >= first_page->getPageBounds().bottom() and area_items.length() == 0) break;
 
         Page* new_page = new Page();
-        new_page->setBackgroundType(Engineering);
+        new_page->setBackgroundType(first_page->getBackgroundType());
         new_page->setPageSize(850,new_height);
         addPage(new_page);
 

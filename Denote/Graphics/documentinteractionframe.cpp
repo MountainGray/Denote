@@ -9,16 +9,16 @@
 
 DocumentInteractionFrame::DocumentInteractionFrame(Document* doc)
 {
-    setMinimumSize(150,150);
+    setMinimumSize(100,100);
 
     empty_widget = new QLabel();
     empty_widget->setAlignment(Qt::AlignCenter);
     empty_widget->setText("No Documents are Open");
 
-    tab_widget = new QTabWidget();
+    tabs = new QTabWidget();
 
-    tab_widget->setMovable(true);
-    tab_widget->setTabsClosable(true);
+    tabs->setMovable(true);
+    tabs->setTabsClosable(true);
 
     QPushButton* shadows = new QPushButton("Shadows");
     shadows->setCheckable(true);
@@ -62,7 +62,7 @@ DocumentInteractionFrame::DocumentInteractionFrame(Document* doc)
 
     frame_layout = new QGridLayout();
     frame_layout->setContentsMargins(0,0,0,0);
-    frame_layout->addWidget(tab_widget,0,0);
+    frame_layout->addWidget(tabs,0,0);
     frame_layout->addLayout(button_layout,1,0);
 
     layout_widget = new QWidget();
@@ -78,7 +78,8 @@ DocumentInteractionFrame::DocumentInteractionFrame(Document* doc)
 
     addDocument(doc);
 
-    connect(tab_widget, &QTabWidget::currentChanged, this, &DocumentInteractionFrame::focusCurrentDoc);
+    connect(tabs, &QTabWidget::currentChanged, this, &DocumentInteractionFrame::focusCurrentDoc);
+    connect(tabs, &QTabWidget::tabCloseRequested, this, &DocumentInteractionFrame::removeTab);
     connect(holes, &QPushButton::clicked, this, &DocumentInteractionFrame::setHoles);
     connect(shadows, &QPushButton::clicked, this, &DocumentInteractionFrame::setShadows);
     connect(vertical, &QPushButton::clicked, this, &DocumentInteractionFrame::setVertical);
@@ -93,7 +94,7 @@ DocumentInteractionFrame::DocumentInteractionFrame(Document* doc)
 
 DocumentInteractionFrame::~DocumentInteractionFrame()
 {
-    delete tab_widget;
+    delete tabs;
 }
 
 
@@ -109,7 +110,7 @@ void DocumentInteractionFrame::addDocument(Document *doc)
 
     DocumentInteractionView* new_viewport = new DocumentInteractionView(doc, this);
     //QString("Untitled %1").arg(tab_widget->count())
-    tab_widget->addTab(new_viewport, doc->getName());
+    tabs->addTab(new_viewport, doc->getName());
     doc->focusDoc();
 
 }
@@ -117,10 +118,10 @@ void DocumentInteractionFrame::addDocument(Document *doc)
 
 void DocumentInteractionFrame::setDocument(Document *doc)
 {
-    for(int i = 0; i < tab_widget->count(); i++){
-        DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tab_widget->widget(i));
+    for(int i = 0; i < tabs->count(); i++){
+        DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tabs->widget(i));
         if(view != nullptr and view->getDoc() == doc){
-            tab_widget->setCurrentIndex(i);
+            tabs->setCurrentIndex(i);
             doc->focusDoc();
             break;
         }
@@ -130,10 +131,10 @@ void DocumentInteractionFrame::setDocument(Document *doc)
 
 void DocumentInteractionFrame::updateDocNames()
 {
-    for(int i = 0; i < tab_widget->count(); i++){
-        DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tab_widget->widget(i));
+    for(int i = 0; i < tabs->count(); i++){
+        DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tabs->widget(i));
         if(view != nullptr){
-            tab_widget->setTabText(i,view->getDoc()->getName());
+            tabs->setTabText(i,view->getDoc()->getName());
         }
     }
 }
@@ -147,7 +148,7 @@ void DocumentInteractionFrame::resetScale()
 
 void DocumentInteractionFrame::focusCurrentDoc()
 {
-    DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tab_widget->currentWidget());
+    DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tabs->currentWidget());
     if(view != nullptr){
         view->getDoc()->focusDoc();
     }
@@ -189,4 +190,11 @@ void DocumentInteractionFrame::setSeamless()
 void DocumentInteractionFrame::setFTV()
 {
     if(current_view != nullptr) current_view->getPageLayoutScene()->setLayoutType(PageLayoutScene::FitToView);
+}
+
+
+void DocumentInteractionFrame::removeTab(int index)
+{
+    delete tabs->widget(index);
+    tabs->removeTab(index);
 }

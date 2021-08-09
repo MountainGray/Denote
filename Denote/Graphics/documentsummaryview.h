@@ -16,9 +16,6 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void resizeEvent(QResizeEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
-
-private:
-    static const int view_padding = 4;
 };
 
 #endif // DOCUMENTSUMMARYVIEW_H

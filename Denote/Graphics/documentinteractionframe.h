@@ -36,11 +36,12 @@ private slots:
     void setHorizontal();
     void setSeamless();
     void setFTV();
+    void removeTab(int index);
 
 private:
     QWidget* layout_widget;
     QLabel* empty_widget;//not in use currently
-    QTabWidget* tab_widget;
+    QTabWidget* tabs;
     QGridLayout* frame_layout;
     DocumentInteractionView* current_view = nullptr;
 

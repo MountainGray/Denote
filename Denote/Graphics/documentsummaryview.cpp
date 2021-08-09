@@ -34,9 +34,7 @@ void DocumentSummaryView::mousePressEvent(QMouseEvent *event)
 void DocumentSummaryView::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
-    if(doc != nullptr){
-        fitInView(0,0,page_layout_scene->width()+view_padding,10,Qt::AspectRatioMode::KeepAspectRatio);
-    }
+    scaleToFit();
 }
 
 

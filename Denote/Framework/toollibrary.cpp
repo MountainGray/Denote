@@ -18,12 +18,12 @@ ToolLibrary::ToolLibrary(UI* ui)
 {
     this->ui = ui;
 
-    setMinimumSize(200,50);
-    setSizePolicy(QSizePolicy::Policy::Maximum, QSizePolicy::Policy::Minimum);
+    setMinimumSize(100,100);
+    setSizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Maximum);
 
     layout = new QVBoxLayout(this);
     layout->setContentsMargins(0,0,0,0);
-    layout->setAlignment(Qt::AlignmentFlag::AlignLeft);
+    layout->setAlignment(Qt::AlignmentFlag::AlignHCenter);
 
     for(int i = 0; i < 5; i ++){
         Pen *pen = new Pen(ui);
