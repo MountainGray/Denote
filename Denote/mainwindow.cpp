@@ -3,6 +3,7 @@
 #include "Framework/document.h"
 #include "Graphics/documentinteractionframe.h"
 #include "Graphics/documentsummaryframe.h"
+<<<<<<< Updated upstream
 #include "Framework/subwindow.h"
 =======
 <<<<<<< Updated upstream
@@ -15,11 +16,14 @@
 #include "Graphics/documentinteractionframe.h"
 #include "Graphics/documentsummaryframe.h"
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 #include "Ui/ui.h"
 #include "Graphics/page.h"
 #include "Framework/pageitem.h"
 #include "Tools/tool.h"
 #include "Graphics/pagelayoutscene.h"
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
 #include <QMessageBox>
@@ -35,6 +39,16 @@
 #include <QSplitter>
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
+=======
+#include "Framework/History/historymanagerviewer.h"
+#include "Framework/toollibrary.h"
+#include "Framework/toolmenuviewer.h"
+#include "Graphics/documentsummaryframe.h"
+
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QSplitter>
+>>>>>>> Stashed changes
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -46,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     ui = new UI(this);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     addView();
     newDocument();
 =======
@@ -54,10 +69,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 >>>>>>> Stashed changes
 }
 =======
+=======
+>>>>>>> Stashed changes
     QTabWidget* tabs = new QTabWidget();
     tabs->setMovable(true);
     tabs->setTabBarAutoHide(true);
     tabs->setTabPosition(QTabWidget::West);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     DocumentSummaryFrame* pages = new DocumentSummaryFrame();
@@ -66,6 +86,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     ui->setWindows(pages, history, settings);
     ToolLibrary* tools = new ToolLibrary(ui);
     ui->setToolLibrary(tools);
+<<<<<<< Updated upstream
 
 
     tabs->addTab(pages, "Pages");
@@ -74,6 +95,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     tabs->addTab(settings, "Tool Settings");
 
 
+=======
+
+
+    tabs->addTab(pages, "Pages");
+    tabs->addTab(history, "History");
+    tabs->addTab(tools, "Tools");
+    tabs->addTab(settings, "Tool Settings");
+
+
+>>>>>>> Stashed changes
 
     DocumentInteractionFrame *central_view = new DocumentInteractionFrame(ui->getActiveDocument());
 
@@ -89,6 +120,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 void MainWindow::addSubWindow(QDockWidget *widget, Qt::DockWidgetArea area)
 {
     addDockWidget(area, widget);
@@ -101,6 +133,10 @@ bool MainWindow::save(){
 MainWindow::~MainWindow(){
 
 >>>>>>> Stashed changes
+>>>>>>> Stashed changes
+=======
+MainWindow::~MainWindow(){
+
 >>>>>>> Stashed changes
 }
 
@@ -187,6 +223,7 @@ void MainWindow::about() {
 
 void MainWindow::addView()
 {
+<<<<<<< Updated upstream
     DocumentInteractionFrame *new_frame = new DocumentInteractionFrame(this);
     addSubWindow(new_frame, Qt::BottomDockWidgetArea);
     new_frame->addDocument(ui->getActiveDocument());
@@ -197,6 +234,9 @@ void MainWindow::addView()
 
 void MainWindow::addView()
 {
+
+>>>>>>> Stashed changes
+=======
 
 >>>>>>> Stashed changes
 }

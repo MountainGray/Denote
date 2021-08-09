@@ -2,16 +2,21 @@
 #define TOOLMENUVIEWER_H
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 #include "Framework/subwindow.h"
+=======
+#include <QStackedWidget>
+>>>>>>> Stashed changes
 
 class ToolMenu;
 
-class ToolMenuViewer : public SubWindow
+class ToolMenuViewer : public QStackedWidget
 {
 public:
-    ToolMenuViewer(QMainWindow *parent);
+    ToolMenuViewer();
 
 public:
+<<<<<<< Updated upstream
     ToolMenu* getMenu(){return tool_menu;}
 =======
 #include <QStackedWidget>
@@ -24,6 +29,10 @@ public:
     ToolMenuViewer();
 
 public:
+    void addToolMenu(ToolMenu* menu);
+    void setToolMenu(ToolMenu* menu);
+>>>>>>> Stashed changes
+=======
     void addToolMenu(ToolMenu* menu);
     void setToolMenu(ToolMenu* menu);
 >>>>>>> Stashed changes

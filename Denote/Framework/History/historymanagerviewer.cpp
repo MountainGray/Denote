@@ -4,10 +4,16 @@
 #include <QKeyEvent>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 HistoryManagerViewer::HistoryManagerViewer(MainWindow* parent) : SubWindow(parent)
 {
     this->parent = parent;
+=======
+HistoryManagerViewer::HistoryManagerViewer()
+{
+
+>>>>>>> Stashed changes
 =======
 HistoryManagerViewer::HistoryManagerViewer()
 {
@@ -31,6 +37,7 @@ void HistoryManagerViewer::keyPressEvent(QKeyEvent *event)
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 void HistoryManagerViewer::setHistoryManager(HistoryManager *history_manager)
 {
     this->history_manager = history_manager;
@@ -38,6 +45,10 @@ void HistoryManagerViewer::setHistoryManager(HistoryManager *history_manager)
 =======
 void HistoryManagerViewer::addHistoryManager(HistoryManager *manager)
 {
+=======
+void HistoryManagerViewer::addHistoryManager(HistoryManager *manager)
+{
+>>>>>>> Stashed changes
     QStackedWidget::addWidget(manager);
     setCurrentWidget(manager);
     history_manager = manager;
@@ -51,5 +62,8 @@ void HistoryManagerViewer::setHistoryManager(HistoryManager *manager)
     } else {
         setCurrentWidget(manager);
     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }

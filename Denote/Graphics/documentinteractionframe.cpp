@@ -8,7 +8,11 @@
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 DocumentInteractionFrame::DocumentInteractionFrame(MainWindow* parent, Document* doc) : SubWindow(parent)
+=======
+DocumentInteractionFrame::DocumentInteractionFrame(Document* doc)
+>>>>>>> Stashed changes
 =======
 DocumentInteractionFrame::DocumentInteractionFrame(Document* doc)
 >>>>>>> Stashed changes
@@ -21,6 +25,11 @@ DocumentInteractionFrame::DocumentInteractionFrame(Document* doc)
 
     tab_widget = new QTabWidget();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+    tab_widget->setMovable(true);
+    tab_widget->setTabsClosable(true);
+>>>>>>> Stashed changes
 =======
     tab_widget->setMovable(true);
     tab_widget->setTabsClosable(true);
@@ -72,12 +81,19 @@ DocumentInteractionFrame::DocumentInteractionFrame(Document* doc)
     frame_layout->addLayout(button_layout,1,0);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     layout_widget = new QWidget();
     layout_widget->setLayout(frame_layout);
 
     addDocument(doc);
 
     connect(this, &QDockWidget::topLevelChanged, this, &DocumentInteractionFrame::resetGL);
+=======
+    setLayout(frame_layout);
+
+    addDocument(doc);
+
+>>>>>>> Stashed changes
 =======
     setLayout(frame_layout);
 
@@ -112,6 +128,7 @@ void DocumentInteractionFrame::setScale(float scale)
 void DocumentInteractionFrame::addDocument(Document *doc)
 {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     if(doc == nullptr and tab_widget->count() == 0){
         setWidget(empty_widget);
 
@@ -123,12 +140,17 @@ void DocumentInteractionFrame::addDocument(Document *doc)
         doc->focusDoc();
     }
 =======
+=======
+>>>>>>> Stashed changes
     if (doc == nullptr) return;
 
     DocumentInteractionView* new_viewport = new DocumentInteractionView(doc, this);
     //QString("Untitled %1").arg(tab_widget->count())
     tab_widget->addTab(new_viewport, doc->getName());
     doc->focusDoc();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }
 
@@ -164,6 +186,7 @@ void DocumentInteractionFrame::resetScale()
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 void DocumentInteractionFrame::resetGL()
 {
     for(int i = 0; i < tab_widget->count(); i++){
@@ -175,6 +198,8 @@ void DocumentInteractionFrame::resetGL()
 }
 
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 void DocumentInteractionFrame::focusCurrentDoc()

@@ -3,6 +3,10 @@
 #include "Ui/ui.h"
 #include "Framework/document.h"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+#include "Framework/toollibrary.h"
+>>>>>>> Stashed changes
 =======
 #include "Framework/toollibrary.h"
 >>>>>>> Stashed changes
@@ -81,7 +85,11 @@ void CircleSelect::drawDoubleClickEvent(ToolEvent event)
         ui->getActivePage()->clearSelection();
     } else if(event.button() == Qt::LeftButton){
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         ui->setActiveTool(box);
+=======
+        tool_library->setActiveTool(box);
+>>>>>>> Stashed changes
 =======
         tool_library->setActiveTool(box);
 >>>>>>> Stashed changes

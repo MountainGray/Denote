@@ -4,8 +4,11 @@
 //Frame to hold document summary view and future other widgets
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 #include "Framework/subwindow.h"
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 #include <QComboBox>
@@ -15,13 +18,18 @@
 #include <QSpinBox>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 class MainWindow;
+=======
+
+>>>>>>> Stashed changes
 class DocumentSummaryView;
 
-class DocumentSummaryFrame : public SubWindow
+class DocumentSummaryFrame : public QWidget
 {
     Q_OBJECT
 public:
+<<<<<<< Updated upstream
     DocumentSummaryFrame(MainWindow* parent);
 =======
 
@@ -31,6 +39,9 @@ class DocumentSummaryFrame : public QWidget
 {
     Q_OBJECT
 public:
+    DocumentSummaryFrame();
+>>>>>>> Stashed changes
+=======
     DocumentSummaryFrame();
 >>>>>>> Stashed changes
     ~DocumentSummaryFrame();
@@ -44,7 +55,10 @@ private slots:
     void raisePage();
     void lowerPage();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     void resetGL();
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 
@@ -54,7 +68,10 @@ private:
     QGridLayout* frame_layout;
     QLabel* empty_widget;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     QWidget* frame_widget;
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     QGridLayout* button_layout;

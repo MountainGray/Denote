@@ -9,6 +9,10 @@
 #include "Graphics/documentsummaryframe.h"
 #include "Graphics/documentinteractionframe.h"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+#include "mainwindow.h"
+>>>>>>> Stashed changes
 =======
 #include "mainwindow.h"
 >>>>>>> Stashed changes
@@ -32,6 +36,10 @@ Document::Document(UI* ui, bool endless){
 
     ui->setActiveDocument(this);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+    ui->getHistoryManagerViewer()->addWidget(history_manager);
+>>>>>>> Stashed changes
 =======
     ui->getHistoryManagerViewer()->addWidget(history_manager);
 >>>>>>> Stashed changes
@@ -136,6 +144,10 @@ void Document::print()
         Page* page = pages.at(i);
         printer.setPageSize(QPageSize(page->getPageSize(),QPageSize::Point,"",QPageSize::SizeMatchPolicy::ExactMatch));
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+        qDebug() << QPageSize(page->getPageSize(),QPageSize::Point,"",QPageSize::SizeMatchPolicy::ExactMatch).size(QPageSize::Inch);
+>>>>>>> Stashed changes
 =======
         qDebug() << QPageSize(page->getPageSize(),QPageSize::Point,"",QPageSize::SizeMatchPolicy::ExactMatch).size(QPageSize::Inch);
 >>>>>>> Stashed changes

@@ -29,7 +29,10 @@ public:
     Document* getDoc(){return doc;}
     void focusDoc();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     void resetGL();
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 

@@ -32,7 +32,10 @@ SOURCES += \
     Framework/toolmenuviewer.cpp \
     Framework/document.cpp \
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     Framework/subwindow.cpp \
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     Framework/toollibrary.cpp \
@@ -87,7 +90,10 @@ HEADERS += \
     Framework/toolmenuviewer.h \
     Framework/document.h \
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     Framework/subwindow.h \
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     Framework/toollibrary.h \

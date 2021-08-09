@@ -1,6 +1,10 @@
 #include "toolpreset.h"
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+#include "toollibrary.h"
+>>>>>>> Stashed changes
 =======
 #include "toollibrary.h"
 >>>>>>> Stashed changes
@@ -33,7 +37,11 @@ void ToolPreset::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton){
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         tool->getUI()->setActiveTool(tool);
+=======
+        tool->getUI()->getToolLibrary()->setActiveTool(tool);
+>>>>>>> Stashed changes
 =======
         tool->getUI()->getToolLibrary()->setActiveTool(tool);
 >>>>>>> Stashed changes

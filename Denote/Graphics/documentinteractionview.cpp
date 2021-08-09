@@ -6,6 +6,10 @@
 #include <QScrollBar>
 #include <QClipboard>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+#include <QGuiApplication>
+>>>>>>> Stashed changes
 =======
 #include <QGuiApplication>
 >>>>>>> Stashed changes

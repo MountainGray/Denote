@@ -8,6 +8,10 @@
 #include <QtOpenGLWidgets/QOpenGLWidget>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -25,13 +29,19 @@ DocumentView::DocumentView(Document* doc)
     setRenderHint(QPainter::SmoothPixmapTransform, true);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     resetGL();
 =======
+=======
+>>>>>>> Stashed changes
     QOpenGLWidget* gl = new QOpenGLWidget();
     QSurfaceFormat format;
     format.setSamples(6);
     gl->setFormat(format);
     setViewport(gl);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     centerOn(0,0);
@@ -74,6 +84,7 @@ void DocumentView::focusDoc()
     if(doc->getUI()->getActiveDocument() != doc) doc->focusDoc();
 }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 
 void DocumentView::resetGL()
@@ -85,5 +96,7 @@ void DocumentView::resetGL()
     setViewport(gl);
     //should need to exist. Antialiasing missing when popping in/out subwindow.
 }
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
