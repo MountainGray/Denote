@@ -11,6 +11,14 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+    document.cpp \
+    documentgraphics.cpp \
+    documentview.cpp \
+=======
+>>>>>>> Stashed changes
     Framework/History/historymanager.cpp \
     Framework/History/historymanagerviewer.cpp \
     Framework/History/undocreation.cpp \
@@ -23,7 +31,10 @@ SOURCES += \
     Framework/toolmenu.cpp \
     Framework/toolmenuviewer.cpp \
     Framework/document.cpp \
+<<<<<<< Updated upstream
     Framework/subwindow.cpp \
+=======
+>>>>>>> Stashed changes
     Framework/toollibrary.cpp \
     Framework/toolpreset.cpp \
     Graphics/documentinteractionframe.cpp \
@@ -43,6 +54,10 @@ SOURCES += \
     Tools/selectionbox.cpp \
     Tools/stroke.cpp \
     Tools/tool.cpp \
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     main.cpp \
     mainwindow.cpp \
     Graphics/page.cpp \
@@ -50,6 +65,14 @@ SOURCES += \
     tabletapplication.cpp
 
 HEADERS += \
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+    document.h \
+    documentgraphics.h \
+    documentview.h \
+=======
+>>>>>>> Stashed changes
     Framework/History/historymanager.h \
     Framework/History/historymanagerviewer.h \
     Framework/History/undocreation.h \
@@ -63,7 +86,10 @@ HEADERS += \
     Framework/toolmenu.h \
     Framework/toolmenuviewer.h \
     Framework/document.h \
+<<<<<<< Updated upstream
     Framework/subwindow.h \
+=======
+>>>>>>> Stashed changes
     Framework/toollibrary.h \
     Graphics/documentinteractionframe.h \
     Graphics/documentinteractionview.h \
@@ -82,6 +108,10 @@ HEADERS += \
     Tools/selectionbox.h \
     Tools/stroke.h \
     Tools/tool.h \
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     mainwindow.h \
     Graphics/page.h \
     Ui/ui.h \

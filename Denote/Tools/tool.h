@@ -13,6 +13,10 @@
 class UI;
 class ToolMenu;
 class ToolPreset;
+<<<<<<< Updated upstream
+=======
+class ToolLibrary;
+>>>>>>> Stashed changes
 
 class Tool
 {
@@ -42,8 +46,14 @@ public:
 
 protected:
     UI* ui;
+<<<<<<< Updated upstream
     ToolMenu* tool_menu = nullptr;
     ToolPreset* tool_preset = nullptr;
+=======
+    ToolLibrary* tool_library;
+    ToolMenu* tool_menu;
+    ToolPreset* tool_preset;
+>>>>>>> Stashed changes
 };
 
 #endif // TOOL_H

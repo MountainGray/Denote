@@ -8,6 +8,10 @@
 #include "Graphics/documentsummaryview.h"
 #include "Graphics/documentsummaryframe.h"
 #include "Graphics/documentinteractionframe.h"
+<<<<<<< Updated upstream
+=======
+#include "mainwindow.h"
+>>>>>>> Stashed changes
 
 
 #if defined(QT_PRINTSUPPORT_LIB)
@@ -27,6 +31,10 @@ Document::Document(UI* ui, bool endless){
     summary_view = new DocumentSummaryView(this);
 
     ui->setActiveDocument(this);
+<<<<<<< Updated upstream
+=======
+    ui->getHistoryManagerViewer()->addWidget(history_manager);
+>>>>>>> Stashed changes
     focusDoc();
 }
 
@@ -127,6 +135,10 @@ void Document::print()
     for(int i = 0; i < pages.length(); i++){
         Page* page = pages.at(i);
         printer.setPageSize(QPageSize(page->getPageSize(),QPageSize::Point,"",QPageSize::SizeMatchPolicy::ExactMatch));
+<<<<<<< Updated upstream
+=======
+        qDebug() << QPageSize(page->getPageSize(),QPageSize::Point,"",QPageSize::SizeMatchPolicy::ExactMatch).size(QPageSize::Inch);
+>>>>>>> Stashed changes
         if(i == 0) painter.begin(&printer);
         else printer.newPage();
         page->render(&painter);

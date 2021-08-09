@@ -40,7 +40,6 @@ private slots:
 
 private:
     void createMenus();
-    QList<QDockWidget *> subWindows;
     UI* ui;
     QList<DocumentInteractionFrame*> views;
 };

@@ -1,16 +1,40 @@
 #include "mainwindow.h"
+<<<<<<< Updated upstream
 #include "Framework/document.h"
 #include "Graphics/documentinteractionframe.h"
 #include "Graphics/documentsummaryframe.h"
 #include "Framework/subwindow.h"
+=======
+<<<<<<< Updated upstream
+#include "document.h"
+#include "documentview.h"
+#include "subwindow.h"
+#include "ui.h"
+=======
+#include "Framework/document.h"
+#include "Graphics/documentinteractionframe.h"
+#include "Graphics/documentsummaryframe.h"
+>>>>>>> Stashed changes
 #include "Ui/ui.h"
 #include "Graphics/page.h"
 #include "Framework/pageitem.h"
 #include "Tools/tool.h"
 #include "Graphics/pagelayoutscene.h"
+<<<<<<< Updated upstream
 
 #include <QMessageBox>
 #include <QFileDialog>
+=======
+#include "Framework/History/historymanagerviewer.h"
+#include "Framework/toollibrary.h"
+#include "Framework/toolmenuviewer.h"
+#include "Graphics/documentsummaryframe.h"
+
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QSplitter>
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -21,20 +45,63 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     ui = new UI(this);
 
+<<<<<<< Updated upstream
     addView();
+    newDocument();
+=======
+<<<<<<< Updated upstream
+    QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
+>>>>>>> Stashed changes
+}
+=======
+    QTabWidget* tabs = new QTabWidget();
+    tabs->setMovable(true);
+    tabs->setTabBarAutoHide(true);
+    tabs->setTabPosition(QTabWidget::West);
+>>>>>>> Stashed changes
+
+    DocumentSummaryFrame* pages = new DocumentSummaryFrame();
+    HistoryManagerViewer* history = new HistoryManagerViewer();
+    ToolMenuViewer* settings = new ToolMenuViewer();
+    ui->setWindows(pages, history, settings);
+    ToolLibrary* tools = new ToolLibrary(ui);
+    ui->setToolLibrary(tools);
+
+
+    tabs->addTab(pages, "Pages");
+    tabs->addTab(history, "History");
+    tabs->addTab(tools, "Tools");
+    tabs->addTab(settings, "Tool Settings");
+
+
+
+    DocumentInteractionFrame *central_view = new DocumentInteractionFrame(ui->getActiveDocument());
+
+    QSplitter* splitter = new QSplitter(Qt::Horizontal);
+    splitter->addWidget(tabs);
+    splitter->addWidget(central_view);
+
+    setCentralWidget(splitter);
+    views.append(central_view);
+
     newDocument();
 }
 
 
-MainWindow::~MainWindow(){
-
-}
-
-
+<<<<<<< Updated upstream
 void MainWindow::addSubWindow(QDockWidget *widget, Qt::DockWidgetArea area)
 {
     addDockWidget(area, widget);
     subWindows.append(widget);
+=======
+<<<<<<< Updated upstream
+bool MainWindow::save(){
+    return false;
+=======
+MainWindow::~MainWindow(){
+
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 }
 
 
@@ -116,6 +183,7 @@ void MainWindow::about() {
                        tr("Best app ever!"));
 }
 
+<<<<<<< Updated upstream
 
 void MainWindow::addView()
 {
@@ -123,6 +191,14 @@ void MainWindow::addView()
     addSubWindow(new_frame, Qt::BottomDockWidgetArea);
     new_frame->addDocument(ui->getActiveDocument());
     views.append(new_frame);
+=======
+<<<<<<< Updated upstream
+=======
+
+void MainWindow::addView()
+{
+
+>>>>>>> Stashed changes
 }
 
 
@@ -176,6 +252,10 @@ void MainWindow::toggleShadow()
 }
 
 
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 void MainWindow::createMenus(){
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(tr("&New..."), this, &MainWindow::newDocument, QKeySequence::New);

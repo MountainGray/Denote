@@ -7,6 +7,10 @@
 #include "Graphics/page.h"
 #include "Graphics/pagelayoutscene.h"
 #include "Graphics/pageportal.h"
+<<<<<<< Updated upstream
+=======
+#include "Framework/toollibrary.h"
+>>>>>>> Stashed changes
 
 #include <QPainter>
 
@@ -69,7 +73,11 @@ void LassoSelect::drawDoubleClickEvent(ToolEvent event)
     if(event.button() == Qt::RightButton){
         ui->getActivePage()->clearSelection();
     } else if(event.button() == Qt::LeftButton){
+<<<<<<< Updated upstream
         ui->setActiveTool(box);
+=======
+        tool_library->setActiveTool(box);
+>>>>>>> Stashed changes
     }
 }
 

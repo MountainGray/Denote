@@ -7,12 +7,15 @@
 #include "mainwindow.h"
 #include "Graphics/documentsummaryframe.h"
 
+<<<<<<< Updated upstream
 #include "Tools/pen.h"
 #include "Tools/fill.h"
 #include "Tools/eraser.h"
 #include "Tools/selectionbox.h"
 #include "Tools/circleselect.h"
 #include "Tools/lassoselect.h"
+=======
+>>>>>>> Stashed changes
 #include "Graphics/page.h"
 #include "Framework/document.h"
 
@@ -21,6 +24,7 @@ UI::UI(MainWindow* main_window)
 {
     this->main_window = main_window;
 
+<<<<<<< Updated upstream
     tool_library = new ToolLibrary(main_window);
     summary_frame = new DocumentSummaryFrame(main_window);
     tool_menu_viewer = new ToolMenuViewer(main_window);
@@ -82,6 +86,21 @@ void UI::setActiveTool(Tool *tool){
 ToolMenu *UI::getToolMenu()
 {
     return tool_menu_viewer->getMenu();
+=======
+    //tool_library = new ToolLibrary(main_window);
+    //summary_frame = new DocumentSummaryFrame();
+    //tool_menu_viewer = new ToolMenuViewer(main_window);
+    //history_manager_viewer = new HistoryManagerViewer(main_window);
+
+
+    //main_window->addSubWindow(tool_library, Qt::TopDockWidgetArea);
+    //main_window->addSubWindow(summary_frame, Qt::BottomDockWidgetArea);
+    //main_window->addSubWindow(tool_menu_viewer, Qt::BottomDockWidgetArea);
+    //main_window->addSubWindow(history_manager_viewer, Qt::BottomDockWidgetArea);
+
+
+
+>>>>>>> Stashed changes
 }
 
 
@@ -98,7 +117,11 @@ void UI::setDisplayMode(IColor::DisplayMode mode)
         page->update();
         page->updatePortals();
     }
+<<<<<<< Updated upstream
     foreach(Tool* tool, getTools()){
+=======
+    foreach(Tool* tool, tool_library->getTools()){
+>>>>>>> Stashed changes
         tool->setDisplayMode(mode);
     }
 
@@ -106,6 +129,23 @@ void UI::setDisplayMode(IColor::DisplayMode mode)
 }
 
 
+<<<<<<< Updated upstream
+=======
+void UI::setWindows(DocumentSummaryFrame* pages, HistoryManagerViewer* history, ToolMenuViewer* settings)
+{
+    summary_frame = pages;
+    history_manager_viewer = history;
+    tool_menu_viewer = settings;
+}
+
+
+Tool *UI::getActiveTool()
+{
+    return tool_library->getActiveTool();
+}
+
+
+>>>>>>> Stashed changes
 
 
 

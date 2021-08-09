@@ -28,7 +28,10 @@ public:
     PageLayoutScene* getPageLayoutScene(){return page_layout_scene;}
     Document* getDoc(){return doc;}
     void focusDoc();
+<<<<<<< Updated upstream
     void resetGL();
+=======
+>>>>>>> Stashed changes
 
 protected:
     Document* doc;

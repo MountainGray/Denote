@@ -5,6 +5,10 @@
 
 #include <QScrollBar>
 #include <QClipboard>
+<<<<<<< Updated upstream
+=======
+#include <QGuiApplication>
+>>>>>>> Stashed changes
 
 
 DocumentInteractionView::DocumentInteractionView(Document* doc, DocumentInteractionFrame* frame) : DocumentView(doc)

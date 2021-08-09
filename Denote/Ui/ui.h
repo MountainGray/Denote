@@ -22,25 +22,42 @@ public:
     UI(MainWindow* main_window);
 
 public:
+<<<<<<< Updated upstream
     void addTool(Tool* tool);
     void setActiveTool(Tool *tool);
+=======
+>>>>>>> Stashed changes
     void setActiveDocument(Document* doc){active_document = doc;}
     void setActiveLayout(PageLayoutScene* layout){active_layout = layout;}
     void setActivePage(Page* page){active_page = page;}
     void setActivePortal(PagePortal* portal){active_portal = portal;}
     void setDisplayMode(IColor::DisplayMode mode);
+<<<<<<< Updated upstream
 
     Tool* getActiveTool(){return active_tool;}
     Document* getActiveDocument(){return active_document;}
     PageLayoutScene* getActiveLayout(){return active_layout;}
     ToolMenu* getToolMenu();
     QList<Tool*> getTools(){return tools;}
+=======
+    void setWindows(DocumentSummaryFrame*, HistoryManagerViewer*, ToolMenuViewer*);
+
+    Document* getActiveDocument(){return active_document;}
+    PageLayoutScene* getActiveLayout(){return active_layout;}
+>>>>>>> Stashed changes
     Page* getActivePage(){return active_page;}
     PagePortal* getActivePortal(){return active_portal;}
     HistoryManagerViewer* getHistoryManagerViewer(){return history_manager_viewer;}
     DocumentSummaryFrame* getSummaryFrame(){return summary_frame;}
     MainWindow* getMain(){return main_window;}
     IColor::DisplayMode getDisplayMode(){return display_mode;}
+<<<<<<< Updated upstream
+=======
+    ToolMenuViewer* getToolMenuViewer(){return tool_menu_viewer;}
+    Tool* getActiveTool();
+    ToolLibrary* getToolLibrary(){return tool_library;}
+    void setToolLibrary(ToolLibrary* library){this->tool_library = library;}
+>>>>>>> Stashed changes
 
 private:
     MainWindow* main_window;
@@ -49,14 +66,20 @@ private:
     DocumentSummaryFrame* summary_frame;
     ToolLibrary* tool_library;
 
+<<<<<<< Updated upstream
     QList<Tool*> tools;
     Tool* active_tool = nullptr;
+=======
+>>>>>>> Stashed changes
     Document* active_document = nullptr;
     PageLayoutScene* active_layout = nullptr;
     Page* active_page = nullptr;
     PagePortal* active_portal = nullptr;
     IColor::DisplayMode display_mode = IColor::Normal;
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 };
 
 #endif // UI_H
