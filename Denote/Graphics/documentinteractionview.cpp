@@ -13,7 +13,6 @@ DocumentInteractionView::DocumentInteractionView(Document* doc, DocumentInteract
     this->frame = frame;
     page_layout_scene->setLayoutType(PageLayoutScene::FitToView);
     connect(verticalScrollBar(), &QAbstractSlider::valueChanged, this, &DocumentInteractionView::scrollPositionChanged);
-    frame->resetScale();
 }
 
 
@@ -62,6 +61,11 @@ void DocumentInteractionView::tabletEvent(QTabletEvent *event){
 void DocumentInteractionView::mousePressEvent(QMouseEvent *event)
 {
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
+        if(event->buttons() & Qt::MiddleButton){
+            pan_offset = event->pos();
+            setCursor(Qt::ClosedHandCursor);
+        }
+
         foreach(PagePortal* portal, page_layout_scene->getPortals()){
             if(portal->isUnderMouse()){
                 page_layout_scene->setFocusedPortal(portal);
@@ -79,7 +83,15 @@ void DocumentInteractionView::mousePressEvent(QMouseEvent *event)
 void DocumentInteractionView::mouseMoveEvent(QMouseEvent *event)
 {
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
-        doc->getUI()->getActiveTool()->drawMoveEvent(ToolEvent(event, this));
+        if(event->buttons() & Qt::MiddleButton){
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->pos().x() - pan_offset.x()));
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->pos().y() - pan_offset.y()));
+            pan_offset = event->position();
+            view_inverse = viewportTransform().inverted();
+
+        } else {
+            doc->getUI()->getActiveTool()->drawMoveEvent(ToolEvent(event, this));
+        }
     }
     QGraphicsView::mouseMoveEvent(event);//for zoom
 }
@@ -87,6 +99,7 @@ void DocumentInteractionView::mouseMoveEvent(QMouseEvent *event)
 
 void DocumentInteractionView::mouseReleaseEvent(QMouseEvent *event)
 {
+    setCursor(Qt::ArrowCursor);
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
         doc->getUI()->getActiveTool()->drawReleaseEvent(ToolEvent(event, this));
     }
@@ -116,11 +129,15 @@ void DocumentInteractionView::wheelEvent(QWheelEvent *event){
             } else if(event->angleDelta().y() < 0 and view_scale > 0.2){
                 scaleBy(1/1.1);
             }
-            frame->resetScale();
+            frame->updateScaleSlider();
         }
         event->accept();
     } else {
-        QGraphicsView::wheelEvent(event);
+        if(page_layout_scene->getLayoutType() == PageLayoutScene::Horizontal){
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value()-event->angleDelta().y());
+        } else {
+            QGraphicsView::wheelEvent(event);
+        }
     }
     view_inverse = viewportTransform().inverted();
 }

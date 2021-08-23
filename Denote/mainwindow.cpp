@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     ui->setWindows(pages, history, settings);
     ToolLibrary* tools = new ToolLibrary(ui);
     ui->setToolLibrary(tools);
-    FileViewer* file_viewer = new FileViewer();
+    FileViewer* file_viewer = new FileViewer(ui);
 
     tabs->addTab(pages, "Pages");
     tabs->addTab(history, "History");
@@ -49,9 +49,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     tabs->addTab(settings, "Tool Settings");
     tabs->addTab(file_viewer, "File Viewer");
 
-    DocumentInteractionFrame *central_view = new DocumentInteractionFrame(ui->getActiveDocument());
+    DocumentInteractionFrame *central_view = new DocumentInteractionFrame(ui);
 
     QSplitter* splitter = new QSplitter(Qt::Horizontal);
+    splitter->setHandleWidth(0);
     splitter->addWidget(tabs);
     splitter->addWidget(central_view);
 
@@ -67,6 +68,35 @@ MainWindow::~MainWindow(){
 }
 
 
+void MainWindow::openDocument(QString file_name)
+{
+    QFile file(file_name);
+    QFileInfo file_info(file_name);
+
+    if(!file.open(QIODevice::ReadOnly)){
+        QMessageBox::information(this->getUI()->getMain(), tr("Unable to open file"),
+            file.errorString());
+    }
+    QByteArray data = file.readAll();
+    data = qUncompress(data);
+    QDataStream in(&data, QIODevice::ReadOnly);
+    if(in.version() != QDataStream::Qt_6_1){
+        QMessageBox::information(this->getUI()->getMain(), tr("Unable to open file"), tr("File version is not compatible"));
+        return;
+    }
+
+    Document *new_doc = new Document(ui);
+    new_doc->setName(file_info.baseName());
+    new_doc->serializeRead(in);
+    ui->setDisplayMode(ui->getDisplayMode());
+    foreach(DocumentInteractionFrame* view, views){
+        view->addDocument(new_doc);
+        view->setCurrentDocument(new_doc);
+    }
+    file.close();
+}
+
+
 void MainWindow::newDocument()
 {
     Document *doc = new Document(ui);
@@ -76,7 +106,7 @@ void MainWindow::newDocument()
 
     foreach(DocumentInteractionFrame* view, views){
         view->addDocument(doc);
-        view->setDocument(doc);
+        view->setCurrentDocument(doc);
     }
 }
 
@@ -113,30 +143,7 @@ void MainWindow::open(){
     if(file_name.isEmpty())
         return;
 
-    QFile file(file_name);
-    QFileInfo file_info(file_name);
-
-    if(!file.open(QIODevice::ReadOnly)){
-        QMessageBox::information(this->getUI()->getMain(), tr("Unable to open file"),
-            file.errorString());
-    }
-    QByteArray data = file.readAll();
-    data = qUncompress(data);
-    QDataStream in(&data, QIODevice::ReadOnly);
-    if(in.version() != QDataStream::Qt_6_1){
-        QMessageBox::information(this->getUI()->getMain(), tr("Unable to open file"), tr("File version is not compatible"));
-        return;
-    }
-
-    Document *new_doc = new Document(ui);
-    new_doc->setName(file_info.baseName());
-    new_doc->serializeRead(in);
-    ui->setDisplayMode(ui->getDisplayMode());
-    foreach(DocumentInteractionFrame* view, views){
-        view->addDocument(new_doc);
-        view->setDocument(new_doc);
-    }
-    file.close();
+    openDocument(file_name);
 }
 
 
@@ -148,7 +155,7 @@ void MainWindow::about() {
 
 void MainWindow::addView()
 {
-    DocumentInteractionFrame *new_view = new DocumentInteractionFrame(ui->getActiveDocument());
+    DocumentInteractionFrame *new_view = new DocumentInteractionFrame(ui, ui->getActiveDocument());
     new_view->resize(1000,500);
     new_view->show();
 

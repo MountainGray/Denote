@@ -36,7 +36,6 @@ void Page::drawBackground(QPainter *painter, const QRectF &rect){
     else if(page_type == Graph) paintGraph(painter);
     else if(page_type == Staves) paintStaves(painter);
     else if(page_type == Custom) paintEngineering(painter);
-    else paintEngineering(painter);
 }
 
 

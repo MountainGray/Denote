@@ -31,6 +31,7 @@ private slots:
 
 private:
     DocumentInteractionFrame* frame;
+    QPointF pan_offset;
 };
 
 #endif // DOCUMENTINTERACTIONVIEW_H

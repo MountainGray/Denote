@@ -254,6 +254,6 @@ void Document::setName(QString name)
 {
     doc_name = name;
     foreach(DocumentInteractionFrame* frame, ui->getMain()->getViews()){
-        frame->updateDocNames();
+        frame->updateDocNames(this);
     }
 }

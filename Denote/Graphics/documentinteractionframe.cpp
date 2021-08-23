@@ -2,199 +2,238 @@
 #include "mainwindow.h"
 #include "Framework/document.h"
 #include "documentinteractionview.h"
+#include "Graphics/pagelayoutscene.h"
+#include "Graphics/page.h"
 
-#include <QPushButton>
-#include <QButtonGroup>
+#include <QAction>
+#include <QActionGroup>
+#include <QToolButton>
+#include <QLabel>
 
-
-DocumentInteractionFrame::DocumentInteractionFrame(Document* doc)
+DocumentInteractionFrame::DocumentInteractionFrame(UI* ui, Document* doc)
 {
+    this->ui = ui;
     setMinimumSize(100,100);
-
-    empty_widget = new QLabel();
-    empty_widget->setAlignment(Qt::AlignCenter);
-    empty_widget->setText("No Documents are Open");
-
-    tabs = new QTabWidget();
-
-    tabs->setMovable(true);
-    tabs->setTabsClosable(true);
-
-    QPushButton* shadows = new QPushButton("Shadows");
-    shadows->setCheckable(true);
-    shadows->setChecked(true);
-
-    QPushButton* holes = new QPushButton("Holes");
-    holes->setCheckable(true);
-    holes->setChecked(true);
-
-    QPushButton* vertical = new QPushButton("Vertical");
-    vertical->setCheckable(true);
-    QPushButton* horizontal = new QPushButton("Horizontal");
-    horizontal->setCheckable(true);
-    QPushButton* seamless = new QPushButton("Seamless");
-    seamless->setCheckable(true);
-    QPushButton* ftv = new QPushButton("Fit to view");
-    ftv->setCheckable(true);
-    ftv->setChecked(true);
-
-
-    QButtonGroup* group = new QButtonGroup();
-    group->setExclusive(true);
-    group->addButton(vertical);
-    group->addButton(horizontal);
-    group->addButton(seamless);
-    group->addButton(ftv);
-
-    slider = new QSlider(Qt::Orientation::Horizontal);
-    slider->setRange(20,500);
-
-    QGridLayout* button_layout = new QGridLayout();
-    QSpacerItem* spacer = new QSpacerItem(1,1, QSizePolicy::Expanding);
-    button_layout->addItem(spacer,0,0);
-    button_layout->addWidget(shadows,0,1);
-    button_layout->addWidget(holes,0,2);
-    button_layout->addWidget(vertical,0,3);
-    button_layout->addWidget(horizontal,0,4);
-    button_layout->addWidget(seamless,0,5);
-    button_layout->addWidget(ftv,0,6);
-    button_layout->addWidget(slider,0,7);
-
-    frame_layout = new QGridLayout();
-    frame_layout->setContentsMargins(0,0,0,0);
-    frame_layout->addWidget(tabs,0,0);
-    frame_layout->addLayout(button_layout,1,0);
-
-    layout_widget = new QWidget();
-    layout_widget->setLayout(frame_layout);
+    setupWidgets();
 
     addDocument(doc);
-
-    setLayout(frame_layout);
-
-    addDocument(doc);
-
-    setLayout(frame_layout);
-
-    addDocument(doc);
-
-    connect(tabs, &QTabWidget::currentChanged, this, &DocumentInteractionFrame::focusCurrentDoc);
-    connect(tabs, &QTabWidget::tabCloseRequested, this, &DocumentInteractionFrame::removeTab);
-    connect(holes, &QPushButton::clicked, this, &DocumentInteractionFrame::setHoles);
-    connect(shadows, &QPushButton::clicked, this, &DocumentInteractionFrame::setShadows);
-    connect(vertical, &QPushButton::clicked, this, &DocumentInteractionFrame::setVertical);
-    connect(horizontal, &QPushButton::clicked, this, &DocumentInteractionFrame::setHorizontal);
-    connect(seamless, &QPushButton::clicked, this, &DocumentInteractionFrame::setSeamless);
-    connect(ftv, &QPushButton::clicked, this, &DocumentInteractionFrame::setFTV);
-    connect(slider, &QSlider::sliderMoved, this, &DocumentInteractionFrame::setScale);
-
-    resetScale();
+    setCurrentDocument(doc);
 }
 
 
 DocumentInteractionFrame::~DocumentInteractionFrame()
 {
     delete tabs;
+    delete view_stack;
+    delete scale;
 }
 
 
 void DocumentInteractionFrame::setScale(float scale)
 {
-    if(current_view != nullptr) current_view->setScale(scale/100);
+    if(viewports.isEmpty()) return;
+    viewports.at(tabs->currentIndex())->setScale(scale/100);
 }
 
 
 void DocumentInteractionFrame::addDocument(Document *doc)
 {
     if (doc == nullptr) return;
-
     DocumentInteractionView* new_viewport = new DocumentInteractionView(doc, this);
-    //QString("Untitled %1").arg(tab_widget->count())
-    tabs->addTab(new_viewport, doc->getName());
+
+    view_stack->addWidget(new_viewport);
+    viewports.append(new_viewport);
+    tabs->addTab(doc->getName());
     doc->focusDoc();
-
 }
 
 
-void DocumentInteractionFrame::setDocument(Document *doc)
+void DocumentInteractionFrame::setCurrentDocument(Document *doc)
 {
-    for(int i = 0; i < tabs->count(); i++){
-        DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tabs->widget(i));
-        if(view != nullptr and view->getDoc() == doc){
-            tabs->setCurrentIndex(i);
-            doc->focusDoc();
-            break;
+    if(doc == nullptr) return;
+
+    for(int i = 0; i < viewports.length(); i++){
+        if(viewports.at(i)->getDoc() == doc){
+            setCurrentIndex(i);
+            return;
         }
     }
 }
 
 
-void DocumentInteractionFrame::updateDocNames()
+void DocumentInteractionFrame::setCurrentIndex(int i)
 {
-    for(int i = 0; i < tabs->count(); i++){
-        DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tabs->widget(i));
-        if(view != nullptr){
-            tabs->setTabText(i,view->getDoc()->getName());
+    if(i < 0 or i > viewports.size()) return;
+
+    tabs->setCurrentIndex(i);
+    view_stack->setCurrentWidget(viewports.at(i));
+    viewports.at(i)->getDoc()->focusDoc();
+    updateLayoutType();
+    updateScaleSlider();
+}
+
+
+void DocumentInteractionFrame::updateDocNames(Document* doc)
+{
+    if(doc == nullptr) return;
+
+    for(int i = 0; i < viewports.length(); i++){
+        if(viewports.at(i)->getDoc() == doc){
+            tabs->setTabText(i,viewports.at(i)->getDoc()->getName());
         }
     }
 }
 
 
-void DocumentInteractionFrame::resetScale()
+void DocumentInteractionFrame::updateScaleSlider()
 {
-    if(current_view != nullptr) slider->setValue(current_view->getScale()*100);
+    scale->setValue(viewports.at(tabs->currentIndex())->getScale()*100);
 }
 
 
-void DocumentInteractionFrame::focusCurrentDoc()
+void DocumentInteractionFrame::tabMoved(int from, int to)
 {
-    DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tabs->currentWidget());
-    if(view != nullptr){
-        view->getDoc()->focusDoc();
+    viewports.swapItemsAt(from,to);
+}
+
+
+void DocumentInteractionFrame::setLayoutType(QAction* layout)
+{
+    if(viewports.isEmpty())return;
+    viewports.at(tabs->currentIndex())->getPageLayoutScene()->setLayoutType(layout->data().value<PageLayoutScene::LayoutType>());
+}
+
+
+void DocumentInteractionFrame::addNewDocument()
+{
+    Document *doc = new Document(ui);
+
+    Page* new_page = new Page();
+    doc->addPage(new_page);
+
+    addDocument(doc);
+    setCurrentDocument(doc);
+}
+
+
+void DocumentInteractionFrame::showTabContextMenu(const QPoint &point)
+{
+    if (point.isNull()) return;
+
+    QMenu menu(this);
+
+    QAction* close = new QAction("Close Document");
+    menu.addAction(close);
+    connect(close, &QAction::triggered, this, &DocumentInteractionFrame::closeTab);
+
+    menu.exec(tabs->mapToGlobal(point));
+}
+
+
+void DocumentInteractionFrame::closeTab()
+{
+    int i = tabs->currentIndex();
+    tabs->removeTab(i);
+    view_stack->removeWidget(viewports.at(i));
+    delete viewports.at(i);
+    viewports.remove(i);
+}
+
+
+void DocumentInteractionFrame::setupWidgets()
+{
+    //stacked widget
+    view_stack = new QStackedWidget();
+
+    //tab bar
+    tabs = new QTabBar();
+    tabs->setShape(QTabBar::RoundedSouth);
+    tabs->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
+    tabs->setExpanding(true);
+    tabs->setMovable(true);
+    tabs->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    QToolButton* new_tab = new QToolButton();
+    new_tab->setIcon(QIcon(":/icons/AddTab.png"));
+
+    //layout types
+    QAction* vertical = new QAction();
+    vertical->setIcon(QIcon(":/icons/Vertical.png"));
+    vertical->setData(int(PageLayoutScene::Vertical));
+    vertical->setCheckable(true);
+
+    QAction* horizontal = new QAction();
+    horizontal->setIcon(QIcon(":/icons/Horizontal.png"));
+    horizontal->setData(int(PageLayoutScene::Horizontal));
+    horizontal->setCheckable(true);
+
+    QAction* seamless = new QAction();
+    seamless->setIcon(QIcon(":/icons/Seamless.png"));
+    seamless->setData(int(PageLayoutScene::Seamless));
+    seamless->setCheckable(true);
+
+    QAction* ftv = new QAction();
+    ftv->setIcon(QIcon(":/icons/FitToView.png"));
+    ftv->setData(int(PageLayoutScene::FitToView));
+    ftv->setCheckable(true);
+    ftv->setChecked(true);
+
+    QActionGroup* group = new QActionGroup(this);
+    group->setExclusive(true);
+    group->addAction(vertical);
+    group->addAction(horizontal);
+    group->addAction(seamless);
+    group->addAction(ftv);
+
+    layouts = new QToolBar("Views");
+    layouts->setMovable(false);
+    layouts->setContentsMargins(0,0,0,0);
+    layouts->addAction(ftv);
+    layouts->addAction(vertical);
+    layouts->addAction(seamless);
+    layouts->addAction(horizontal);
+    layouts->setIconSize(QSize(15,15));//originally 20x20
+
+    scale = new QSlider(Qt::Orientation::Horizontal);
+    scale->setRange(20,500);
+    scale->setFixedWidth(200);
+
+    //setup button layout
+    QHBoxLayout* button_layout = new QHBoxLayout();
+    button_layout->setContentsMargins(0,0,0,0);
+    button_layout->setSpacing(0);
+    button_layout->addWidget(tabs);
+    button_layout->addSpacing(5);
+    button_layout->addWidget(new_tab);
+    button_layout->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::Expanding));
+    button_layout->addWidget(layouts);
+    button_layout->addWidget(scale);
+
+    //setup frame layout
+    QVBoxLayout* frame_layout = new QVBoxLayout();
+    frame_layout->setContentsMargins(0,0,0,0);
+    frame_layout->setSpacing(0);
+    frame_layout->addWidget(view_stack);
+    frame_layout->addLayout(button_layout);
+
+    setLayout(frame_layout);
+
+    connect(tabs, &QTabBar::currentChanged, this, &DocumentInteractionFrame::setCurrentIndex);
+    connect(tabs, &QTabBar::tabMoved, this, &DocumentInteractionFrame::tabMoved);
+    connect(tabs, &QTabBar::customContextMenuRequested, this, &DocumentInteractionFrame::showTabContextMenu);
+    connect(scale, &QSlider::sliderMoved, this, &DocumentInteractionFrame::setScale);
+    connect(layouts, &QToolBar::actionTriggered, this, &DocumentInteractionFrame::setLayoutType);
+    connect(new_tab, &QToolButton::clicked, this, &DocumentInteractionFrame::addNewDocument);
+}
+
+
+void DocumentInteractionFrame::updateLayoutType()
+{
+    PageLayoutScene::LayoutType type = viewports.at(tabs->currentIndex())->getPageLayoutScene()->getLayoutType();
+    foreach(QAction* action, layouts->actions()){
+        if(action->data().toInt() == type){
+            action->setChecked(true);
+            return;
+        }
     }
-    current_view = view;
-    resetScale();
-}
-
-
-void DocumentInteractionFrame::setHoles(bool holes)
-{
-    if(current_view != nullptr) current_view->getPageLayoutScene()->setHoles(holes);
-}
-
-
-void DocumentInteractionFrame::setShadows(bool shadows)
-{
-    if(current_view != nullptr) current_view->getPageLayoutScene()->setShadow(shadows);
-}
-
-
-void DocumentInteractionFrame::setVertical()
-{
-    if(current_view != nullptr) current_view->getPageLayoutScene()->setLayoutType(PageLayoutScene::Vertical);
-}
-
-
-void DocumentInteractionFrame::setHorizontal()
-{
-    if(current_view != nullptr) current_view->getPageLayoutScene()->setLayoutType(PageLayoutScene::Horizontal);
-}
-
-
-void DocumentInteractionFrame::setSeamless()
-{
-    if(current_view != nullptr) current_view->getPageLayoutScene()->setLayoutType(PageLayoutScene::Seamless);
-}
-
-
-void DocumentInteractionFrame::setFTV()
-{
-    if(current_view != nullptr) current_view->getPageLayoutScene()->setLayoutType(PageLayoutScene::FitToView);
-}
-
-
-void DocumentInteractionFrame::removeTab(int index)
-{
-    delete tabs->widget(index);
-    tabs->removeTab(index);
 }

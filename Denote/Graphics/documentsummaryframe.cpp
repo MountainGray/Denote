@@ -16,7 +16,7 @@ DocumentSummaryFrame::DocumentSummaryFrame()
     stack = new QStackedWidget();
 
     page_combo = new QComboBox();
-    page_combo->addItems({"Engineering", "Graph", "Lines", "LinesMargin", "Staves"});
+    page_combo->addItems({"Engineering", "Graph", "Lines", "LinesMargin", "Staves", "Blank"});
     page_combo->setCurrentIndex(0);
 
     new_button = new QPushButton("New Page");
@@ -30,6 +30,7 @@ DocumentSummaryFrame::DocumentSummaryFrame()
     page_height->setValue(1100);
 
     button_layout = new QGridLayout();
+    button_layout->setSpacing(0);
     button_layout->addWidget(page_combo,0,0);
     button_layout->addWidget(new_button,1,0);
     button_layout->addWidget(up_button,2,0);
@@ -95,7 +96,7 @@ void DocumentSummaryFrame::addPage()
     } else if(page_combo->currentText() == "Staves"){
         page->setBackgroundType(BackgroundType::Staves);
     } else {
-        page->setBackgroundType(BackgroundType::Engineering);
+        page->setBackgroundType(BackgroundType::Blank);
     }
     page->setPageSize(page_width->value(),page_height->value());
     int index = -1;

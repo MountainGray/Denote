@@ -9,7 +9,7 @@
 
 class PagePortal;
 
-enum BackgroundType { Lines, LinesMargin, Engineering, Graph, Staves, Custom };
+enum BackgroundType { Lines, LinesMargin, Engineering, Graph, Staves, Blank, Custom };
 
 class Page : public QGraphicsScene, public Serializable
 {

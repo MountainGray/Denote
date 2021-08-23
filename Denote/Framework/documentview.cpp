@@ -6,6 +6,7 @@
 #include "Ui/ui.h"
 
 #include <QtOpenGLWidgets/QOpenGLWidget>
+#include <QScrollBar>
 
 
 DocumentView::DocumentView(Document* doc)
@@ -34,6 +35,14 @@ DocumentView::DocumentView(Document* doc)
     page_layout_scene->updatePageLayout();
 
     setResizeAnchor(ViewportAnchor::AnchorViewCenter);
+
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setStyleSheet(
+        "QScrollBar:vertical {border: 1px; background: none; width: 7px; margin: 0px 1px 0px 1px;}"
+        "QScrollBar::handle:vertical {background: #444444; min-height: 10px;}"
+        "QScrollBar::add-page, QScrollBar::sub-page {background: none;}"
+        "QScrollBar::add-line, QScrollBar::sub-line {background: none;}"
+        "QScrollBar::up-arrow, QScrollBar::down-arrow {background: none;}");
 }
 
 
