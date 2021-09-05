@@ -168,7 +168,7 @@ void Pen::setDisplayMode(IColor::DisplayMode mode)
 }
 
 
-void Pen::setWidth(float width)
+void Pen::setWidth(float new_width)
 {
     width = fmax(fmin(new_width, width_slider->maximum()),0);
     width_slider->setValue(width*3);

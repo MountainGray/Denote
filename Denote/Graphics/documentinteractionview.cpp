@@ -19,29 +19,12 @@
 
 DocumentInteractionView::DocumentInteractionView(Document* doc, DocumentInteractionFrame* frame) : DocumentView(doc)
 {
-    this->doc = doc;
-    page_layout_scene = new PageLayoutScene(this, doc);
-    page_layout_scene->setLayoutType(LayoutType::FitToView);
-    setScene(page_layout_scene);
-
-    doc->getUI()->setActiveLayout(page_layout_scene);
-
-    setDragMode(QGraphicsView::NoDrag);
-    setTransformationAnchor(AnchorUnderMouse);
-
-    setRenderHint(QPainter::Antialiasing, true);
-    setRenderHint(QPainter::SmoothPixmapTransform, true);
-
-    resetGL();
-
-    centerOn(0,0);
+    this->frame = frame;
+    page_layout_scene->setLayoutType(PageLayoutScene::FitToView);
 
     setTabletTracking(true);
     setMouseTracking(true);
 
-    setBackgroundBrush(QBrush(QColor(37,37,40)));
-    this->frame = frame;
-    page_layout_scene->setLayoutType(PageLayoutScene::FitToView);
     connect(verticalScrollBar(), &QAbstractSlider::valueChanged, this, &DocumentInteractionView::scrollPositionChanged);
 }
 

@@ -6,7 +6,7 @@ ToolMenuViewer::ToolMenuViewer()
 {
     setMinimumSize(50,50);
     tool_menu = new ToolMenu();
-    setWidget(tool_menu);
+}
 
 
 void ToolMenuViewer::addToolMenu(ToolMenu* menu)
