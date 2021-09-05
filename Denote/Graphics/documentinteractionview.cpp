@@ -1,77 +1,24 @@
 #include "documentinteractionview.h"
-#include "pagelayoutscene.h"
-#include "Framework/document.h"
-#include "Tools/tool.h"
-#include "Ui/ui.h"
-#include "Framework/toolevent.h"
-#include "Graphics/pageportal.h"
-#include "Framework/History/historymanager.h"
-#include "Graphics/page.h"
-#include "Graphics/documentsummaryview.h"
-#include "mainwindow.h"
 #include "Framework/History/historymanagerviewer.h"
-
-#include <QtOpenGLWidgets/QOpenGLWidget>
+#include "Graphics/documentinteractionframe.h"
 #include "Tools/image.h"
 
+#include <QScrollBar>
 #include <QClipboard>
+#include <QGuiApplication>
 
 
-DocumentInteractionView::DocumentInteractionView(Document* doc)
+DocumentInteractionView::DocumentInteractionView(Document* doc, DocumentInteractionFrame* frame) : DocumentView(doc)
 {
-    this->doc = doc;
-    page_layout_scene = new PageLayoutScene(this, doc);
-    page_layout_scene->setLayoutType(LayoutType::FitToView);
-    setScene(page_layout_scene);
-
-    summary_view = new DocumentSummaryView(doc);
-
-    doc->getUI()->setActiveLayout(page_layout_scene);
-
-    setDragMode(QGraphicsView::NoDrag);
-    setTransformationAnchor(AnchorUnderMouse);
-
-    setRenderHint(QPainter::Antialiasing, true);
-    setRenderHint(QPainter::SmoothPixmapTransform, true);
-
-    resetGL();
-
-    centerOn(0,0);
-
-    setTabletTracking(true);
-    setMouseTracking(true);
-
-    setBackgroundBrush(QBrush(QColor(37,37,40)));
+    this->frame = frame;
+    page_layout_scene->setLayoutType(PageLayoutScene::FitToView);
+    connect(verticalScrollBar(), &QAbstractSlider::valueChanged, this, &DocumentInteractionView::scrollPositionChanged);
 }
 
 
 DocumentInteractionView::~DocumentInteractionView()
 {
-    delete page_layout_scene;
-}
 
-
-void DocumentInteractionView::setScale(float view_scale)
-{
-    float new_scale = view_scale / transform().m11();
-    scale(new_scale, new_scale);
-}
-
-
-void DocumentInteractionView::resetGL()
-{
-    QOpenGLWidget* gl = new QOpenGLWidget();
-    QSurfaceFormat format;
-    format.setSamples(6);
-    gl->setFormat(format);
-    setViewport(gl);
-    //should need to exist. Antialiasing missing when popping in/out subwindow.
-}
-
-
-void DocumentInteractionView::focusDoc()
-{
-    if(doc->getUI()->getActiveDocument() != doc) doc->focusDoc();
 }
 
 
@@ -98,7 +45,7 @@ void DocumentInteractionView::tabletEvent(QTabletEvent *event){
                 page_layout_scene->setFocusedPortal(portal);
                 doc->getUI()->setActivePage(portal->getPage());
                 doc->getUI()->setActivePortal(portal);
-                page_inverse = -portal->scenePos();
+                page_inverse = portal->getPageOffset() - portal->scenePos();
             }
         }
         doc->getUI()->getActiveTool()->drawPressEvent(ToolEvent(event, this));
@@ -114,12 +61,17 @@ void DocumentInteractionView::tabletEvent(QTabletEvent *event){
 void DocumentInteractionView::mousePressEvent(QMouseEvent *event)
 {
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
+        if(event->buttons() & Qt::MiddleButton){
+            pan_offset = event->pos();
+            setCursor(Qt::ClosedHandCursor);
+        }
+
         foreach(PagePortal* portal, page_layout_scene->getPortals()){
             if(portal->isUnderMouse()){
                 page_layout_scene->setFocusedPortal(portal);
                 doc->getUI()->setActivePage(portal->getPage());
                 doc->getUI()->setActivePortal(portal);
-                page_inverse = -portal->scenePos();
+                page_inverse = portal->getPageOffset() - portal->scenePos();
             }
         }
         doc->getUI()->getActiveTool()->drawPressEvent(ToolEvent(event, this));
@@ -131,7 +83,15 @@ void DocumentInteractionView::mousePressEvent(QMouseEvent *event)
 void DocumentInteractionView::mouseMoveEvent(QMouseEvent *event)
 {
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
-        doc->getUI()->getActiveTool()->drawMoveEvent(ToolEvent(event, this));
+        if(event->buttons() & Qt::MiddleButton){
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->pos().x() - pan_offset.x()));
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->pos().y() - pan_offset.y()));
+            pan_offset = event->position();
+            view_inverse = viewportTransform().inverted();
+
+        } else {
+            doc->getUI()->getActiveTool()->drawMoveEvent(ToolEvent(event, this));
+        }
     }
     QGraphicsView::mouseMoveEvent(event);//for zoom
 }
@@ -139,6 +99,7 @@ void DocumentInteractionView::mouseMoveEvent(QMouseEvent *event)
 
 void DocumentInteractionView::mouseReleaseEvent(QMouseEvent *event)
 {
+    setCursor(Qt::ArrowCursor);
     if(event->deviceType() == QInputDevice::DeviceType::Mouse){//prevents artificial mouse events from stylus
         doc->getUI()->getActiveTool()->drawReleaseEvent(ToolEvent(event, this));
     }
@@ -160,17 +121,23 @@ void DocumentInteractionView::wheelEvent(QWheelEvent *event){
                 rotate(5);
             else
                 rotate(-5);
+            doc->updateAllLayouts();
+            doc->updateEndlessLength();
         } else {//zoom
-            if (event->angleDelta().y() > 0){
-                scale(1.1,1.1);
-            } else {
-                scale(1/1.1,1/1.1);
+            if (event->angleDelta().y() > 0 and view_scale < 5){
+                scaleBy(1.1);
+            } else if(event->angleDelta().y() < 0 and view_scale > 0.2){
+                scaleBy(1/1.1);
             }
-            page_layout_scene->updatePageLayout();
+            frame->updateScaleSlider();
         }
         event->accept();
     } else {
-        QGraphicsView::wheelEvent(event);
+        if(page_layout_scene->getLayoutType() == PageLayoutScene::Horizontal){
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value()-event->angleDelta().y());
+        } else {
+            QGraphicsView::wheelEvent(event);
+        }
     }
     view_inverse = viewportTransform().inverted();
 }
@@ -214,8 +181,7 @@ void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
 }
 
 
-void DocumentInteractionView::resizeEvent(QResizeEvent *event)
+void DocumentInteractionView::scrollPositionChanged()
 {
-    Q_UNUSED(event);
-    page_layout_scene->updatePageLayout();
+    doc->updateEndlessLength();
 }

@@ -1,23 +1,23 @@
 #ifndef HISTORYMANAGERVIEWER_H
 #define HISTORYMANAGERVIEWER_H
 
-#include "Framework/subwindow.h"
 #include "mainwindow.h"
+#include <QStackedWidget>
 
 class HistoryManager;
 
-class HistoryManagerViewer : public SubWindow
+class HistoryManagerViewer : public QStackedWidget
 {
 public:
-    HistoryManagerViewer(MainWindow* parent);
+    HistoryManagerViewer();
 
 public:
     void keyPressEvent(QKeyEvent* event) override;
-    void setHistoryManager(HistoryManager* history_manager);
+    void addHistoryManager(HistoryManager* manager);
+    void setHistoryManager(HistoryManager* manager);
 
 private:
-    MainWindow* parent;
-    HistoryManager* history_manager = nullptr;
+    HistoryManager* history_manager;
 };
 
 #endif // HISTORYMANAGERVIEWER_H

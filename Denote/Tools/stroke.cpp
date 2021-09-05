@@ -10,14 +10,14 @@ Stroke::Stroke(Pen* pen)
 {
     color = pen->getColor();
     width = pen->getWidth();
-    painter_pen = QPen(color, width, Qt::SolidLine, Qt::RoundCap);
+    painter_pen = QPen(color.active(), width, Qt::SolidLine, Qt::RoundCap);
     setFlag(GraphicsItemFlag::ItemIsSelectable, true);
 }
 
 
 Stroke::Stroke(Stroke *stroke)
 {
-    color = stroke->color;
+    color = IColor(stroke->color);
     width = stroke->width;
     points = stroke->points;
     bounds = stroke->bounds;
@@ -27,6 +27,13 @@ Stroke::Stroke(Stroke *stroke)
     setPos(stroke->pos());
     setRotation(stroke->rotation());
     setScale(stroke->scale());
+}
+
+
+Stroke::Stroke(QDataStream &in)
+{
+    setFlag(GraphicsItemFlag::ItemIsSelectable, true);
+    Stroke::serializeRead(in);
 }
 
 
@@ -105,10 +112,10 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
     for(int o = 0; o < 2; o++){
         if(o == 0){
-            if(QGraphicsItem::isSelected()) painter_pen.setColor(color.darker(250));
-            else painter_pen.setColor(color);
+            if(QGraphicsItem::isSelected()) painter_pen.setColor(color.active().darker(250));
+            else painter_pen.setColor(color.active());
         } else {
-            if(QGraphicsItem::isSelected()) painter_pen.setColor(color);
+            if(QGraphicsItem::isSelected()) painter_pen.setColor(color.active());
             else return;
         }
 
@@ -143,6 +150,49 @@ void Stroke::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             painter->drawLine(points.at(points.size()-2), points.last());
         }
     }
+}
+
+
+void Stroke::setDisplayMode(IColor::DisplayMode display_mode)
+{
+    color.setDisplayMode(display_mode);
+}
+
+
+void Stroke::serializeRead(QDataStream &in)
+{
+    PageItem::serializeRead(in);
+
+    qsizetype num_points;
+    in >> num_points;
+    points.clear();
+    for(qsizetype i = 0; i < num_points; i++){
+        PressurePoint p;
+        p.serializeRead(in);
+        points.push_back(p);
+    }
+    in >> painter_pen;
+    in >> bounds;
+    in >> width;
+    QColor normal;
+    in >> normal;
+    color = IColor(normal);
+    update();
+}
+
+
+void Stroke::serializeWrite(QDataStream &out)
+{
+    PageItem::serializeWrite(out);
+
+    out << points.length();
+    foreach(PressurePoint point, points){
+        point.serializeWrite(out);
+    }
+    out << painter_pen;
+    out << bounds;
+    out << width;
+    out << color.normalColor();
 }
 
 

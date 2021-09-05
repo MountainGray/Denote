@@ -4,9 +4,9 @@
 #include <QKeyEvent>
 
 
-HistoryManagerViewer::HistoryManagerViewer(MainWindow* parent) : SubWindow(parent)
+HistoryManagerViewer::HistoryManagerViewer()
 {
-    this->parent = parent;
+
 }
 
 
@@ -24,8 +24,19 @@ void HistoryManagerViewer::keyPressEvent(QKeyEvent *event)
 }
 
 
-void HistoryManagerViewer::setHistoryManager(HistoryManager *history_manager)
+void HistoryManagerViewer::addHistoryManager(HistoryManager *manager)
 {
-    this->history_manager = history_manager;
-    setWidget(history_manager);
+    addWidget(manager);
+    setHistoryManager(manager);
+}
+
+
+void HistoryManagerViewer::setHistoryManager(HistoryManager *manager)
+{
+    if(indexOf(manager) == -1){
+        addHistoryManager(manager);
+    } else {
+        setCurrentWidget(manager);
+        history_manager = manager;
+    }
 }

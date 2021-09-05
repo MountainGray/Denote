@@ -23,6 +23,8 @@ public:
     QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     int type() const override {return TypeFillStroke;}
+    void serializeRead(QDataStream &in) override;
+    void serializeWrite(QDataStream &out) override;
 
 protected:
     void updateBounds(QPointF point);

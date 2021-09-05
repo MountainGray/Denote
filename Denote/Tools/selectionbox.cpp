@@ -83,10 +83,10 @@ void SelectionBox::paintPreset(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(QBrush(QColor("white")));
     painter.setPen(QPen(QColor("black")));
-    painter.drawRect(QRectF(0,0,60,60));
+    painter.drawRect(QRectF(0,0,tool_preset->width(),tool_preset->height()));
     painter.setBrush(QBrush(QColor("grey")));
     painter.setPen(QPen(QColor("blue")));
-    painter.drawRect(20,20, 20, 20);
+    painter.drawRect(tool_preset->width()/4,tool_preset->height()/4, tool_preset->width()/2, tool_preset->height()/2);
     painter.setPen(QPen(QColor("black")));
     painter.drawText(QPointF(2,12),"Selection Box");
 }

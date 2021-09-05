@@ -72,6 +72,7 @@ void Fill::drawReleaseEvent(ToolEvent event)
             fill_stroke->finish(event.pagePos());
         }
         ui->getActivePage()->updatePortals(fill_stroke->sceneBoundingRect());
+        ui->getActivePage()->updateLowestObject(fill_stroke);
         fill_stroke = nullptr;        
     }
 }
@@ -84,9 +85,9 @@ void Fill::paintPreset(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(QBrush(QColor("white")));
     painter.setPen(QPen(QColor("black")));
-    painter.drawRect(QRectF(0,0,60,60));
+    painter.drawRect(QRectF(0,0,tool_preset->width(),tool_preset->height()));
     painter.setBrush(QBrush(color));
-    painter.drawEllipse(QPointF(30,30),10,10);
+    painter.drawEllipse(QPointF(tool_preset->width()/2,tool_preset->height()/2),10,10);
     painter.drawText(QPointF(2,12),"Fill");
 }
 

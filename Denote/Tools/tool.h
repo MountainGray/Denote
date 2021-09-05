@@ -14,6 +14,9 @@ class UI;
 class ToolMenu;
 class ToolPreset;
 
+class ToolLibrary;
+class ToolLibrary;
+
 class Tool
 {
 public:
@@ -31,6 +34,7 @@ public:
     virtual void deactivate() = 0;
 
     virtual void paintPreset(QPaintEvent *event) = 0;
+    virtual void setDisplayMode(IColor::DisplayMode){};
 
 public:
     ToolMenu* getToolMenu(){return tool_menu;}
@@ -43,6 +47,7 @@ protected:
     UI* ui;
     ToolMenu* tool_menu = nullptr;
     ToolPreset* tool_preset = nullptr;
+    ToolLibrary* tool_library;
 };
 
 #endif // TOOL_H

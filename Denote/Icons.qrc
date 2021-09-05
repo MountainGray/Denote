@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/Horizontal.png</file>
+        <file>icons/Vertical.png</file>
+        <file>icons/Seamless.png</file>
+        <file>icons/FitToView.png</file>
+        <file>icons/AddTab.png</file>
+    </qresource>
+</RCC>

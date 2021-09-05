@@ -21,18 +21,28 @@ public:
 
 public:
     UI* getUI(){return this->ui;}
+    QList<DocumentInteractionFrame*> getViews(){return views;}
     void addSubWindow(QDockWidget* widget, Qt::DockWidgetArea area = Qt::DockWidgetArea::BottomDockWidgetArea);
+
+public slots:
+    void openDocument(QString file_name);
 
 private slots:
     void newDocument();
-    bool save();
+    void save();
     void open();
     void about();
     void addView();
+    void convertToEndless();
+    void convertToPages();
+    void toggleCropWorkArea();
+    void print();
+    void invertView();
+    void toggleHoles();
+    void toggleShadow();
 
 private:
     void createMenus();
-    QList<QDockWidget *> subWindows;
     UI* ui;
     QList<DocumentInteractionFrame*> views;
 };

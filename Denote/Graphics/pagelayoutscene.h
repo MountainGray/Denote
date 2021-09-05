@@ -5,41 +5,54 @@
 //All tools are only added to the active scene
 
 #include <QGraphicsScene>
-#include <QGraphicsView>
 #include "Framework/document.h"
 
 class Page;
 class PagePortal;
-
-enum LayoutType {SingleColumn, FitToView};
+class DocumentView;
 
 class PageLayoutScene : public QGraphicsScene
 {
     friend PagePortal;
 public:
-    PageLayoutScene(QGraphicsView* viewport, Document* doc);
+    enum LayoutType {Vertical, Horizontal, Seamless, FitToView};
+    static constexpr QColor BACKGROUND = QColor(30,33,33);
+
+    PageLayoutScene(Document* doc, DocumentView* viewport);
     ~PageLayoutScene();
 
 public:
-    void updatePageLayout();    
-    void setLayoutType(LayoutType type);
-    void setFocusedPortal(PagePortal* portal);
+    Document* getDoc(){return doc;}
+    DocumentView* getView(){return viewport;}
 
+    void setLayoutType(LayoutType type);
+    LayoutType getLayoutType(){return layout_type;}
+    void updatePageLayout();
+
+    void setFocusedPortal(PagePortal* portal);
     QList<PagePortal*> getPortals(){return portals;}
+
+    void setHoles(bool holes);
+    bool hasHoles(){return holes;}
+    void setShadow(bool shadow);
+    bool hasShadow(){return shadow;}
+
+    void setInteractive(bool interactive){this->interactive = interactive;}
+    bool isInteractive(){return interactive;}
 
 private:
     friend void Document::movePage(Page* page, int new_index);
 
 private:
-    QGraphicsView* viewport;
     Document* doc;
+    DocumentView* viewport;
     QList<PagePortal*> portals;
     PagePortal* focused_portal = nullptr;
-    LayoutType layout_type = SingleColumn;
+    LayoutType layout_type = Vertical;
     QRectF last_focused_portal_bounds;
-
-    const int page_padding = 20;
-    const int view_padding = 100;
+    bool holes = true;
+    bool shadow = true;
+    bool interactive = true;
 };
 
 #endif // PAGELAYOUTSCENE_H

@@ -7,6 +7,7 @@
 #include "Graphics/page.h"
 #include "Graphics/pagelayoutscene.h"
 #include "Graphics/pageportal.h"
+#include "Framework/toollibrary.h"
 
 #include <QPainter>
 
@@ -69,7 +70,7 @@ void LassoSelect::drawDoubleClickEvent(ToolEvent event)
     if(event.button() == Qt::RightButton){
         ui->getActivePage()->clearSelection();
     } else if(event.button() == Qt::LeftButton){
-        ui->setActiveTool(box);
+        tool_library->setActiveTool(box);
     }
 }
 
@@ -99,11 +100,11 @@ void LassoSelect::paintPreset(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(QBrush(QColor("white")));
     painter.setPen(QPen(QColor("black")));
-    painter.drawRect(QRectF(0,0,60,60));
+    painter.drawRect(QRectF(0,0,tool_preset->width(),tool_preset->height()));
     painter.drawText(QPointF(2,12),"Lasso Select");
     painter.setPen(QPen(QColor("blue")));
     painter.setBrush(QBrush(QColor(0,30,255,40)));
-    painter.drawEllipse(QPointF(30,30),15,10);
+    painter.drawEllipse(QPointF(tool_preset->width()/2,tool_preset->height()/2),15,10);
 }
 
 

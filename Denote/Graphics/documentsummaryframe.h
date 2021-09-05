@@ -3,38 +3,38 @@
 
 //Frame to hold document summary view and future other widgets
 
-#include "Framework/subwindow.h"
-
 #include <QComboBox>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QLabel>
 #include <QSpinBox>
+#include <QStackedWidget>
 
-class MainWindow;
 class DocumentSummaryView;
 
-class DocumentSummaryFrame : public SubWindow
+class DocumentSummaryFrame : public QWidget
 {
     Q_OBJECT
 public:
-    DocumentSummaryFrame(MainWindow* parent);
+    DocumentSummaryFrame();
     ~DocumentSummaryFrame();
 
 public:
-    void setView(DocumentSummaryView* view);
+    void addSummaryView(DocumentSummaryView* view);
+    void setSummaryView(DocumentSummaryView* view);
+    //DocumentSummaryView* getView(){return viewport;}
 
 private slots:
     void addPage();
     void raisePage();
     void lowerPage();
-    void resetGL();
 
 private:
-    DocumentSummaryView* viewport = nullptr;
+    QStackedWidget* stack;
+    DocumentSummaryView* summary_view = nullptr;
 
     QGridLayout* frame_layout;
-    QLabel* empty_widget;
+    QLabel* empty_widget;//not in use rn
     QWidget* frame_widget;
     QGridLayout* button_layout;
 

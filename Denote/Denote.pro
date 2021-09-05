@@ -1,5 +1,6 @@
 QT       += core gui
 QT       += openglwidgets
+qtHaveModule(printsupport): QT += printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,17 +11,19 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Framework/document.cpp \
+    Framework/documentview.cpp \
     Framework/History/historymanager.cpp \
     Framework/History/historymanagerviewer.cpp \
     Framework/History/undocreation.cpp \
     Framework/History/undodeletion.cpp \
     Framework/History/undoobject.cpp \
+    Framework/fileviewer.cpp \
+    Framework/icolor.cpp \
     Framework/pageitem.cpp \
     Framework/toolevent.cpp \
     Framework/toolmenu.cpp \
     Framework/toolmenuviewer.cpp \
-    Framework/document.cpp \
-    Framework/subwindow.cpp \
     Framework/toollibrary.cpp \
     Framework/toolpreset.cpp \
     Graphics/documentinteractionframe.cpp \
@@ -47,17 +50,20 @@ SOURCES += \
     tabletapplication.cpp
 
 HEADERS += \
+    Framework/document.h \
+    Framework/documentview.h \
     Framework/History/historymanager.h \
     Framework/History/historymanagerviewer.h \
     Framework/History/undocreation.h \
     Framework/History/undodeletion.h \
     Framework/History/undoobject.h \
+    Framework/fileviewer.h \
+    Framework/icolor.h \
     Framework/pageitem.h \
+    Framework/serializable.h \
     Framework/toolevent.h \
     Framework/toolmenu.h \
     Framework/toolmenuviewer.h \
-    Framework/document.h \
-    Framework/subwindow.h \
     Framework/toollibrary.h \
     Graphics/documentinteractionframe.h \
     Graphics/documentinteractionview.h \
@@ -85,3 +91,6 @@ HEADERS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Icons.qrc

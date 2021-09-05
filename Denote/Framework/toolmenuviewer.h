@@ -1,17 +1,18 @@
 #ifndef TOOLMENUVIEWER_H
 #define TOOLMENUVIEWER_H
 
-#include "Framework/subwindow.h"
+#include <QStackedWidget>
 
 class ToolMenu;
 
-class ToolMenuViewer : public SubWindow
+class ToolMenuViewer : public QStackedWidget
 {
 public:
-    ToolMenuViewer(QMainWindow *parent);
+    ToolMenuViewer();
 
 public:
-    ToolMenu* getMenu(){return tool_menu;}
+    void addToolMenu(ToolMenu* menu);
+    void setToolMenu(ToolMenu* menu);
 
 private:
     ToolMenu* tool_menu;

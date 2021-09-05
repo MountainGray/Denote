@@ -2,6 +2,7 @@
 
 #include "Ui/ui.h"
 #include "Framework/document.h"
+#include "Framework/toollibrary.h"
 #include "Graphics/pagelayoutscene.h"
 #include "Framework/toolmenu.h"
 #include "Tools/selectionbox.h"
@@ -76,7 +77,7 @@ void CircleSelect::drawDoubleClickEvent(ToolEvent event)
     if(event.button() == Qt::RightButton){
         ui->getActivePage()->clearSelection();
     } else if(event.button() == Qt::LeftButton){
-        ui->setActiveTool(box);
+        tool_library->setActiveTool(box);
     }
 }
 
@@ -106,9 +107,9 @@ void CircleSelect::paintPreset(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(QBrush(QColor("white")));
     painter.setPen(QPen(QColor("black")));
-    painter.drawRect(QRectF(0,0,60,60));
+    painter.drawRect(QRectF(0,0,tool_preset->width(),tool_preset->height()));
     painter.setBrush(QBrush(QColor("Blue")));
-    painter.drawEllipse(QPointF(30,30),width/2,width/2);
+    painter.drawEllipse(QPointF(tool_preset->width()/2,tool_preset->height()/2),width/2,width/2);
     painter.drawText(QPointF(2,12),"Circle Select");
 }
 

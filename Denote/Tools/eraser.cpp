@@ -102,9 +102,9 @@ void Eraser::paintPreset(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(QBrush(QColor("white")));
     painter.setPen(QPen(QColor("black")));
-    painter.drawRect(QRectF(0,0,60,60));
+    painter.drawRect(QRectF(0,0,tool_preset->width(),tool_preset->height()));
     painter.setBrush(QBrush(QColor("Pink")));
-    painter.drawRect(30-width/2,30-width/2, width,width);
+    painter.drawRect((tool_preset->width()-width)/2,(tool_preset->height()-width)/2, width,width);
     painter.drawText(QPointF(2,12),"Eraser");
 }
 
@@ -128,7 +128,7 @@ void Eraser::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    QPen pen = QPen(QColor(0,0,0,55), 2, Qt::SolidLine, Qt::RoundCap);
+    QPen pen = QPen(QColor(122,122,122,75), 2, Qt::SolidLine, Qt::RoundCap);
     pen.setCosmetic(true);
     painter->setPen(pen);
     painter->setBrush(Qt::NoBrush);

@@ -129,6 +129,7 @@ void Pen::drawReleaseEvent(ToolEvent event)
             stroke->finish(event.pagePos(),pressureToWidth(event.pressure()));
         }
         ui->getActivePage()->updatePortals(stroke->sceneBoundingRect());
+        ui->getActivePage()->updateLowestObject(stroke);
         stroke = nullptr;
     }
 }
@@ -141,10 +142,17 @@ void Pen::paintPreset(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(QBrush(QColor("white")));
     painter.setPen(QPen(QColor("black")));
-    painter.drawRect(QRectF(0,0,60,60));
-    painter.setBrush(QBrush(color));
-    painter.drawEllipse(QPointF(30,30),width/2,width/2);
+    painter.drawRect(QRectF(0,0,tool_preset->width(),tool_preset->height()));
+    painter.setBrush(QBrush(color.active()));
+    painter.drawEllipse(QPointF(tool_preset->width()/2,tool_preset->height()/2),width/2,width/2);
     painter.drawText(QPointF(2,12),"Pen");
+}
+
+
+void Pen::setDisplayMode(IColor::DisplayMode mode)
+{
+    color.setDisplayMode(mode);
+    tool_preset->update();
 }
 
 
@@ -177,7 +185,7 @@ void Pen::updateWidth(int width)
 
 void Pen::updateColor()
 {
-    color = QColorDialog::getColor(color);
+    color = IColor(QColorDialog::getColor(color.active()),ui->getDisplayMode());
 }
 
 
