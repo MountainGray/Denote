@@ -5,8 +5,8 @@
 ToolMenuViewer::ToolMenuViewer()
 {
     setMinimumSize(50,50);
-    //setSizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Maximum);
-}
+    tool_menu = new ToolMenu();
+    setWidget(tool_menu);
 
 
 void ToolMenuViewer::addToolMenu(ToolMenu* menu)

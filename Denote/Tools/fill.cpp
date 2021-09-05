@@ -101,4 +101,5 @@ void Fill::setColor(QColor color)
 void Fill::updateColor()
 {
     color = QColorDialog::getColor(color);
+    tool_preset->update();
 }

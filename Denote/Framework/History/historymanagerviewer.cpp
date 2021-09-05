@@ -6,7 +6,8 @@
 
 HistoryManagerViewer::HistoryManagerViewer()
 {
-
+    this->parent = parent;
+    setMinimumSize(50,50);
 }
 
 

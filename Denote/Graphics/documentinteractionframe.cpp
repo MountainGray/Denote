@@ -23,9 +23,15 @@ DocumentInteractionFrame::DocumentInteractionFrame(UI* ui, Document* doc)
 
 DocumentInteractionFrame::~DocumentInteractionFrame()
 {
+    for(int i = 0; i < tab_widget->count(); i++){
+        DocumentInteractionView* view = static_cast<DocumentInteractionView*>(tab_widget->widget(i));
+        if(view != nullptr){
+            delete view;
+        }
+    }
+    delete tab_widget;
     delete tabs;
     delete view_stack;
-    delete scale;
 }
 
 

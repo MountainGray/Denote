@@ -29,10 +29,10 @@ public:
     void serializeRead(QDataStream &in) override;
     void serializeWrite(QDataStream &out) override;
 
-protected:
+private:
     void updateBounds(PressurePoint point);
 
-protected:
+private:
     QVector<PressurePoint> points;
     QPen painter_pen;
     QRectF bounds;

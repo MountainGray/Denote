@@ -65,58 +65,70 @@ void Pen::drawPressEvent(ToolEvent event)
 
 void Pen::drawMoveEvent(ToolEvent event)
 {
-    float num_speed_points = 4;
-    float slow_thresh = 3; //seconds per 1000 pixels
-
-    if(true_last_point == event.position()) return;
-    if(mode == "Speed" or mode == "Average" or mode == "Combined"){
-        if(count >= num_speed_points){
-            inverse_speed = timer.restart()/(sum_dist*num_speed_points);
-            speed_width = sqrt(fmin(inverse_speed,slow_thresh)/slow_thresh);
-            speed_width = (speed_width + last_speed_width)/2;
-            last_speed_width = speed_width;
-            count = 0;
-            sum_dist = 0;
-            dir = atan2f(last_point.y()-event.position().y(), event.position().x()-last_point.x());
-            dir = (dir + last_dir)/2;
-            last_dir = dir;
-            //if(dir < 0) dir += 6.28;
-            //qDebug() << dir;
+    if(event.modifiers() & Qt::ControlModifier and event.buttons() & Qt::LeftButton){
+        if(adjusting_width){
+            setWidth(pause_width-(event.position().y() - width_point.y())/4.0);
         } else {
-            sum_dist += fabs(event.position().x()-true_last_point.x());
-            sum_dist += fabs(event.position().y()-true_last_point.y());
-            count++;
+            width_point = event.position();
+            adjusting_width = true;
+            pause_width = width;
+        }
+    } else {
+        adjusting_width = false;
+        float num_speed_points = 4;
+        float slow_thresh = 3; //seconds per 1000 pixels
+
+        if(true_last_point == event.position()) return;
+        if(mode == "Speed" or mode == "Average" or mode == "Combined"){
+            if(count >= num_speed_points){
+                inverse_speed = timer.restart()/(sum_dist*num_speed_points);
+                speed_width = sqrt(fmin(inverse_speed,slow_thresh)/slow_thresh);
+                speed_width = (speed_width + last_speed_width)/2;
+                last_speed_width = speed_width;
+                count = 0;
+                sum_dist = 0;
+                dir = atan2f(last_point.y()-event.position().y(), event.position().x()-last_point.x());
+                dir = (dir + last_dir)/2;
+                last_dir = dir;
+                //if(dir < 0) dir += 6.28;
+                //qDebug() << dir;
+            } else {
+                sum_dist += fabs(event.position().x()-true_last_point.x());
+                sum_dist += fabs(event.position().y()-true_last_point.y());
+                count++;
+            }
+        }
+
+        if(stroke != nullptr){
+            //float dx = event.position().x()-last_point.x();
+            //float dy = event.position().y()-last_point.y();
+            //float dist = sqrt(dx*dx+dy*dy);
+            //float dist = abs(dx)+abs(dy);
+
+            float dist = 1;
+
+            if (event.deviceType() == QInputDevice::DeviceType::Mouse and dist >= 1){//min distance to add new point for mouse
+                if(mode == "Speed") stroke->addpoint(event.pagePos(), fmax(speed_width*width,0.1));
+                else stroke->addpoint(event.pagePos(), width);
+                last_point = event.position();
+            } else if (event.deviceType() == QInputDevice::DeviceType::Stylus and dist >= 1){//min distance to add new point for pen
+                if(mode == "Speed") stroke->addpoint(event.pagePos(),fmax(speed_width*width,0.1));//speed
+                else if(mode == "Pressure") stroke->addpoint(event.pagePos(),pressureToWidth(event.pressure()));//pressure
+                else if(mode == "Average") stroke->addpoint(event.pagePos(),(pressureToWidth(event.pressure()) + fmax(speed_width*width,0.1))/2);//average
+                else if(mode == "Combined") stroke->addpoint(event.pagePos(),fmax(event.pressure()*speed_width*width,0.1));//mult average
+                //else stroke->addpoint(event.docPos(), width);
+                //else stroke->addpoint(event.docPos(), fmax(0.1,abs(width*event.xTilt()/60)));
+                else stroke->addpoint(event.pagePos(), fmax(0.1, width*(abs(cosf(dir))*0.9+0.1)));
+                last_point = event.position();
+            }
+            //ui->getActivePage()->updatePortals(QRectF(event.pagePos(),last_page_pos).normalized().adjusted(-3,-3,3,3));
+            ui->getActivePortal()->update(QRectF(event.pagePos(),last_page_pos).normalized().adjusted(-3,-3,3,3));
+
+            true_last_point = event.position();
+            last_page_pos = event.pagePos();
         }
     }
 
-    if(stroke != nullptr){
-        //float dx = event.position().x()-last_point.x();
-        //float dy = event.position().y()-last_point.y();
-        //float dist = sqrt(dx*dx+dy*dy);
-        //float dist = abs(dx)+abs(dy);
-
-        float dist = 1;
-
-        if (event.deviceType() == QInputDevice::DeviceType::Mouse and dist >= 1){//min distance to add new point for mouse
-            if(mode == "Speed") stroke->addpoint(event.pagePos(), fmax(speed_width*width,0.1));
-            else stroke->addpoint(event.pagePos(), width);
-            last_point = event.position();
-        } else if (event.deviceType() == QInputDevice::DeviceType::Stylus and dist >= 1){//min distance to add new point for pen
-            if(mode == "Speed") stroke->addpoint(event.pagePos(),fmax(speed_width*width,0.1));//speed
-            else if(mode == "Pressure") stroke->addpoint(event.pagePos(),pressureToWidth(event.pressure()));//pressure
-            else if(mode == "Average") stroke->addpoint(event.pagePos(),(pressureToWidth(event.pressure()) + fmax(speed_width*width,0.1))/2);//average
-            else if(mode == "Combined") stroke->addpoint(event.pagePos(),fmax(event.pressure()*speed_width*width,0.1));//mult average
-            //else stroke->addpoint(event.docPos(), width);
-            //else stroke->addpoint(event.docPos(), fmax(0.1,abs(width*event.xTilt()/60)));
-            else stroke->addpoint(event.pagePos(), fmax(0.1, width*(abs(cosf(dir))*0.9+0.1)));
-            last_point = event.position();
-        }
-        //ui->getActivePage()->updatePortals(QRectF(event.pagePos(),last_page_pos).normalized().adjusted(-3,-3,3,3));
-        ui->getActivePortal()->update(QRectF(event.pagePos(),last_page_pos).normalized().adjusted(-3,-3,3,3));
-
-        true_last_point = event.position();
-        last_page_pos = event.pagePos();
-    }
 }
 
 
@@ -158,7 +170,7 @@ void Pen::setDisplayMode(IColor::DisplayMode mode)
 
 void Pen::setWidth(float width)
 {
-    this->width = width;
+    width = fmax(fmin(new_width, width_slider->maximum()),0);
     width_slider->setValue(width*3);
     tool_preset->update();
 }
@@ -177,9 +189,9 @@ float Pen::pressureToWidth(float pressure)
 }
 
 
-void Pen::updateWidth(int width)
+void Pen::updateWidth(int new_width)
 {
-    setWidth(float(width)/3);
+    setWidth(float(new_width)/3);
 }
 
 

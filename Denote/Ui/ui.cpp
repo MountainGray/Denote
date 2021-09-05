@@ -14,6 +14,7 @@
 #include "Tools/selectionbox.h"
 #include "Tools/circleselect.h"
 #include "Tools/lassoselect.h"
+#include "Tools/highlighter.h"
 
 #include "Graphics/page.h"
 #include "Framework/document.h"

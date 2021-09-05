@@ -1,4 +1,13 @@
 #include "documentinteractionview.h"
+#include "pagelayoutscene.h"
+#include "Framework/document.h"
+#include "Tools/tool.h"
+#include "Ui/ui.h"
+#include "Framework/toolevent.h"
+#include "Graphics/pageportal.h"
+#include "Framework/History/historymanager.h"
+#include "Graphics/page.h"
+#include "mainwindow.h"
 #include "Framework/History/historymanagerviewer.h"
 #include "Graphics/documentinteractionframe.h"
 #include "Tools/image.h"
@@ -10,6 +19,27 @@
 
 DocumentInteractionView::DocumentInteractionView(Document* doc, DocumentInteractionFrame* frame) : DocumentView(doc)
 {
+    this->doc = doc;
+    page_layout_scene = new PageLayoutScene(this, doc);
+    page_layout_scene->setLayoutType(LayoutType::FitToView);
+    setScene(page_layout_scene);
+
+    doc->getUI()->setActiveLayout(page_layout_scene);
+
+    setDragMode(QGraphicsView::NoDrag);
+    setTransformationAnchor(AnchorUnderMouse);
+
+    setRenderHint(QPainter::Antialiasing, true);
+    setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+    resetGL();
+
+    centerOn(0,0);
+
+    setTabletTracking(true);
+    setMouseTracking(true);
+
+    setBackgroundBrush(QBrush(QColor(37,37,40)));
     this->frame = frame;
     page_layout_scene->setLayoutType(PageLayoutScene::FitToView);
     connect(verticalScrollBar(), &QAbstractSlider::valueChanged, this, &DocumentInteractionView::scrollPositionChanged);

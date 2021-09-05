@@ -36,10 +36,12 @@ SOURCES += \
     Tools/eraser.cpp \
     Tools/fill.cpp \
     Tools/fillstroke.cpp \
+    Tools/highlighter.cpp \
     Tools/image.cpp \
     Tools/lassoselect.cpp \
     Tools/pressurepoint.cpp \
     Tools/pen.cpp \
+    Tools/rectangle.cpp \
     Tools/selectionbox.cpp \
     Tools/stroke.cpp \
     Tools/tool.cpp \
@@ -75,10 +77,12 @@ HEADERS += \
     Tools/eraser.h \
     Tools/fill.h \
     Tools/fillstroke.h \
+    Tools/highlighter.h \
     Tools/image.h \
     Tools/lassoselect.h \
     Tools/pressurepoint.h \
     Tools/pen.h \
+    Tools/rectangle.h \
     Tools/selectionbox.h \
     Tools/stroke.h \
     Tools/tool.h \
