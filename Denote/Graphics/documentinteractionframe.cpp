@@ -1,4 +1,4 @@
-#include "documentinteractionframe.h"
+  #include "documentinteractionframe.h"
 #include "mainwindow.h"
 #include "Framework/document.h"
 #include "documentinteractionview.h"

@@ -74,8 +74,10 @@ void PageLayoutScene::updatePageLayout()
     }
     setSceneRect(bounds);
     if(focused_portal != nullptr){
-        if(focused_portal->scenePageBoundingRect() != last_focused_portal_bounds){
-            viewport->ensureVisible(focused_portal);
+        if(focused_portal->scenePageBoundingRect() != last_focused_portal_bounds){//horrible way of doing it
+            QRectF area = focused_portal->scenePageBoundingRect();
+            area.moveCenter(-focused_portal->getPageOffset());//broken
+            viewport->ensureVisible(area);
         }
         last_focused_portal_bounds = focused_portal->scenePageBoundingRect();
     }

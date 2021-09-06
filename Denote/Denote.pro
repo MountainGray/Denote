@@ -11,6 +11,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Framework/bezier.cpp \
     Framework/document.cpp \
     Framework/documentview.cpp \
     Framework/History/historymanager.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
     Framework/fileviewer.cpp \
     Framework/icolor.cpp \
     Framework/pageitem.cpp \
+    Framework/penstroke.cpp \
     Framework/toolevent.cpp \
     Framework/toolmenu.cpp \
     Framework/toolmenuviewer.cpp \
@@ -39,11 +41,9 @@ SOURCES += \
     Tools/highlighter.cpp \
     Tools/image.cpp \
     Tools/lassoselect.cpp \
-    Tools/pressurepoint.cpp \
     Tools/pen.cpp \
     Tools/rectangle.cpp \
     Tools/selectionbox.cpp \
-    Tools/stroke.cpp \
     Tools/tool.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -52,6 +52,7 @@ SOURCES += \
     tabletapplication.cpp
 
 HEADERS += \
+    Framework/bezier.h \
     Framework/document.h \
     Framework/documentview.h \
     Framework/History/historymanager.h \
@@ -62,6 +63,7 @@ HEADERS += \
     Framework/fileviewer.h \
     Framework/icolor.h \
     Framework/pageitem.h \
+    Framework/penstroke.h \
     Framework/serializable.h \
     Framework/toolevent.h \
     Framework/toolmenu.h \
@@ -80,11 +82,9 @@ HEADERS += \
     Tools/highlighter.h \
     Tools/image.h \
     Tools/lassoselect.h \
-    Tools/pressurepoint.h \
     Tools/pen.h \
     Tools/rectangle.h \
     Tools/selectionbox.h \
-    Tools/stroke.h \
     Tools/tool.h \
     mainwindow.h \
     Graphics/page.h \

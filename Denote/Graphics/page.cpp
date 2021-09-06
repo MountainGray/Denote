@@ -2,7 +2,7 @@
 #include "pageportal.h"
 #include <QPainter>
 #include "Framework/pageitem.h"
-#include "Tools/stroke.h"
+#include "Framework/penstroke.h"
 #include "Tools/pen.h"
 
 
@@ -73,14 +73,18 @@ void Page::serializeRead(QDataStream &in)
 
     size_t num_items;
     in >> num_items;
+
+
+    /*
     for(size_t i = 0; i < num_items; i++){
         ItemType type;
         in >> type;
         PageItem* new_item;
-        if(type == ItemType::TypePenStroke) new_item = new Stroke(in);
+        if(type == ItemType::TypePenStroke) new_item = new PenStroke(in);
         else continue;
         addItem(new_item);
     }
+    */
     update();
 }
 

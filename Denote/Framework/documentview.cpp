@@ -18,6 +18,7 @@ DocumentView::DocumentView(Document* doc)
 
     setDragMode(QGraphicsView::NoDrag);
     setTransformationAnchor(AnchorUnderMouse);
+    setResizeAnchor(AnchorViewCenter);
 
     setRenderHint(QPainter::Antialiasing, true);
     setRenderHint(QPainter::SmoothPixmapTransform, true);
@@ -33,8 +34,6 @@ DocumentView::DocumentView(Document* doc)
     setBackgroundBrush(QBrush(PageLayoutScene::BACKGROUND));
     doc->updateEndlessLength();
     page_layout_scene->updatePageLayout();
-
-    setResizeAnchor(ViewportAnchor::AnchorViewCenter);
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setStyleSheet(

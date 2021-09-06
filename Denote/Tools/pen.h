@@ -9,6 +9,7 @@
 #include <QComboBox>
 #include <QGridLayout>
 
+#include "Framework/penstroke.h"
 
 class Stroke;
 class UI;
@@ -62,6 +63,8 @@ private:
     bool adjusting_width = false;
     QPointF width_point;
     float pause_width;
+
+    PenStroke* pen_stroke = nullptr;
 
 private:
     QSlider *width_slider;

@@ -42,6 +42,53 @@ Pen::Pen(UI* ui) : Tool(ui)
 }
 
 
+void Pen::drawPressEvent(ToolEvent event){
+    if(event.button() == Qt::LeftButton and pen_stroke == nullptr){
+        pen_stroke = new PenStroke();
+        new UndoCreation(ui->getActiveDocument()->getHistoryManager(), pen_stroke, "Pen Stroke");
+        BezierPoint p;
+        p.x = event.pagePos().x();
+        p.y = event.pagePos().y();
+        p.t = event.pressure();
+        pen_stroke->initialize(p);
+        ui->getActivePage()->addItem(pen_stroke);
+        last_page_pos = event.pagePos();
+    } else {
+        drawReleaseEvent(event);
+    }
+}
+
+
+void Pen::drawMoveEvent(ToolEvent event){
+    if(pen_stroke == nullptr) return;
+
+    BezierPoint p;
+    p.x = event.pagePos().x();
+    p.y = event.pagePos().y();
+    p.t = event.pressure();
+    pen_stroke->append(p);
+
+    ui->getActivePortal()->update(QRectF(event.pagePos(),last_page_pos).normalized().adjusted(-3,-3,3,3));
+    last_page_pos = event.pagePos();
+}
+
+
+void Pen::drawReleaseEvent(ToolEvent event){
+    if(pen_stroke == nullptr) return;
+
+    BezierPoint p;
+    p.x = event.pagePos().x();
+    p.y = event.pagePos().y();
+    p.t = event.pressure();
+    pen_stroke->terminate(p);
+
+    ui->getActivePage()->updatePortals(pen_stroke->sceneBoundingRect());
+    ui->getActivePage()->updateLowestObject(pen_stroke);
+    pen_stroke = nullptr;
+}
+
+
+/*
 void Pen::drawPressEvent(ToolEvent event)
 {
     if(event.button() == Qt::LeftButton and stroke == nullptr){
@@ -145,7 +192,7 @@ void Pen::drawReleaseEvent(ToolEvent event)
         stroke = nullptr;
     }
 }
-
+*/
 
 void Pen::paintPreset(QPaintEvent *event)
 {
