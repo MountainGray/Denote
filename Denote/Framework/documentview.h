@@ -2,6 +2,7 @@
 #define DOCUMENTVIEW_H
 
 #include <QGraphicsView>
+
 #include "Graphics/pagelayoutscene.h"
 #include "Ui/ui.h"
 #include "Tools/tool.h"
@@ -9,6 +10,8 @@
 
 class Document;
 class PageLayoutScene;
+class PenStroke;
+class OffscreenOpenGL;
 
 class DocumentView : public QGraphicsView
 {
@@ -30,6 +33,21 @@ public:
     void focusDoc();
     void scaleToFit();
 
+    void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+
+    void forcePaint(QPaintEvent *event){ paintEvent(event);}
+
+    bool force = true;
+
+    void cacheScene(QRect rect = QRect());
+
+    void setCachedStroke(PenStroke* stroke){this->stroke = stroke;}
+    void clearCachedStroke(){this->stroke = nullptr;}
+
+private:
+    void paintCachedStroke(QPainter* painter);
+
 protected:
     Document* doc;
     PageLayoutScene* page_layout_scene;
@@ -39,6 +57,10 @@ protected:
 
 private:
     static const int view_padding = 4;
+
+    OffscreenOpenGL* gl;
+    QImage image;
+    PenStroke* stroke = nullptr;
 };
 
 #endif // DOCUMENTVIEW_H

@@ -19,6 +19,8 @@ public:
     Page();
 
 public:
+    //void update() = delete;
+
     void setPageSize(int width, int height);
     QRect getWorkArea(){return work_area;}
     QRect getPageBounds(){return QRect(0,0,width,height);}
@@ -26,8 +28,8 @@ public:
     int getHeight(){return height;}
     QSize getPageSize(){return QSize(width,height);}
 
-    void updatePortals(QRectF rect = QRectF());
     QList<PagePortal*> getPortals(){return portals;}
+    void updatePortals(const QRectF &rect = QRectF());
 
     void findLowestObject();
     void updateLowestObject(QGraphicsItem* potential_lowest);
@@ -41,16 +43,22 @@ public:
     void serializeRead(QDataStream &in) override;
     void serializeWrite(QDataStream &out) override;
 
+    void toggleRed(){red = !red;}
+
+    void cache();
+    QPixmap getCached(){return cached;}
+
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
 
-private:
+public://change back to private
     void paintLines(QPainter *painter);
     void paintLinesMargin(QPainter *painter);
     void paintEngineering(QPainter *painter);
     void paintGraph(QPainter *painter);
     void paintStaves(QPainter *painter);
     void paintCustom(QPainter *painter);
+
 
 private:
     int width = 850;
@@ -69,6 +77,10 @@ private:
 
     BackgroundType page_type = Engineering;
     QGraphicsItem* lowest_object = nullptr;
+
+    bool red = false;
+
+    QPixmap cached;
 };
 
 #endif // PAGE_H

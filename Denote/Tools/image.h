@@ -2,7 +2,7 @@
 #define IMAGE_H
 
 #include "Tools/tool.h"
-#include "Framework/pageitem.h"
+#include "Graphics/pageitem.h"
 
 class UI;
 

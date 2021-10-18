@@ -58,6 +58,7 @@ void Fill::drawMoveEvent(ToolEvent event)
         }
 
         //ui->getActivePage()->updatePortals(fill_stroke->sceneBoundingRect());
+        qDebug() << "fill update()";
         ui->getActivePortal()->update(fill_stroke->sceneBoundingRect());
     }
 }

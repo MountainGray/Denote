@@ -1,5 +1,5 @@
 #include "undocreation.h"
-#include "Framework/pageitem.h"
+#include "Graphics/pageitem.h"
 
 
 UndoCreation::UndoCreation(HistoryManager *manager, PageItem *created, QString text) : UndoObject(manager)

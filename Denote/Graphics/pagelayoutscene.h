@@ -6,6 +6,7 @@
 
 #include <QGraphicsScene>
 #include "Framework/document.h"
+#include <QTabletEvent>
 
 class Page;
 class PagePortal;
@@ -53,6 +54,8 @@ private:
     bool holes = true;
     bool shadow = true;
     bool interactive = true;
+
+    bool _isInBackgroundUpdate;
 };
 
 #endif // PAGELAYOUTSCENE_H

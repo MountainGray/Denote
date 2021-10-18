@@ -50,7 +50,6 @@ void UI::setDisplayMode(IColor::DisplayMode mode)
             }
         }
         page->setDisplayMode(mode);
-        page->update();
         page->updatePortals();
     }
 

@@ -32,7 +32,7 @@ void FillStroke::addpoint(QPointF pos)
         QRectF new_area = QRectF(pos,points.last());
         QRectF old_area = QRectF(points.last(),points.at(points.size()-2));
         points.append(pos);
-        update(new_area.united(old_area).adjusted(-1,-1,1,1));
+        //update(new_area.united(old_area).adjusted(-1,-1,1,1));
     } else {
         points.append(pos);
     }
@@ -45,7 +45,7 @@ void FillStroke::finish(QPointF pos)
         QRectF new_area = QRectF(pos,points.last());
         QRectF old_area = QRectF(points.last(),points.at(points.size()-2));
         points.append(pos);
-        update(new_area.united(old_area).adjusted(-1,-1,1,1));
+        //update(new_area.united(old_area).adjusted(-1,-1,1,1));
     }
 }
 

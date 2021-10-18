@@ -1,12 +1,20 @@
 #include "mainwindow.h"
 
-#include "tabletapplication.h"
+#include "application.h"
+#include <QSurfaceFormat>
 
 
 int main(int argc, char *argv[])
 {
-    TabletApplication a(argc, argv);
-    a.setupStyleSheet();
+    Application a(argc, argv);
+
+    QSurfaceFormat format;
+    format.setSamples(6);
+    format.setDepthBufferSize(24);
+    format.setStencilBufferSize(8);
+    format.setVersion(3, 2);
+    format.setProfile(QSurfaceFormat::CoreProfile);
+    QSurfaceFormat::setDefaultFormat(format);
 
     /*
     QPalette p = a.palette();

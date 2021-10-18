@@ -3,6 +3,9 @@
 #include "pagelayoutscene.h"
 
 #include <QPainter>
+#include <QGraphicsView>
+#include <QStyleOptionGraphicsItem>
+
 
 PagePortal::PagePortal(Page* page, PageLayoutScene* page_layout, int index)
 {
@@ -13,6 +16,9 @@ PagePortal::PagePortal(Page* page, PageLayoutScene* page_layout, int index)
     page_layout->portals.insert(index, this);
     page_layout->addItem(this);
     setFlag(GraphicsItemFlag::ItemIsSelectable, true);
+    setFlag(GraphicsItemFlag::ItemUsesExtendedStyleOption, true);
+
+    //setCacheMode(DeviceCoordinateCache);
 
     updateRenderArea();
 }
@@ -52,18 +58,29 @@ void PagePortal::updateRenderArea()
     } else {
         bounds = render_to;
     }
-
+    qDebug() << "updating render area and calling update())";
     update();
 }
 
 
 void PagePortal::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(option);
     Q_UNUSED(widget);
+    Q_UNUSED(option);
+    //return;
+
+    //qDebug() << "printing page portal" << option->exposedRect;
+
+    anti = true;
+    painter->setRenderHint(QPainter::Antialiasing,anti);
+    anti = false;
+
+    painter->setRenderHint(QPainter::SmoothPixmapTransform);
+
 
     painter->setBrush(Qt::NoBrush);
     QPen pen = QPen(QColor("black"),1,Qt::SolidLine,Qt::SquareCap, Qt::MiterJoin);
+
 
     if(page_layout->hasShadow()){
         for(int i = 0; i <= SHADOW; i ++){
@@ -73,7 +90,12 @@ void PagePortal::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         }
     }
 
+
+    //painter->drawPixmap(option->exposedRect.adjusted(-2,-2,2,2), page->getCached(), option->exposedRect.adjusted(-2,-2,2,2));
     page->render(painter, render_to, render_from);
+    //page->render(painter, option->exposedRect, option->exposedRect);
+    //qDebug() << option->exposedRect;
+
 
     if(page_layout->hasHoles() and not page_layout->getDoc()->isEndless()){
         float hole_x = 26;

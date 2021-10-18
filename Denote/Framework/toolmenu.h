@@ -9,6 +9,7 @@ class ToolMenu : public QWidget
 {
 public:
     ToolMenu();
+
 };
 
 #endif // TOOLMENU_H

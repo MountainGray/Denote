@@ -1,7 +1,7 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-#include "Framework/pageitem.h"
+#include "Graphics/pageitem.h"
 
 class Rectangle : public PageItem
 {

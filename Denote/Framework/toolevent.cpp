@@ -5,9 +5,9 @@
 ToolEvent::ToolEvent(QMouseEvent *event, DocumentInteractionView* view) :
     QTabletEvent(event->type(),
                  event->pointingDevice(),
-                 QPointF(float(event->position().x()), float(event->position().y())),
+                 event->position(),
                  event->globalPosition(),
-                 0.5, //pressure
+                 1.0, //pressure
                  0, //x_tilt
                  0, //y_tilt
                  0, //tangential_pressure

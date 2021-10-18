@@ -1,8 +1,12 @@
-QT       += core gui
-QT       += openglwidgets
+QT += core gui
+QT += openglwidgets
+QT += opengl-private
+QT += gui-private
+
 qtHaveModule(printsupport): QT += printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets-private
 
 CONFIG += c++11
 
@@ -21,7 +25,7 @@ SOURCES += \
     Framework/History/undoobject.cpp \
     Framework/fileviewer.cpp \
     Framework/icolor.cpp \
-    Framework/pageitem.cpp \
+    Framework/offscreenopengl.cpp \
     Framework/penstroke.cpp \
     Framework/toolevent.cpp \
     Framework/toolmenu.cpp \
@@ -34,6 +38,7 @@ SOURCES += \
     Graphics/documentsummaryview.cpp \
     Graphics/pagelayoutscene.cpp \
     Graphics/pageportal.cpp \
+    Graphics/pageitem.cpp \
     Tools/circleselect.cpp \
     Tools/eraser.cpp \
     Tools/fill.cpp \
@@ -45,11 +50,11 @@ SOURCES += \
     Tools/rectangle.cpp \
     Tools/selectionbox.cpp \
     Tools/tool.cpp \
+    application.cpp \
     main.cpp \
     mainwindow.cpp \
     Graphics/page.cpp \
-    Ui/ui.cpp \
-    tabletapplication.cpp
+    Ui/ui.cpp
 
 HEADERS += \
     Framework/bezier.h \
@@ -62,7 +67,7 @@ HEADERS += \
     Framework/History/undoobject.h \
     Framework/fileviewer.h \
     Framework/icolor.h \
-    Framework/pageitem.h \
+    Framework/offscreenopengl.h \
     Framework/penstroke.h \
     Framework/serializable.h \
     Framework/toolevent.h \
@@ -75,6 +80,7 @@ HEADERS += \
     Graphics/documentsummaryview.h \
     Graphics/pagelayoutscene.h \
     Graphics/pageportal.h \
+    Graphics/pageitem.h \
     Tools/circleselect.h \
     Tools/eraser.h \
     Tools/fill.h \
@@ -86,10 +92,10 @@ HEADERS += \
     Tools/rectangle.h \
     Tools/selectionbox.h \
     Tools/tool.h \
+    application.h \
     mainwindow.h \
     Graphics/page.h \
-    Ui/ui.h \
-    tabletapplication.h
+    Ui/ui.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

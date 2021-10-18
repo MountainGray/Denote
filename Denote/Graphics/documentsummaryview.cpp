@@ -35,6 +35,7 @@ void DocumentSummaryView::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
     scaleToFit();
+    DocumentView::resizeEvent(event);
 }
 
 

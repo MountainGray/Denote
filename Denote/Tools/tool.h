@@ -3,7 +3,7 @@
 
 #include "Framework/toolevent.h"
 #include "Framework/toolpreset.h"
-#include "Framework/pageitem.h"
+#include "Graphics/pageitem.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
@@ -16,6 +16,7 @@ class ToolPreset;
 
 class ToolLibrary;
 class ToolLibrary;
+class DocumentView;
 
 class Tool
 {
@@ -36,6 +37,8 @@ public:
     virtual void paintPreset(QPaintEvent *event) = 0;
     virtual void setDisplayMode(IColor::DisplayMode){};
 
+    void setView(DocumentView* viewport){view = viewport;}
+
 public:
     ToolMenu* getToolMenu(){return tool_menu;}
 
@@ -48,6 +51,8 @@ protected:
     ToolMenu* tool_menu = nullptr;
     ToolPreset* tool_preset = nullptr;
     ToolLibrary* tool_library;
+
+    DocumentView* view;
 };
 
 #endif // TOOL_H

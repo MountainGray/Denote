@@ -1,13 +1,14 @@
 #include "Graphics/page.h"
 #include "pageportal.h"
 #include <QPainter>
-#include "Framework/pageitem.h"
+#include "Graphics/pageitem.h"
 #include "Framework/penstroke.h"
 #include "Tools/pen.h"
 
 
 Page::Page(){
 
+    cache();
 }
 
 
@@ -28,6 +29,8 @@ void Page::drawBackground(QPainter *painter, const QRectF &rect){
 
     painter->setPen(Qt::NoPen);
     painter->setBrush(QBrush(white_page.active()));
+
+    if(red) painter->setBrush(QBrush(QColor("red")));
     painter->drawRect(getPageBounds());
 
     if(page_type == Lines) paintLines(painter);
@@ -39,14 +42,10 @@ void Page::drawBackground(QPainter *painter, const QRectF &rect){
 }
 
 
-void Page::updatePortals(QRectF rect)
+void Page::updatePortals(const QRectF &rect)
 {
     foreach(PagePortal* portal, portals){
-        if(rect.isEmpty()){
-            portal->update();
-        } else {
-            portal->update(rect);
-        }
+        portal->update(rect);
     }
 }
 
@@ -85,7 +84,7 @@ void Page::serializeRead(QDataStream &in)
         addItem(new_item);
     }
     */
-    update();
+    updatePortals();
 }
 
 
@@ -108,6 +107,16 @@ void Page::serializeWrite(QDataStream &out)
             page_item->serializeWrite(out);
         }
     }
+}
+
+
+void Page::cache()
+{
+    cached = QPixmap(width,height);
+    QPainter* painter = new QPainter(&cached);
+    painter->setRenderHint(QPainter::Antialiasing);
+    render(painter, getPageBounds(), getPageBounds());
+    delete painter;
 }
 
 

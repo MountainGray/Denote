@@ -8,8 +8,10 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QGridLayout>
+#include <QGraphicsView>
 
 #include "Framework/penstroke.h"
+
 
 class Stroke;
 class UI;
@@ -59,7 +61,7 @@ private:
     QString mode = "Pressure";
     float dir = 0;
     float last_dir = 0;
-    QPointF last_page_pos;
+    QPoint last_pos;
     bool adjusting_width = false;
     QPointF width_point;
     float pause_width;
@@ -71,6 +73,8 @@ private:
     QPushButton *color_button;
     QComboBox *mode_combo;
     QGridLayout* menu_layout;
+
+    int update_cycle = 0;
 };
 
 #endif // PEN_H

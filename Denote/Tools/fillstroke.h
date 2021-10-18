@@ -1,8 +1,7 @@
 #ifndef FILLSTROKE_H
 #define FILLSTROKE_H
 
-#include "Framework/pageitem.h"
-#include "pressurepoint.h"
+#include "Graphics/pageitem.h"
 
 #include <QPainter>
 

@@ -3,7 +3,7 @@
 #include "Graphics/documentsummaryframe.h"
 #include "Ui/ui.h"
 #include "Graphics/page.h"
-#include "Framework/pageitem.h"
+#include "Graphics/pageitem.h"
 #include "Tools/tool.h"
 #include "Graphics/pagelayoutscene.h"
 
@@ -24,7 +24,7 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     QMainWindow::setDockOptions(AllowNestedDocks | AnimatedDocks);
-    QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents);
+
     setWindowTitle(tr("Denote Pre-Alpha"));
     createMenus();
 
@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     DocumentInteractionFrame *central_view = new DocumentInteractionFrame(ui);
 
     QSplitter* splitter = new QSplitter(Qt::Horizontal);
-    splitter->setHandleWidth(0);
+    splitter->setHandleWidth(1);
     splitter->addWidget(tabs);
     splitter->addWidget(central_view);
 

@@ -10,6 +10,7 @@
 #include <QToolButton>
 #include <QLabel>
 
+
 DocumentInteractionFrame::DocumentInteractionFrame(UI* ui, Document* doc)
 {
     this->ui = ui;
@@ -70,6 +71,7 @@ void DocumentInteractionFrame::setCurrentIndex(int i)
     updateLayoutType();
     updateScaleSlider();
 }
+
 
 
 void DocumentInteractionFrame::updateDocNames(Document* doc)

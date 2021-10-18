@@ -33,6 +33,8 @@ public:
     virtual void serializeRead(QDataStream &in) override;
     virtual void serializeWrite(QDataStream &out) override;
 
+    //void update() = delete;
+
 private:
     bool present = true;
 };

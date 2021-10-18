@@ -2,7 +2,7 @@
 #define PENSTROKE_H
 
 #include "Framework/bezier.h"
-#include "Framework/pageitem.h"
+#include "Graphics/pageitem.h"
 
 class PenStroke : public PageItem
 {
@@ -13,11 +13,12 @@ public:
     void initialize(BezierPoint p);
     void append(BezierPoint p);
     void terminate(BezierPoint p);
+    void setClipping(QRectF clip_rect = QRectF());
 
 public:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     int type() const override {return TypePenStroke;}
     //void setDisplayMode(IColor::DisplayMode display_mode) override;
     void serializeRead(QDataStream &in) override;
@@ -31,7 +32,10 @@ private:
     QRectF bounds;
     QPainterPath outline;
 
-    const int line_resolution = 7; //length of drawn lines in pixels
+    QRectF clip_rect;
+    bool clipping = false;
+
+    const int line_resolution = 40; //length of drawn lines in pixels
 };
 
 #endif // PENSTROKE_H

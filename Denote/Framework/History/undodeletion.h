@@ -2,7 +2,7 @@
 #define UNDODELETION_H
 
 #include "Framework/History/undoobject.h"
-#include "Framework/pageitem.h"
+#include "Graphics/pageitem.h"
 
 class UndoDeletion : public UndoObject
 {

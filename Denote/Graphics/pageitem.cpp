@@ -2,6 +2,19 @@
 #include "Graphics/page.h"
 
 
+/*
+Page items should never need to call update() as that scedules a repaint for all views of the page scene.
+In this case, page portals use the render() function instead and the page portals should be updated instead.
+
+
+
+
+*/
+
+
+
+
+
 PageItem::PageItem()
 {
     setFlag(GraphicsItemFlag::ItemIsSelectable, true);

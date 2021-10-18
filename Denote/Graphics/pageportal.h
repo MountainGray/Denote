@@ -23,6 +23,8 @@ public:
     void updateRenderArea();
     QPointF getPageOffset(){return page_offset;}
 
+    void setAnti(){anti = true;}
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     QRectF boundingRect() const override {return bounds;}
@@ -35,6 +37,8 @@ private:
     QRectF render_to;
     QPointF page_offset;
     static const int SHADOW = 25;
+
+    bool anti;
 };
 
 #endif // PAGEPORTAL_H

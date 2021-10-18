@@ -73,11 +73,13 @@ void PageLayoutScene::updatePageLayout()
         y += padding;
     }
     setSceneRect(bounds);
+
+    //below needs fixing, designed to ensure focused page is always visible
     if(focused_portal != nullptr){
         if(focused_portal->scenePageBoundingRect() != last_focused_portal_bounds){//horrible way of doing it
             QRectF area = focused_portal->scenePageBoundingRect();
             area.moveCenter(-focused_portal->getPageOffset());//broken
-            viewport->ensureVisible(area);
+            viewport->ensureVisible(area);//broken
         }
         last_focused_portal_bounds = focused_portal->scenePageBoundingRect();
     }
@@ -118,3 +120,4 @@ void PageLayoutScene::setShadow(bool shadow)
     }
     updatePageLayout();
 }
+

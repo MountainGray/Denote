@@ -1,22 +1,24 @@
-#ifndef TABLETAPPLICATION_H
-#define TABLETAPPLICATION_H
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
 #include <QApplication>
 
 class UI;
 
-class TabletApplication : public QApplication
+class Application : public QApplication
 {    
 public:
-    using QApplication::QApplication;
+    Application(int, char**);
 
+public:
     bool event(QEvent *event) override;
     void setUI(UI *ui){this->ui = ui;}
 
+private:
     void setupStyleSheet();
 
 private:
     UI *ui = nullptr;
 };
 
-#endif // TABLETAPPLICATION_H
+#endif // APPLICATION_H
