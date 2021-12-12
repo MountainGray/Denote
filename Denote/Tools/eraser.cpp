@@ -43,12 +43,18 @@ void Eraser::drawPressEvent(ToolEvent event)
 }
 
 
+#include "Framework/documentview.h"
 void Eraser::drawMoveEvent(ToolEvent event)
 {
     if(visible){
+        view->setNormal();
         setPos(event.layoutPos());
+
+
+
         if(erasing){
             QPainterPath page_shape = mapToScene(shape()).translated(-ui->getActivePortal()->scenePos());
+
             foreach(QGraphicsItem* item, ui->getActivePage()->items()){
                 PageItem* page_item = static_cast<PageItem*>(item);
                 if(page_item != nullptr){

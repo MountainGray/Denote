@@ -71,12 +71,7 @@ void PagePortal::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     //qDebug() << "printing page portal" << option->exposedRect;
 
-    anti = true;
-    painter->setRenderHint(QPainter::Antialiasing,anti);
-    anti = false;
-
-    painter->setRenderHint(QPainter::SmoothPixmapTransform);
-
+    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     painter->setBrush(Qt::NoBrush);
     QPen pen = QPen(QColor("black"),1,Qt::SolidLine,Qt::SquareCap, Qt::MiterJoin);

@@ -81,7 +81,7 @@ void Pen::drawMoveEvent(ToolEvent event){
         update_cycle = 0;
     }*/
 
-    if(abs(event.pagePos().x() - last_pos.x()) + abs(event.pagePos().y() - last_pos.y()) < 2) return;
+    if(abs(event.pagePos().x() - last_pos.x()) + abs(event.pagePos().y() - last_pos.y()) < 6) return;
 
     BezierPoint p;
     p.x = event.pagePos().x();
@@ -92,8 +92,10 @@ void Pen::drawMoveEvent(ToolEvent event){
     QRect dirty = QRect(event.pagePos().toPoint(),last_pos).normalized().adjusted(-2,-2,2,2);
 
     if(!dirty.isNull()){
+        qDebug() << dirty << "Normal";
         //view->scene()->update(view->mapToScene(dirty).boundingRect());
         ui->getActivePortal()->update(dirty);
+
     }
 
     last_pos = event.pagePos().toPoint();

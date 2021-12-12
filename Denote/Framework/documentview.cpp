@@ -51,20 +51,23 @@ DocumentView::~DocumentView()
 void DocumentView::paintEvent(QPaintEvent *event)
 {
 
-    //bool partial_update = event->rect() != viewport()->rect();
-    bool partial_update = stroke != nullptr;
+    if(normal){
+        QGraphicsView::paintEvent(event);
+        normal = false;
+        return;
+    }
+
+
+    if(image->isNull() || event->rect() == viewport()->rect()) cacheScene();
 
     QRect image_rect = QRect(event->rect().topLeft() * devicePixelRatio(), event->rect().bottomRight() * devicePixelRatio());
-
     QPainter wpainter(viewport());
+    qDebug() << image_rect;
     wpainter.setRenderHints(QPainter::Antialiasing);//| QPainter::SmoothPixmapTransform);
+    wpainter.drawImage(event->rect(), *image, image_rect);
 
-    if(partial_update){
-        wpainter.drawImage(event->rect(), image, image_rect);
+    if(stroke != nullptr){ // partial update
         paintCachedStroke(&wpainter);
-    } else {
-        cacheScene();
-        wpainter.drawImage(event->rect(), image, image_rect);
     }
 }
 
@@ -105,18 +108,32 @@ void DocumentView::resizeEvent(QResizeEvent *event)
     page_layout_scene->updatePageLayout();
     QGraphicsView::resizeEvent(event);
     gl->resizeEvent(event);
+    cacheScene();
 }
 
 
 void DocumentView::cacheScene(QRect rect)
 {
+    qDebug() << "Repainting Background via OpenGL";
+
     if(rect.isNull()) rect = viewport()->rect();
 
     QPainter gpainter(gl->paintDevice());
 
     gpainter.setRenderHints(QPainter::Antialiasing);// | QPainter::SmoothPixmapTransform);
     render(&gpainter, rect, rect);
-    image = gl->grabFramebuffer();
+    *image = gl->grabFramebuffer();
+}
+
+
+void DocumentView::clearCachedStroke()
+{
+    //flatten stroke onto image
+    QPainter p(image);
+    p.setRenderHint(QPainter::Antialiasing);
+    paintCachedStroke(&p);
+
+    this->stroke = nullptr;
 }
 
 
@@ -124,10 +141,14 @@ void DocumentView::paintCachedStroke(QPainter* painter)
 {
     if(stroke != nullptr){
         painter->save();
+
         QPointF offset = doc->getUI()->getActivePortal()->scenePos();
         QTransform t = viewportTransform();
         t.translate(offset.x(),offset.y());
         painter->setTransform(t);
+
+        painter->setClipRect(doc->getUI()->getActivePortal()->getRenderTo());
+
         stroke->paint(painter, new QStyleOptionGraphicsItem());
         painter->restore();
     }

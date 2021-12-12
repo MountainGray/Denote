@@ -182,8 +182,6 @@ void DocumentInteractionView::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key::Key_Space){
         doc->getUI()->getActivePortal()->setRotation(doc->getUI()->getActivePortal()->rotation()+15);
-    } else if (event->key() == Qt::Key::Key_A){
-        doc->getUI()->getActivePortal()->setAnti();
     } else if (event->key() == Qt::Key::Key_D){
         foreach(QGraphicsItem* item, scene()->items()){
             scene()->removeItem(item);

@@ -43,7 +43,11 @@ public:
     void cacheScene(QRect rect = QRect());
 
     void setCachedStroke(PenStroke* stroke){this->stroke = stroke;}
-    void clearCachedStroke(){this->stroke = nullptr;}
+    void clearCachedStroke();
+
+    void setNormal(){normal = true;}
+
+
 
 private:
     void paintCachedStroke(QPainter* painter);
@@ -59,8 +63,10 @@ private:
     static const int view_padding = 4;
 
     OffscreenOpenGL* gl;
-    QImage image;
+    QImage *image = new QImage();
     PenStroke* stroke = nullptr;
+
+    bool normal = false;
 };
 
 #endif // DOCUMENTVIEW_H
